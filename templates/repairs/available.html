@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Available work" %}{% endblock %}
+{% block content %}
+<section class="card">
+  <h2>{% trans "Available work" %}</h2>
+  <p class="muted">{% trans "Reports that inspectors have verified and nobody has reserved yet, most urgent first. Each report is one repair, including every damage found in it. Click a row to see the report, or reserve it straight away." %}</p>
+  <table class="table">
+    <thead><tr><th>{% trans "Street" %}</th><th>{% trans "Damages" %}</th><th>{% trans "Severity" %}</th><th>{% trans "Priority" %}</th><th>{% trans "Est. cost" %}</th><th></th></tr></thead>
+    <tbody>
+      {% for report in reports %}
+      <tr class="click-row">
+        <td><a class="row-cover" href="{% url 'reports:detail' report.id %}">{{ report.street_name|default:report.district|default:"—" }}</a></td>
+        <td>{{ report.damage_names }}</td>
+        <td>{% with top=report.top_severity %}{% if top %}<span class="badge {{ top.severity }}">{{ top.get_severity_display }}</span>{% endif %}{% endwith %}</td>
+        <td>{{ report.priority|default:"—" }}</td>
+        <td>{% if report.estimated_cost is not None %}€ {{ report.estimated_cost }}{% else %}—{% endif %}</td>
+        <td class="row-actions">
+          <form method="post" action="{% url 'repairs:reserve' report.id %}">{% csrf_token %}
+            <button class="btn btn-sm" type="submit">{% trans "Reserve" %}</button>
+          </form>
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="6" class="muted">{% trans "Nothing to pick up right now. New damage shows up here once an inspector verifies it." %}</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}

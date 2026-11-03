@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% if verified %}{% trans "Report verified" %}{% else %}{% trans "Report rejected" %}{% endif %}{% endblock %}
+{% block content %}
+<section class="card result-card {% if verified %}is-good{% else %}is-bad{% endif %}">
+  <div class="result-icon" aria-hidden="true">
+    {% if verified %}
+      <svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+    {% else %}
+      <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    {% endif %}
+  </div>
+
+  <h1>{% if verified %}{% trans "Report verified" %}{% else %}{% trans "Report rejected" %}{% endif %}</h1>
+  <p class="muted result-lead">
+    {% if verified %}
+      {% with n=report.detections.count %}
+        {% if n %}
+          {% blocktrans count counter=n %}{{ counter }} damage confirmed and added to the public register. Contractors can now reserve the repair work.{% plural %}{{ counter }} damages confirmed and added to the public register. Contractors can now reserve the repair work.{% endblocktrans %}
+        {% else %}
+          {% trans "The report is on the public register. No damage was detected on it, so there is nothing for contractors to reserve." %}
+        {% endif %}
+      {% endwith %}
+    {% else %}
+      {% trans "It has been removed from the public map and register. The citizen who filed it can still see it, marked as rejected." %}
+    {% endif %}
+  </p>
+
+  <dl class="result-summary">
+    <div><dt>{% trans "Report" %}</dt><dd>{{ report.street_name|default:report.district|default:_("Road report") }}</dd></div>
+    <div><dt>{% trans "New status" %}</dt><dd><span class="badge {{ report.status }}">{{ report.get_status_display }}</span></dd></div>
+    {% if verified and report.detections.all %}
+      <div><dt>{% trans "Damages" %}</dt><dd>{% for det in report.detections.all %}{{ det.catalog.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</dd></div>
+    {% endif %}
+    {% if last_change %}
+      <div><dt>{% if verified %}{% trans "Note" %}{% else %}{% trans "Reason" %}{% endif %}</dt><dd>{{ last_change.change_reason|default:"—" }}</dd></div>
+      <div><dt>{% trans "By" %}</dt><dd>{{ last_change.changed_by.full_name|default:"—" }} · {{ last_change.created_at|date:"d.m.Y H:i" }}</dd></div>
+    {% endif %}
+  </dl>
+
+  <div class="result-actions">
+    {% if next_report %}
+      <a class="btn" href="{% url 'reports:detail' next_report.id %}">{% trans "Review next report" %}</a>
+    {% endif %}
+    <a class="btn {% if next_report %}ghost{% endif %}" href="{% url 'reports:moderation' %}?tab=damages">{% trans "Back to review queue" %}</a>
+    <a class="btn ghost" href="{% url 'reports:detail' report.id %}">{% trans "View this report" %}</a>
+  </div>
+  <p class="muted small result-remaining">
+    {% if remaining %}{% blocktrans count counter=remaining %}{{ counter }} report still waiting for review.{% plural %}{{ counter }} reports still waiting for review.{% endblocktrans %}{% else %}{% trans "The review queue is clear. Nothing else is waiting." %}{% endif %}
+  </p>
+</section>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<section class="card">
+  <h2>{{ title }}</h2>
+  <table class="table">
+    <thead><tr><th>{% trans "Street" %}</th><th>{% trans "Status" %}</th><th>{% trans "Filed" %}</th><th></th></tr></thead>
+    <tbody>
+      {% for report in reports %}
+      <tr class="click-row{% if report.status == 'repaired' %} is-repaired{% endif %}">
+        <td>
+          <a class="row-cover" href="{% if report.status == 'repaired' %}{% url 'reports:before_after' report.id %}{% else %}{% url 'reports:detail' report.id %}{% endif %}">
+            {{ report.street_name|default:report.district|default:"—" }}
+          </a>
+        </td>
+        <td><span class="badge {{ report.status }}">{{ report.get_status_display }}</span></td>
+        <td>{{ report.created_at|date:"d.m.Y H:i" }}</td>
+        <td class="row-actions">
+          {% if report.user_id == user.id and report.can_owner_delete %}
+          <form method="post" action="{% url 'reports:delete' report.id %}"
+                onsubmit="return confirm('{% filter escapejs %}{% trans "Delete this report permanently?" %}{% endfilter %}');">{% csrf_token %}
+            <button class="btn ghost btn-sm" type="submit">{% trans "Delete" %}</button>
+          </form>
+          {% endif %}
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="4" class="muted">{% trans "No reports yet." %}</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}

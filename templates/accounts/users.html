@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Users" %}{% endblock %}
+{% block content %}
+{% if pending %}
+<section class="card pending-card">
+  <h2>{% trans "Inspector requests" %} <span class="tab-count">{{ pending|length }}</span></h2>
+  <p class="muted">{% trans "These people asked for inspector access when they signed up. Inspectors can verify and reject reports, so only approve people you know. Until you decide, they use PATCH as citizens." %}</p>
+  <ul class="request-list">
+    {% for account in pending %}
+    <li class="request">
+      <div>
+        <strong>{{ account.full_name }}</strong>
+        <div class="muted small">{{ account.email }}{% if account.phone %} · {{ account.phone }}{% endif %} · {% blocktrans with date=account.created_at|date:"d.m.Y" %}signed up {{ date }}{% endblocktrans %}</div>
+      </div>
+      <div class="request-actions">
+        <form method="post" action="{% url 'accounts:review_request' account.id 'decline' %}">{% csrf_token %}
+          <button class="btn ghost btn-sm" type="submit">{% trans "Decline" %}</button>
+        </form>
+        <form method="post" action="{% url 'accounts:review_request' account.id 'approve' %}"
+              onsubmit="return confirm('{% filter escapejs %}{% blocktrans with name=account.full_name %}Give {{ name }} inspector access?{% endblocktrans %}{% endfilter %}');">{% csrf_token %}
+          <button class="btn btn-sm" type="submit">{% blocktrans with role=account.get_requested_role_display %}Approve as {{ role }}{% endblocktrans %}</button>
+        </form>
+      </div>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+{% endif %}
+
+<section class="card {% if pending %}section{% endif %}">
+  <h2>{% trans "Accounts" %}</h2>
+  <p class="muted">{% trans "Change roles, or block and unblock users. Blocked accounts cannot sign in. You can't change your own role or block yourself." %}</p>
+  <table class="table">
+    <thead><tr><th>{% trans "Name" %}</th><th>{% trans "Email" %}</th><th>{% trans "Role" %}</th><th>{% trans "Status" %}</th><th>{% trans "Spam strikes" %}</th><th></th></tr></thead>
+    <tbody>
+      {% for account in users %}
+      <tr>
+        <td>
+          {{ account.full_name }}
+          {% if account.has_pending_role_request %}<span class="badge reserved">{% blocktrans with role=account.get_requested_role_display %}Wants {{ role }}{% endblocktrans %}</span>{% endif %}
+        </td>
+        <td class="muted">
+          {{ account.email }}
+          {% if account.email_verified %}<span class="badge verified" title="{% trans 'Email verified' %}">✓</span>{% else %}<span class="badge" title="{% trans 'Email not verified' %}">?</span>{% endif %}
+        </td>
+        <td>
+          {% if account == user %}
+            {{ account.get_role_display }} <span class="muted small">({% trans "you" %})</span>
+          {% else %}
+          <form class="role-form" method="post" action="{% url 'accounts:change_role' account.id %}">{% csrf_token %}
+            <select name="role" aria-label="{% blocktrans with name=account.full_name %}Role for {{ name }}{% endblocktrans %}" data-current="{{ account.role }}">
+              {% for value, label in roles %}
+                <option value="{{ value }}" {% if value == account.role %}selected{% endif %}>{{ label }}</option>
+              {% endfor %}
+            </select>
+            <button class="btn btn-sm" type="submit" hidden>{% trans "Save" %}</button>
+          </form>
+          {% endif %}
+        </td>
+        <td>
+          <span class="badge {% if account.is_active %}verified{% else %}rejected{% endif %}">{% if account.is_active %}{% trans "Active" %}{% else %}{% trans "Blocked" %}{% endif %}</span>
+          {% if account.reporting_banned %}<span class="badge rejected">{% trans "Can't report" %}</span>{% endif %}
+        </td>
+        <td>
+          <span class="strikes {% if account.reporting_banned %}is-banned{% endif %}">{{ account.spam_strikes }} / {{ strike_limit }}</span>
+          {% if account.spam_strikes %}
+          <form method="post" action="{% url 'accounts:reset_strikes' account.id %}" style="display:inline"
+                onsubmit="return confirm('{% filter escapejs %}{% trans "Reset this person's spam strikes? They'll be able to report again." %}{% endfilter %}');">{% csrf_token %}
+            <button class="btn ghost btn-sm" type="submit">{% trans "Reset" %}</button>
+          </form>
+          {% endif %}
+        </td>
+        <td class="row-actions">
+          {% if account != user %}
+          <form method="post" action="{% url 'accounts:toggle_block' account.id %}">{% csrf_token %}
+            <button class="btn ghost btn-sm {% if account.is_active %}btn-block{% endif %}" type="submit">
+              {% if account.is_active %}{% trans "Block" %}{% else %}{% trans "Unblock" %}{% endif %}
+            </button>
+          </form>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}
+{% block extra_js %}
+<script>
+  const changeRoleTo = "{% filter escapejs %}{% trans 'Change this account to {role}?' %}{% endfilter %}";
+  // Show "Save" only once the role picker actually differs from the saved role,
+  // and confirm before handing out the powerful roles.
+  document.querySelectorAll('.role-form').forEach(function (form) {
+    const select = form.querySelector('select');
+    const save = form.querySelector('button');
+    select.addEventListener('change', function () {
+      save.hidden = select.value === select.dataset.current;
+    });
+    form.addEventListener('submit', function (event) {
+      const label = select.options[select.selectedIndex].text;
+      if (!confirm(changeRoleTo.replace('{role}', label))) event.preventDefault();
+    });
+  });
+</script>
+{% endblock %}

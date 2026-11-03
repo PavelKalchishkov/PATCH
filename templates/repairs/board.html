@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "My repairs" %}{% endblock %}
+{% block content %}
+<section class="card">
+  <div class="card-head">
+    <div>
+      <h2>{% trans "My repairs" %}</h2>
+      <p class="muted">{% trans "Work you've reserved or been assigned, from reservation to finished repair." %}</p>
+    </div>
+    <a class="btn" href="{% url 'repairs:available' %}">{% trans "Find work" %}</a>
+  </div>
+
+  <nav class="tabs" role="tablist">
+    {% for stage in stages %}
+      <a class="tab {% if stage.key == active %}is-active{% endif %}" href="?stage={{ stage.key }}" role="tab"
+         aria-selected="{% if stage.key == active %}true{% else %}false{% endif %}">
+        {{ stage.label }} <span class="tab-count">{{ stage.tasks|length }}</span>
+      </a>
+    {% endfor %}
+  </nav>
+
+  {% for stage in stages %}{% if stage.key == active %}
+  <table class="table">
+    <thead><tr><th>{% trans "Task" %}</th><th>{% trans "Street" %}</th><th>{% trans "Status" %}</th><th>{% trans "Priority" %}</th><th>{% trans "Updated" %}</th></tr></thead>
+    <tbody>
+      {% for task in stage.tasks %}
+      <tr class="click-row{% if task.status == 'approved' %} is-repaired{% endif %}">
+        <td><a class="row-cover" href="{% url 'repairs:detail' task.id %}">{{ task.title }}</a></td>
+        <td>{% with det=task.damages.all|first %}{{ det.report.street_name|default:det.report.district|default:"—" }}{% endwith %}</td>
+        <td>
+          <span class="badge {{ task.status }}">
+            {% if task.status == "rejected" %}{% trans "Sent back" %}{% elif task.status == "completed" %}{% trans "Awaiting approval" %}{% else %}{{ task.get_status_display }}{% endif %}
+          </span>
+        </td>
+        <td>{{ task.effective_priority }}</td>
+        <td>{{ task.updated_at|date:"d.m.Y H:i" }}</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="5" class="muted">
+        {% if stage.key == "reserved" %}{% url 'repairs:available' as available_url %}{% blocktrans %}No reservations. Pick something up from <a href="{{ available_url }}">Available work</a>.{% endblocktrans %}
+        {% elif stage.key == "in_progress" %}{% trans "Nothing in progress. Start one of your reserved jobs." %}
+        {% else %}{% trans "No finished repairs yet." %}{% endif %}
+      </td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}{% endfor %}
+</section>
+{% endblock %}

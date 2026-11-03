@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Assign repair" %}{% endblock %}
+{% block content %}
+<section class="card">
+  <h2>{% trans "Create repair task" %}</h2>
+  <p class="muted">{% trans "Pick one verified report and the team that will repair it. The task covers every damage found in the report." %}</p>
+  {% if errors %}
+    <div class="form-error" role="alert">
+      <strong>{% trans "The repair wasn't assigned." %}</strong>
+      <ul>{% for error in errors %}<li>{{ error }}</li>{% endfor %}</ul>
+    </div>
+  {% endif %}
+  <form method="post">{% csrf_token %}
+    <label>{% trans "Report" %}</label>
+    {% for report in reports %}
+      <label class="choice">
+        <input type="radio" name="report" value="{{ report.id }}" {% if request.POST.report == report.id|stringformat:"s" %}checked{% endif %}>
+        <span>
+          <strong>{{ report.street_name|default:report.district|default:"—" }}</strong>
+          <span class="muted">· {{ report.damage_names }}{% with top=report.top_severity %}{% if top %} · {{ top.get_severity_display }}{% endif %}{% endwith %}</span>
+        </span>
+      </label>
+    {% empty %}
+      <p class="muted">{% trans "No verified reports are waiting for a repair. Verify a report first." %}</p>
+    {% endfor %}
+    <label for="team">{% trans "Contractor team" %}</label>
+    <select class="input" name="team" id="team">
+      <option value="">—</option>
+      {% for team in teams %}
+        <option value="{{ team.id }}" {% if request.POST.team == team.id|stringformat:"s" %}selected{% endif %}>{{ team }}</option>
+      {% endfor %}
+    </select>
+    <label for="title">{% trans "Title (optional)" %}</label>
+    <input class="input" name="title" id="title" value="{{ request.POST.title }}" placeholder="{% trans 'Filled in from the report if left empty' %}">
+    <label for="description">{% trans "Description (optional)" %}</label>
+    <textarea class="input" name="description" id="description" rows="3">{{ request.POST.description }}</textarea>
+    <label for="priority_override">{% trans "Priority override" %}</label>
+    <input class="input" type="number" min="1" max="4" name="priority_override" id="priority_override" value="{{ request.POST.priority_override }}">
+    <button class="btn" type="submit">{% trans "Assign" %}</button>
+  </form>
+</section>
+{% endblock %}

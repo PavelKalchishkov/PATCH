@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Review" %}{% endblock %}
+{% block content %}
+<section class="card">
+  <h2>{% trans "Review" %}</h2>
+  <p class="muted">{% trans "Verify citizen damage reports, and approve repairs contractors have finished. Click a row to open it." %}</p>
+
+  <nav class="tabs" role="tablist">
+    <a class="tab {% if tab == 'damages' %}is-active{% endif %}" href="?tab=damages" role="tab"
+       aria-selected="{% if tab == 'damages' %}true{% else %}false{% endif %}">
+      {% trans "Damage reports" %} <span class="tab-count">{{ reports_waiting }}</span>
+    </a>
+    <a class="tab {% if tab == 'repairs' %}is-active{% endif %}" href="?tab=repairs" role="tab"
+       aria-selected="{% if tab == 'repairs' %}true{% else %}false{% endif %}">
+      {% trans "Repairs" %} <span class="tab-count">{{ repairs|length }}</span>
+    </a>
+  </nav>
+
+  {% if tab == "damages" %}
+  <p class="muted small tab-help">{% trans "Confirm the detected damage, flag spam and duplicates, then verify or reject. The count shows reports still waiting for a decision." %}</p>
+  <table class="table">
+    <thead><tr><th>{% trans "Street" %}</th><th>{% trans "Citizen" %}</th><th>{% trans "Status" %}</th><th>{% trans "Flags" %}</th></tr></thead>
+    <tbody>
+      {% for report in reports %}
+      <tr class="click-row{% if report.status == 'repaired' %} is-repaired{% endif %}">
+        <td>
+          <a class="row-cover" href="{% url 'reports:detail' report.id %}">
+            {{ report.street_name|default:"—" }}
+          </a>
+        </td>
+        <td>
+          {{ report.user.full_name|default:"—" }}
+          {% if report.user %}{% if report.user.email_verified %}<span class="badge verified" title="{% trans 'Verified account' %}">✓</span>{% else %}<span class="badge" title="{% trans 'Unverified account' %}">?</span>{% endif %}{% endif %}
+        </td>
+        <td><span class="badge {{ report.status }}">{{ report.get_status_display }}</span></td>
+        <td>
+          {% if report.is_spam %}<span class="badge rejected">{% trans "Spam" %}</span>{% endif %}
+          {% if report.is_duplicate %}<span class="badge rejected">{% trans "Duplicate" %}</span>{% endif %}
+          {% with n=report.spam_flags %}{% if n %}<span class="badge rejected">{% blocktrans count counter=n %}{{ counter }} spam flag{% plural %}{{ counter }} spam flags{% endblocktrans %}</span>{% endif %}{% endwith %}
+          {% with n=report.accurate_votes %}{% if n %}<span class="badge verified">👍 {{ n }}</span>{% endif %}{% endwith %}
+          {% with n=report.confirmations.count %}{% if n %}<span class="badge processing">{% blocktrans count counter=n %}+{{ counter }} photo{% plural %}+{{ counter }} photos{% endblocktrans %}</span>{% endif %}{% endwith %}
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="4" class="muted">{% trans "No reports to review." %}</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p class="muted small tab-help">{% trans "Contractors marked these repairs finished. Check the photos, then approve them or send them back. Oldest first." %}</p>
+  <table class="table">
+    <thead><tr><th>{% trans "Repair" %}</th><th>{% trans "Street" %}</th><th>{% trans "Contractor" %}</th><th>{% trans "Finished" %}</th></tr></thead>
+    <tbody>
+      {% for task in repairs %}
+      <tr class="click-row">
+        <td><a class="row-cover" href="{% url 'repairs:detail' task.id %}">{{ task.title }}</a></td>
+        <td>{% with det=task.damages.all|first %}{{ det.report.street_name|default:det.report.district|default:"—" }}{% endwith %}</td>
+        <td>{{ task.team|default:task.assigned_to.full_name|default:"—" }}</td>
+        <td>{{ task.updated_at|date:"d.m.Y H:i" }}</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="4" class="muted">{% trans "No finished repairs waiting for approval." %}</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+</section>
+{% endblock %}

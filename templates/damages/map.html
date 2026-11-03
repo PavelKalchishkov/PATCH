@@ -1,0 +1,292 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Public map" %}{% endblock %}
+{% block extra_head %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+{% endblock %}
+{% block content %}
+<section class="map-layout">
+  <div class="card map-card">
+    <h2>{% trans "Public damage map" %}</h2>
+    <p class="muted">{% trans "Non-rejected reports on the live register. Click a marker or a listing to inspect it. Faces and plates are blurred before annotated photos go public." %}</p>
+    <div class="map-filters" role="group" aria-label="{% trans 'Show on the map' %}">
+      <button type="button" class="map-filter is-active" data-filter="all" aria-pressed="true">{% trans "All" %} <span class="tab-count" data-count="all">0</span></button>
+      <button type="button" class="map-filter" data-filter="fixed" aria-pressed="false"><i class="dot dot-repaired"></i>{% trans "Fixed" %} <span class="tab-count" data-count="fixed">0</span></button>
+      <button type="button" class="map-filter" data-filter="open" aria-pressed="false"
+              title="{% trans 'Checked by an inspector, not repaired yet' %}"><i class="dot dot-open"></i>{% trans "Not fixed" %} <span class="tab-count" data-count="open">0</span></button>
+      <button type="button" class="map-filter map-filter-review" data-filter="review" aria-pressed="false"
+              title="{% trans 'Reports no inspector has verified or rejected yet' %}"><i class="dot dot-review"></i>{% trans "Awaiting review" %} <span class="tab-count" data-count="review">0</span></button>
+      {% if user.is_contractor %}
+        <span class="map-filter-divider" aria-hidden="true"></span>
+        <button type="button" class="map-filter map-filter-available" data-filter="available" aria-pressed="false"
+                title="{% trans 'Verified reports nobody has reserved yet' %}">{% trans "Available to reserve" %} <span class="tab-count" data-count="available">0</span></button>
+      {% endif %}
+    </div>
+    <div id="public-map" class="map"></div>
+    <div class="map-legend">
+      <span><i class="dot dot-repaired"></i>{% trans "Fixed" %}</span>
+      <span><i class="dot dot-open"></i>{% trans "Not fixed" %}</span>
+      <span><i class="dot dot-review"></i>{% trans "Awaiting review" %}</span>
+    </div>
+  </div>
+  <aside class="card map-aside">
+    <h3>{% trans "Registered problems" %}</h3>
+    <p class="muted" id="problem-hint">{% trans "Click a pin on the map, or pick one below." %}</p>
+    <div id="map-error" class="form-error" role="alert" hidden>
+      <strong>{% trans "The map data couldn't be loaded." %}</strong>
+      <span>{% trans "Check your connection and try again." %}</span>
+      <button type="button" class="btn btn-sm" id="map-retry">{% trans "Try again" %}</button>
+    </div>
+    <div id="problem-detail" class="problem-detail" hidden></div>
+    <p class="muted filter-empty" id="filter-empty" hidden></p>
+    <div id="problem-list" class="problem-list"></div>
+  </aside>
+</section>
+{% endblock %}
+{% block extra_js %}
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+  const T = {
+    roadReport: "{% filter escapejs %}{% trans 'Road report' %}{% endfilter %}",
+    unnamed: "{% filter escapejs %}{% trans 'Unnamed location' %}{% endfilter %}",
+    openReport: "{% filter escapejs %}{% trans 'Open this report' %}{% endfilter %}",
+    reviewReport: "{% filter escapejs %}{% trans 'Review this report' %}{% endfilter %}",
+    accurate: "{% filter escapejs %}{% trans '{n} confirmed accurate' %}{% endfilter %}",
+    viewAndReserve: "{% filter escapejs %}{% trans 'View and reserve' %}{% endfilter %}",
+    notReviewed: "{% filter escapejs %}{% trans "An inspector hasn't checked this report yet, so it can't be reserved." %}{% endfilter %}",
+    taken: "{% filter escapejs %}{% trans 'Another contractor is already repairing this.' %}{% endfilter %}",
+    yours: "{% filter escapejs %}{% trans 'Open in your repairs' %}{% endfilter %}",
+    beforeAfter: "{% filter escapejs %}{% trans 'See before & after' %}{% endfilter %}",
+    selected: "{% filter escapejs %}{% trans 'Selected problem' %}{% endfilter %}",
+    hint: "{% filter escapejs %}{% trans 'Click a pin on the map, or pick one below.' %}{% endfilter %}",
+    empty: "{% filter escapejs %}{% trans 'No registered problems on the map yet.' %}{% endfilter %}",
+    emptyFilter: {
+      open: "{% filter escapejs %}{% trans 'No unfixed road problems right now.' %}{% endfilter %}",
+      fixed: "{% filter escapejs %}{% trans 'No repaired road problems yet.' %}{% endfilter %}",
+      review: "{% filter escapejs %}{% trans 'Nothing is waiting for review. Every report has been verified or rejected.' %}{% endfilter %}",
+      available: "{% filter escapejs %}{% trans 'Nothing is available to reserve right now. New work appears here once an inspector verifies a report.' %}{% endfilter %}",
+    },
+  };
+  const canOpenReport = {{ user.is_authenticated|yesno:"true,false" }};
+  const canModerate = {{ user.can_moderate|yesno:"true,false" }};
+  const isContractor = {{ user.is_contractor|yesno:"true,false" }};
+  const AWAITING_REVIEW = ['submitted', 'processing'];
+  const ZERO_ID = '00000000-0000-0000-0000-000000000000';
+  const detailPattern = "{% url 'reports:detail' '00000000-0000-0000-0000-000000000000' %}";
+  const beforeAfterPattern = "{% url 'reports:before_after' '00000000-0000-0000-0000-000000000000' %}";
+  const map = L.map('public-map').setView([42.6977, 23.3219], 12);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom: 19}).addTo(map);
+
+  const listEl = document.getElementById('problem-list');
+  const detailEl = document.getElementById('problem-detail');
+  const hintEl = document.getElementById('problem-hint');
+  const emptyEl = document.getElementById('filter-empty');
+  const errorEl = document.getElementById('map-error');
+  const markerLayer = L.layerGroup().addTo(map);
+  const markers = {};
+  const featuresById = {};
+  const listItems = {};
+  let selectedId = null;
+
+  const FILTERS = {
+    all: () => true,
+    // The three categories don't overlap: every report is exactly one of them.
+    open: (p) => !p.repaired && !AWAITING_REVIEW.includes(p.status),
+    fixed: (p) => !!p.repaired,
+    review: (p) => AWAITING_REVIEW.includes(p.status),
+    // Contractors only: the part of "Not fixed" that nobody has reserved yet.
+    available: (p) => !!p.reservable,
+  };
+  let activeFilter = 'all';
+
+  function esc(value) {
+    const node = document.createElement('span');
+    node.textContent = value == null ? '' : String(value);
+    return node.innerHTML;
+  }
+
+  function titleFor(props) {
+    return props.street_name || props.district || T.roadReport;
+  }
+
+  function urlFor(pattern, id) {
+    return pattern.replace(ZERO_ID, id);
+  }
+
+  function awaitingReview(props) {
+    return AWAITING_REVIEW.includes(props.status);
+  }
+
+  // Repaired reports are green; for reviewers, reports nobody has reviewed yet are blue;
+  // everything else still open keeps the warm accent.
+  function markerStyle(props, active) {
+    let palette = { stroke: '#8a4a2b', fill: '#d0895a', fillActive: '#c45c2a' };
+    if (props.repaired) palette = { stroke: '#1f5e41', fill: '#3f9b6e', fillActive: '#2f7a57' };
+    else if (awaitingReview(props)) palette = { stroke: '#244a86', fill: '#5b86c9', fillActive: '#3a63a8' };
+    return {
+      radius: active ? 11 : 8,
+      color: palette.stroke,
+      fillColor: active ? palette.fillActive : palette.fill,
+      fillOpacity: active ? 0.95 : 0.85,
+      weight: active ? 2.5 : 1,
+      className: 'map-pin'
+    };
+  }
+
+  function renderDetail(props) {
+    const place = [props.street_name, props.district].filter(Boolean).join(' · ') || T.unnamed;
+    const img = props.image
+      ? `<img class="problem-thumb" src="${esc(props.image)}" alt="">`
+      : '';
+    let link = '';
+    if (props.repaired) {
+      link = `<a class="btn btn-good" href="${esc(urlFor(beforeAfterPattern, props.id))}">${esc(T.beforeAfter)}</a>`;
+    } else if (isContractor) {
+      if (props.reservable) link = `<a class="btn" href="${esc(urlFor(detailPattern, props.id))}">${esc(T.viewAndReserve)}</a>`;
+      else if (awaitingReview(props)) link = `<p class="notice">${esc(T.notReviewed)}</p>`;
+      else link = `<p class="notice">${esc(T.taken)}</p>`;
+    } else if (canModerate && awaitingReview(props)) {
+      link = `<a class="btn btn-info" href="${esc(urlFor(detailPattern, props.id))}">${esc(T.reviewReport)}</a>`;
+    } else if (canOpenReport) {
+      link = `<a class="btn" href="${esc(urlFor(detailPattern, props.id))}">${esc(T.openReport)}</a>`;
+    }
+    detailEl.hidden = false;
+    detailEl.classList.toggle('is-repaired', !!props.repaired);
+    detailEl.innerHTML = `
+      ${img}
+      <div class="problem-detail-head">
+        <strong>${esc(titleFor(props))}</strong>
+        <span class="badge ${esc(props.status)}">${esc(props.status_label || props.status)}</span>
+      </div>
+      <p class="muted">${esc(place)}${props.accurate_votes ? ` · 👍 ${esc(T.accurate.replace('{n}', props.accurate_votes))}` : ''}</p>
+      ${link}
+    `;
+    hintEl.textContent = T.selected;
+  }
+
+  function clearSelection() {
+    selectedId = null;
+    detailEl.hidden = true;
+    hintEl.textContent = T.hint;
+    Object.entries(markers).forEach(([id, m]) => m.setStyle(markerStyle(featuresById[id].properties, false)));
+    Object.values(listItems).forEach((el) => el.classList.remove('is-selected'));
+  }
+
+  function revealDetail() {
+    // The panel can sit below the map or out of view, so bring it to the user.
+    detailEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    detailEl.classList.remove('is-flash');
+    void detailEl.offsetWidth;
+    detailEl.classList.add('is-flash');
+  }
+
+  function selectProblem(id, { pan = true, reveal = true } = {}) {
+    selectedId = id;
+    const feature = featuresById[id];
+    const marker = markers[id];
+    if (!feature || !marker) return;
+
+    Object.entries(markers).forEach(([mid, m]) => m.setStyle(markerStyle(featuresById[mid].properties, mid === id)));
+    Object.entries(listItems).forEach(([lid, el]) => el.classList.toggle('is-selected', lid === id));
+    renderDetail(feature.properties);
+    if (pan) {
+      map.setView(marker.getLatLng(), Math.max(map.getZoom(), 15), { animate: true });
+    }
+    marker.bringToFront();
+    if (reveal) revealDetail();
+  }
+
+  function applyFilter(name, { fit = true } = {}) {
+    if (!FILTERS[name] || (name === 'available' && !isContractor)) name = 'all';
+    activeFilter = name;
+    const keep = FILTERS[name];
+    document.querySelectorAll('.map-filter').forEach((btn) => {
+      const on = btn.dataset.filter === name;
+      btn.classList.toggle('is-active', on);
+      btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+
+    const visible = [];
+    Object.entries(featuresById).forEach(([id, f]) => {
+      const show = keep(f.properties);
+      listItems[id].hidden = !show;
+      if (show) {
+        markerLayer.addLayer(markers[id]);
+        visible.push(markers[id].getLatLng());
+      } else {
+        markerLayer.removeLayer(markers[id]);
+      }
+    });
+    if (selectedId && !keep(featuresById[selectedId].properties)) clearSelection();
+
+    emptyEl.hidden = visible.length > 0 || name === 'all';
+    emptyEl.textContent = T.emptyFilter[name] || '';
+    if (fit && visible.length) map.fitBounds(L.latLngBounds(visible), { padding: [32, 32], maxZoom: 16 });
+
+    // Remember the choice in the address, so the filtered map can be shared or reloaded.
+    const url = new URL(window.location);
+    if (name === 'all') url.searchParams.delete('show'); else url.searchParams.set('show', name);
+    history.replaceState(null, '', url);
+  }
+
+  document.querySelectorAll('.map-filter').forEach((btn) => {
+    btn.addEventListener('click', () => applyFilter(btn.dataset.filter));
+  });
+
+  function updateCounts() {
+    const props = Object.values(featuresById).map((f) => f.properties);
+    Object.entries(FILTERS).forEach(([name, test]) => {
+      const el = document.querySelector(`[data-count="${name}"]`);
+      if (el) el.textContent = props.filter(test).length;
+    });
+  }
+
+  function load() {
+    errorEl.hidden = true;
+    fetch('{% url "damages:map_geojson" %}')
+      .then((r) => {
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+        return r.json();
+      })
+      .then((geo) => {
+        const features = geo.features || [];
+        if (!features.length) {
+          hintEl.textContent = T.empty;
+          return;
+        }
+        features.forEach((f) => {
+          const props = f.properties;
+          const [lng, lat] = f.geometry.coordinates;
+          const marker = L.circleMarker([lat, lng], markerStyle(props, false));
+          marker.on('click', () => selectProblem(props.id, { pan: false }));
+          marker.bindTooltip(titleFor(props), { direction: 'top', offset: [0, -8] });
+          markers[props.id] = marker;
+          featuresById[props.id] = f;
+
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'problem-item' + (props.repaired ? ' is-repaired' : '') + (awaitingReview(props) ? ' is-review' : '')
+            + (isContractor && props.reservable ? ' is-available' : '');
+          btn.dataset.id = props.id;
+          btn.innerHTML = `
+            <span class="problem-item-title">${esc(titleFor(props))}</span>
+            <span class="muted">${esc(props.district || '')}</span>
+            <span class="badge ${esc(props.status)}">${esc(props.status_label || props.status)}</span>
+          `;
+          btn.addEventListener('click', () => selectProblem(props.id));
+          listEl.appendChild(btn);
+          listItems[props.id] = btn;
+        });
+        updateCounts();
+        applyFilter(new URLSearchParams(window.location.search).get('show') || 'all');
+      })
+      .catch(() => {
+        hintEl.textContent = '';
+        errorEl.hidden = false;
+      });
+  }
+
+  document.getElementById('map-retry').addEventListener('click', load);
+  load();
+</script>
+{% endblock %}

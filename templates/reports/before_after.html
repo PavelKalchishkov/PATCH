@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Repaired" %} · {{ report.street_name|default:report.district }}{% endblock %}
+{% block content %}
+<section class="card repaired-hero">
+  <div class="repaired-head">
+    <div class="repaired-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+    </div>
+    <div>
+      <p class="eyebrow">{% trans "Repair confirmed by the municipality" %}</p>
+      <h1>{{ report.street_name|default:report.district|default:_("Road report") }}</h1>
+      <p class="muted">
+        {% if report.district and report.street_name %}{{ report.district }} · {% endif %}
+        {% if repaired_on %}{% blocktrans with date=repaired_on.created_at|date:"d.m.Y" %}Repaired on {{ date }}{% endblocktrans %}{% endif %}
+      </p>
+    </div>
+  </div>
+
+  <div class="compare">
+    <figure class="compare-side">
+      <figcaption><span class="badge rejected">{% trans "Before" %}</span> <span class="muted small">{% blocktrans with date=report.created_at|date:"d.m.Y" %}Reported {{ date }}{% endblocktrans %}</span></figcaption>
+      {% if before_image %}
+        <img src="{{ before_image.url }}" alt="{% trans 'The damage as reported' %}">
+      {% else %}
+        <div class="compare-empty">{% trans "No photo was attached to the report." %}</div>
+      {% endif %}
+    </figure>
+    <figure class="compare-side">
+      <figcaption><span class="badge repaired">{% trans "Now" %}</span>{% if after_photo %} <span class="muted small">{% blocktrans with date=after_photo.created_at|date:"d.m.Y" %}Photographed {{ date }}{% endblocktrans %}</span>{% endif %}</figcaption>
+      {% if after_photo %}
+        <img src="{{ after_photo.image.url }}" alt="{% trans 'The road after the repair' %}">
+      {% else %}
+        <div class="compare-empty">
+          <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="14" rx="2"/><circle cx="12" cy="13" r="3.5"/><path d="M8 6l1.5-2h5L16 6"/></svg>
+          {% trans "The contractor didn't upload a photo of the finished repair." %}
+        </div>
+      {% endif %}
+    </figure>
+  </div>
+
+  <dl class="result-summary repaired-facts">
+    <div><dt>{% trans "Damage fixed" %}</dt><dd>{% for det in report.detections.all %}{{ det.catalog.name }}{% if not forloop.last %}, {% endif %}{% empty %}—{% endfor %}</dd></div>
+    {% for task in repairs %}
+      <div><dt>{% trans "Repaired by" %}</dt><dd>{{ task.team|default:task.assigned_to.full_name|default:"—" }}</dd></div>
+      {% if task.description %}<div><dt>{% trans "Method" %}</dt><dd>{{ task.description }}</dd></div>{% endif %}
+    {% endfor %}
+  </dl>
+
+  <div class="result-actions">
+    <a class="btn ghost" href="{% url 'damages:map' %}">{% trans "Back to the map" %}</a>
+    <a class="btn ghost" href="{% url 'damages:register' %}">{% trans "Damage register" %}</a>
+    {% if user.is_authenticated %}<a class="btn ghost" href="{% url 'reports:detail' report.id %}">{% trans "Full report" %}</a>{% endif %}
+  </div>
+</section>
+{% endblock %}

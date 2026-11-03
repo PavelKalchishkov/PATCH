@@ -1,0 +1,2322 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-03 17:11+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: .\PATCH\errors.py:13
+msgid "Something was wrong with that request"
+msgstr "Нещо в заявката не е наред"
+
+#: .\PATCH\errors.py:14
+msgid "The page couldn't understand what was sent. Go back and try again."
+msgstr "Страницата не успя да обработи изпратеното. Върнете се и опитайте отново."
+
+#: .\PATCH\errors.py:20
+msgid "You don't have access to this page"
+msgstr "Нямате достъп до тази страница"
+
+#: .\PATCH\errors.py:21
+msgid ""
+"Your account's role can't open this section. If you think it should, ask an "
+"administrator."
+msgstr "Ролята на профила ви няма достъп до този раздел. Ако смятате, че трябва да има, обърнете се към администратор."
+
+#: .\PATCH\errors.py:27
+msgid "Page not found"
+msgstr "Страницата не е намерена"
+
+#: .\PATCH\errors.py:28
+msgid ""
+"The page or report you're looking for doesn't exist. It may have been "
+"deleted, or the link is wrong."
+msgstr "Страницата или сигналът, който търсите, не съществува. Може да е изтрит или връзката да е грешна."
+
+#: .\PATCH\errors.py:34
+msgid "Something went wrong on our side"
+msgstr "Възникна грешка от наша страна"
+
+#: .\PATCH\errors.py:35
+msgid ""
+"The action didn't go through and nothing was changed. Please try again in a "
+"moment."
+msgstr "Действието не беше изпълнено и нищо не е променено. Моля, опитайте отново след малко."
+
+#: .\PATCH\errors.py:41
+msgid "Your form expired"
+msgstr "Формулярът е изтекъл"
+
+#: .\PATCH\errors.py:42
+msgid ""
+"For your security, forms expire after a while or when you sign in somewhere "
+"else. Nothing was saved. Reload the page and submit it again."
+msgstr "За ваша сигурност формулярите изтичат след известно време или при вход от друго място. Нищо не е запазено. Презаредете страницата и изпратете отново."
+
+#: .\PATCH\errors.py:45
+msgid "Reload the form"
+msgstr "Презареди формуляра"
+
+#: .\accounts\forms.py:17 .\accounts\forms.py:25 .\accounts\forms.py:97
+#: .\templates\accounts\users.html:35
+msgid "Email"
+msgstr "Имейл"
+
+#: .\accounts\forms.py:26
+msgid "Full name"
+msgstr "Име и фамилия"
+
+#: .\accounts\forms.py:27 .\accounts\forms.py:97
+msgid "Phone (optional)"
+msgstr "Телефон (по желание)"
+
+#: .\accounts\forms.py:30 .\accounts\models.py:9
+#: .\templates\reports\moderate.html:23
+msgid "Citizen"
+msgstr "Гражданин"
+
+#: .\accounts\forms.py:31 .\accounts\models.py:12
+#: .\templates\repairs\approval_result.html:26
+#: .\templates\reports\moderate.html:53
+msgid "Contractor"
+msgstr "Изпълнител"
+
+#: .\accounts\forms.py:32
+msgid "Inspector (needs admin approval)"
+msgstr "Инспектор (изисква одобрение от администратор)"
+
+#: .\accounts\forms.py:34 .\accounts\forms.py:117
+#: .\templates\accounts\users.html:35
+msgid "Role"
+msgstr "Роля"
+
+#: .\accounts\forms.py:35
+msgid ""
+"Inspector accounts start as citizen accounts until an administrator approves "
+"them."
+msgstr "Инспекторските профили започват като граждански, докато администратор не ги одобри."
+
+#: .\accounts\forms.py:37
+msgid "Company name (contractors)"
+msgstr "Име на фирма (за изпълнители)"
+
+#: .\accounts\forms.py:38
+msgid "License number (contractors)"
+msgstr "Номер на лиценз (за изпълнители)"
+
+#: .\accounts\forms.py:39
+msgid "Address (contractors)"
+msgstr "Адрес (за изпълнители)"
+
+#: .\accounts\forms.py:52
+msgid "Company name is required for contractor accounts."
+msgstr "Името на фирмата е задължително за профили на изпълнители."
+
+#: .\accounts\forms.py:82
+msgid "Company name"
+msgstr "Име на фирма"
+
+#: .\accounts\forms.py:83
+msgid "License number"
+msgstr "Номер на лиценз"
+
+#: .\accounts\forms.py:84
+msgid "Address"
+msgstr "Адрес"
+
+#: .\accounts\forms.py:85 .\templates\reports\detail.html:177
+msgid "Notes"
+msgstr "Бележки"
+
+#: .\accounts\forms.py:97 .\templates\accounts\users.html:35
+#: .\templates\damages\catalog.html:8
+msgid "Name"
+msgstr "Име"
+
+#: .\accounts\forms.py:106
+msgid "Another account already uses this email address."
+msgstr "Друг профил вече използва този имейл адрес."
+
+#: .\accounts\models.py:10
+msgid "Inspector"
+msgstr "Инспектор"
+
+#: .\accounts\models.py:11
+msgid "Administrator"
+msgstr "Администратор"
+
+#: .\accounts\verification.py:68
+msgid "Confirm your email address for PATCH"
+msgstr "Потвърдете имейл адреса си в PATCH"
+
+#: .\accounts\views.py:49
+msgid ""
+"Welcome to PATCH. Your inspector request was sent to an administrator. You "
+"can use PATCH as a citizen until it is approved."
+msgstr "Добре дошли в PATCH. Заявката ви за инспектор е изпратена до администратор. Дотогава можете да използвате PATCH като гражданин."
+
+#: .\accounts\views.py:54
+msgid "Welcome to PATCH."
+msgstr "Добре дошли в PATCH."
+
+#: .\accounts\views.py:80
+msgid "Account details updated."
+msgstr "Данните на профила са обновени."
+
+#: .\accounts\views.py:83
+msgid "Your email changed, so it needs verifying again."
+msgstr "Имейлът ви е променен и трябва да бъде потвърден отново."
+
+#: .\accounts\views.py:89
+msgid "Password changed."
+msgstr "Паролата е сменена."
+
+#: .\accounts\views.py:93
+msgid "Contractor profile updated."
+msgstr "Профилът на изпълнителя е обновен."
+
+#: .\accounts\views.py:104 .\repairs\models.py:14 .\repairs\views.py:30
+#: .\templates\repairs\detail.html:42
+msgid "Reserved"
+msgstr "Резервирано"
+
+#: .\accounts\views.py:104 .\repairs\models.py:17 .\repairs\views.py:30
+#: .\templates\repairs\detail.html:43
+msgid "In progress"
+msgstr "В процес"
+
+#: .\accounts\views.py:104 .\repairs\views.py:30
+#: .\templates\repairs\detail.html:44 .\templates\reports\moderate.html:53
+msgid "Finished"
+msgstr "Завършено"
+
+#: .\accounts\views.py:110 .\templates\home.html:19
+msgid "Reports"
+msgstr "Сигнали"
+
+#: .\accounts\views.py:111
+msgid "Open"
+msgstr "Отворени"
+
+#: .\accounts\views.py:112 .\templates\home.html:21
+msgctxt "count"
+msgid "Repaired"
+msgstr "Ремонтирани"
+
+#: .\accounts\views.py:140
+msgid "This verification link doesn't work"
+msgstr "Тази връзка за потвърждение не работи"
+
+#: .\accounts\views.py:141
+msgid ""
+"It may have expired, been used for an old email address, or been copied "
+"incompletely. Sign in and send yourself a new link from your profile."
+msgstr "Може да е изтекла, да е за стар имейл адрес или да е копирана непълно. Влезте и си изпратете нова връзка от профила."
+
+#: .\accounts\views.py:143
+msgid "Go to my profile"
+msgstr "Към профила ми"
+
+#: .\accounts\views.py:148
+msgid "Your email address was already verified."
+msgstr "Имейл адресът ви вече е потвърден."
+
+#: .\accounts\views.py:150
+#, python-format
+msgid "Thank you. Your email address %(email)s is verified."
+msgstr "Благодарим ви! Имейл адресът ви %(email)s е потвърден."
+
+#: .\accounts\views.py:164
+#, python-format
+msgid "We sent a link to %(email)s. Check your inbox and spam folder."
+msgstr "Изпратихме връзка на %(email)s. Проверете входящата поща и папката за спам."
+
+#: .\accounts\views.py:166
+msgid ""
+"Email sending isn't set up on this server, so no email was sent. Use the "
+"verification link on your profile page."
+msgstr "Изпращането на имейли не е настроено на този сървър, затова не е изпратен имейл. Използвайте връзката за потвърждение в профила си."
+
+#: .\accounts\views.py:169
+msgid ""
+"The verification email couldn't be sent right now. Try again from your "
+"profile in a few minutes."
+msgstr "Имейлът за потвърждение не можа да бъде изпратен в момента. Опитайте отново от профила си след няколко минути."
+
+#: .\accounts\views.py:171
+msgid ""
+"A link was sent less than two minutes ago. Please check your inbox first."
+msgstr "Преди по-малко от две минути беше изпратена връзка. Моля, първо проверете пощата си."
+
+#: .\accounts\views.py:193
+#, python-format
+msgid "Approved: %(name)s is now %(role)s."
+msgstr "Одобрено: %(name)s вече е с роля „%(role)s“."
+
+#: .\accounts\views.py:196
+#, python-format
+msgid "Declined %(name)s's request to become %(role)s."
+msgstr "Заявката на %(name)s за роля „%(role)s“ е отказана."
+
+#: .\accounts\views.py:210
+msgid "You cannot change your own role."
+msgstr "Не можете да промените собствената си роля."
+
+#: .\accounts\views.py:217
+#, python-format
+msgid "%(name)s's role is now %(role)s."
+msgstr "Ролята на %(name)s вече е „%(role)s“."
+
+#: .\accounts\views.py:228
+#, python-format
+msgid "%(name)s's spam strikes were reset. They can report again."
+msgstr "Нарушенията за спам на %(name)s са нулирани. Отново може да подава сигнали."
+
+#: .\accounts\views.py:236
+msgid "You cannot block your own account."
+msgstr "Не можете да блокирате собствения си профил."
+
+#: .\accounts\views.py:241
+#, python-format
+msgid "%(name)s was unblocked."
+msgstr "%(name)s е отблокиран."
+
+#: .\accounts\views.py:243
+#, python-format
+msgid "%(name)s was blocked."
+msgstr "%(name)s е блокиран."
+
+#: .\damages\models.py:13
+msgid "Low"
+msgstr "Ниска"
+
+#: .\damages\models.py:14
+msgid "Medium"
+msgstr "Средна"
+
+#: .\damages\models.py:15
+msgid "High"
+msgstr "Висока"
+
+#: .\damages\models.py:16
+msgid "Critical"
+msgstr "Критична"
+
+#: .\damages\views.py:50
+msgid "Priority override saved."
+msgstr "Ръчният приоритет е запазен."
+
+#: .\repairs\models.py:13
+msgid "Draft"
+msgstr "Чернова"
+
+#: .\repairs\models.py:15
+msgid "Assigned"
+msgstr "Възложена"
+
+#: .\repairs\models.py:16
+msgid "Accepted"
+msgstr "Приета"
+
+#: .\repairs\models.py:18 .\vision\models.py:12
+msgid "Completed"
+msgstr "Завършена"
+
+#: .\repairs\models.py:19 .\templates\repairs\approval_result.html:25
+msgid "Approved"
+msgstr "Одобрена"
+
+#: .\repairs\models.py:20 .\reports\models.py:15
+msgid "Rejected"
+msgstr "Отхвърлен"
+
+#: .\repairs\models.py:133 .\templates\reports\before_after.html:22
+msgid "Before"
+msgstr "Преди"
+
+#: .\repairs\models.py:134
+msgid "After"
+msgstr "След"
+
+#: .\repairs\models.py:135
+msgid "Other"
+msgstr "Друга"
+
+#: .\repairs\views.py:56
+msgid "Someone else has already reserved this repair."
+msgstr "Някой друг вече е резервирал този ремонт."
+
+#: .\repairs\views.py:58
+msgid "Repair reserved. It is now in your repairs under Reserved."
+msgstr "Ремонтът е резервиран. Ще го намерите в „Моите ремонти“ под „Резервирано“."
+
+#: .\repairs\views.py:72
+msgid "Choose the report to repair."
+msgstr "Изберете сигнала за ремонт."
+
+#: .\repairs\views.py:74
+msgid "Choose the contractor team that will do the repair."
+msgstr "Изберете екипа на изпълнителя, който ще извърши ремонта."
+
+#: .\repairs\views.py:89
+msgid ""
+"That report is no longer available. It may have been reserved by a "
+"contractor."
+msgstr "Сигналът вече не е наличен. Може да е резервиран от изпълнител."
+
+#: .\repairs\views.py:91
+msgid "Repair task created."
+msgstr "Задачата за ремонт е създадена."
+
+#: .\repairs\views.py:103 .\repairs\views.py:199
+msgid "This task is not assigned to you."
+msgstr "Тази задача не е възложена на вас."
+
+#: .\repairs\views.py:116
+msgid "Only reservations that have not started can be released."
+msgstr "Могат да се освобождават само резервации, по които не е започната работа."
+
+#: .\repairs\views.py:119
+msgid ""
+"Reservation released. The damage is available to other contractors again."
+msgstr "Резервацията е освободена. Повредата отново е достъпна за други изпълнители."
+
+#: .\repairs\views.py:124
+msgid "Work started."
+msgstr "Работата е започната."
+
+#: .\repairs\views.py:126
+msgid "Marked as finished. An inspector will review it."
+msgstr "Отбелязано като завършено. Инспектор ще го прегледа."
+
+#: .\repairs\views.py:129
+msgid "Unknown action."
+msgstr "Непознато действие."
+
+#: .\repairs\views.py:133
+msgid "This task can't do that from its current status."
+msgstr "Това действие не е възможно при текущия статус на задачата."
+
+#: .\repairs\views.py:145
+msgid "Add a photo of the finished repair before marking it finished."
+msgstr "Добавете снимка на завършения ремонт, преди да го отбележите като завършен."
+
+#: .\repairs\views.py:159
+msgid ""
+"Only repairs the contractor has marked finished can be approved or sent back."
+msgstr "Могат да се одобряват или връщат само ремонти, които изпълнителят е отбелязал като завършени."
+
+#: .\repairs\views.py:163
+msgid ""
+"Add a note telling the contractor what to fix before sending the repair back."
+msgstr "Добавете бележка какво трябва да поправи изпълнителят, преди да върнете ремонта."
+
+#: .\repairs\views.py:208
+msgid "Photo attached."
+msgstr "Снимката е прикачена."
+
+#: .\repairs\views.py:219
+msgid "That file isn't a photo we can read. Take or choose the photo again."
+msgstr "Файлът не е снимка, която можем да прочетем. Снимайте или изберете снимката отново."
+
+#: .\reports\forms.py:23 .\templates\reports\submit.html:102
+msgid "Take a photo of the damage with the camera."
+msgstr "Снимайте повредата с камерата."
+
+#: .\reports\forms.py:24 .\reports\photo_quality.py:63
+msgid "The photo couldn't be read. Please take it again."
+msgstr "Снимката не можа да бъде прочетена. Моля, снимайте отново."
+
+#: .\reports\forms.py:25 .\templates\reports\submit.html:103
+msgid ""
+"Your location wasn't captured. Allow location access and take the photo "
+"again."
+msgstr "Местоположението ви не беше определено. Разрешете достъп до местоположението и снимайте отново."
+
+#: .\reports\forms.py:29
+msgid "Take the photo with the camera on this page, then send the report."
+msgstr "Снимайте с камерата на тази страница и след това изпратете сигнала."
+
+#: .\reports\forms.py:38 .\templates\reports\submit.html:104
+msgid "The photo is too old. Take a new photo and send the report right away."
+msgstr "Снимката е твърде стара. Направете нова снимка и изпратете сигнала веднага."
+
+#: .\reports\forms.py:72
+msgid "Street or boulevard"
+msgstr "Улица или булевард"
+
+#: .\reports\forms.py:73
+msgid "District / municipality"
+msgstr "Район / община"
+
+#: .\reports\models.py:10
+msgid "Submitted"
+msgstr "Подаден"
+
+#: .\reports\models.py:11
+msgid "Processing"
+msgstr "Обработва се"
+
+#: .\reports\models.py:12
+msgid "Verified"
+msgstr "Потвърден"
+
+#: .\reports\models.py:13
+msgid "Scheduled for repair"
+msgstr "Насрочен за ремонт"
+
+#: .\reports\models.py:14 .\templates\reports\before_after.html:3
+msgid "Repaired"
+msgstr "Ремонтиран"
+
+#: .\reports\models.py:65
+msgid "unlocated"
+msgstr "без местоположение"
+
+#: .\reports\models.py:66
+#, python-format
+msgid "Report %(id)s · %(place)s"
+msgstr "Сигнал %(id)s · %(place)s"
+
+#: .\reports\models.py:219
+msgid "Accurate"
+msgstr "Точен"
+
+#: .\reports\models.py:220 .\templates\reports\detail.html:20
+#: .\templates\reports\moderate.html:38
+msgid "Spam"
+msgstr "Спам"
+
+#: .\reports\photo_quality.py:20 .\templates\reports\submit.html:117
+msgid "The photo is too small. Take it with the camera on this page."
+msgstr "Снимката е твърде малка. Снимайте с камерата на тази страница."
+
+#: .\reports\photo_quality.py:21 .\templates\reports\submit.html:118
+msgid ""
+"The photo is too dark. Make sure nothing covers the camera and there is "
+"enough light, then take it again."
+msgstr "Снимката е твърде тъмна. Уверете се, че нищо не закрива камерата и има достатъчно светлина, и снимайте отново."
+
+#: .\reports\photo_quality.py:22 .\templates\reports\submit.html:119
+msgid ""
+"The photo is almost white. Don't point the camera at the sun or a bright "
+"light, then take it again."
+msgstr "Снимката е почти бяла. Не насочвайте камерата към слънцето или силна светлина и снимайте отново."
+
+#: .\reports\photo_quality.py:23 .\templates\reports\submit.html:120
+msgid ""
+"The photo looks blank, with no detail. Point the camera at the road damage "
+"and take it again."
+msgstr "Снимката изглежда празна, без детайли. Насочете камерата към повредата на пътя и снимайте отново."
+
+#: .\reports\photo_quality.py:24 .\templates\reports\submit.html:121
+msgid ""
+"The photo is too blurry. Hold the phone still for a moment and take it again."
+msgstr "Снимката е твърде размазана. Задръжте телефона неподвижно за момент и снимайте отново."
+
+#: .\reports\views.py:43
+#, python-format
+msgid ""
+"You've reached the limit of %(hour)s reports an hour and %(day)s a day. You "
+"can send the next one at %(time)s."
+msgstr "Достигнахте ограничението от %(hour)s сигнала на час и %(day)s на ден. Следващия можете да изпратите в %(time)s."
+
+#: .\reports\views.py:51
+#, python-format
+msgid ""
+"Your account can no longer send reports because %(limit)s of your reports "
+"were marked as spam. If you think this is a mistake, contact an "
+"administrator."
+msgstr "Профилът ви вече не може да подава сигнали, защото %(limit)s от сигналите ви са отбелязани като спам. Ако смятате, че това е грешка, свържете се с администратор."
+
+#: .\reports\views.py:58 .\reports\views.py:159
+msgid ""
+"Contractor accounts don't file damage reports. Pick up verified damage from "
+"Available work."
+msgstr "Изпълнителите не подават сигнали за повреди. Изберете потвърдена повреда от „Налична работа“."
+
+#: .\reports\views.py:82
+msgid ""
+"This problem may already be reported nearby. Take the photo again and choose "
+"whether it's the same problem."
+msgstr "Възможно е проблемът вече да е подаден наблизо. Снимайте отново и изберете дали е същият проблем."
+
+#: .\reports\views.py:105
+msgid "Your report wasn't submitted"
+msgstr "Сигналът ви не беше изпратен"
+
+#: .\reports\views.py:106
+msgid ""
+"Something went wrong while saving it, so nothing was sent. Please take the "
+"photo again and resend it."
+msgstr "Възникна грешка при запазването, затова нищо не е изпратено. Моля, снимайте отново и изпратете пак."
+
+#: .\reports\views.py:117
+msgid ""
+"Your report was saved, but the automatic photo analysis couldn't start. An "
+"inspector will review it manually."
+msgstr "Сигналът ви е запазен, но автоматичният анализ на снимката не успя да стартира. Инспектор ще го прегледа ръчно."
+
+#: .\reports\views.py:121
+msgid "Report submitted. Computer vision analysis is running."
+msgstr "Сигналът е подаден. Тече анализ с компютърно зрение."
+
+#: .\reports\views.py:136 .\templates\damages\map.html:50
+#: .\templates\reports\before_after.html:12 .\templates\reports\detail.html:17
+#: .\templates\reports\moderation_result.html:30
+msgid "Road report"
+msgstr "Сигнал за пътя"
+
+#: .\reports\views.py:165
+msgid "You already reported this problem."
+msgstr "Вече сте подали сигнал за този проблем."
+
+#: .\reports\views.py:167
+msgid "This report is already closed, so it can't take more photos."
+msgstr "Сигналът вече е приключен и не приема повече снимки."
+
+#: .\reports\views.py:169
+msgid "You've already added a photo to this report."
+msgstr "Вече сте добавили снимка към този сигнал."
+
+#: .\reports\views.py:174
+msgid "Your photo was taken too far from this report to confirm it."
+msgstr "Снимката ви е направена твърде далеч от този сигнал, за да го потвърди."
+
+#: .\reports\views.py:189
+msgid ""
+"Thank you. Your photo was added to the existing report, which helps "
+"inspectors prioritise it."
+msgstr "Благодарим ви! Снимката ви е добавена към съществуващия сигнал, което помага на инспекторите да определят приоритета му."
+
+#: .\reports\views.py:201
+msgid "You can't vote on this report."
+msgstr "Не можете да гласувате за този сигнал."
+
+#: .\reports\views.py:206
+msgid "Your vote was removed."
+msgstr "Гласът ви е премахнат."
+
+#: .\reports\views.py:210
+msgid "Thank you. Inspectors will see that you flagged this report as spam."
+msgstr "Благодарим ви! Инспекторите ще видят, че сте отбелязали сигнала като спам."
+
+#: .\reports\views.py:212
+msgid "Thank you for confirming this report is accurate."
+msgstr "Благодарим ви, че потвърдихте, че сигналът е точен."
+
+#: .\reports\views.py:236 .\templates\base.html:29
+msgid "My reports"
+msgstr "Моите сигнали"
+
+#: .\reports\views.py:250
+msgid "You can only view your own reports."
+msgstr "Можете да преглеждате само собствените си сигнали."
+
+#: .\reports\views.py:293
+msgid ""
+"This report is already in the repair workflow and can no longer be deleted."
+msgstr "Този сигнал вече е в процес на ремонт и не може да бъде изтрит."
+
+#: .\reports\views.py:299
+msgid "Report deleted."
+msgstr "Сигналът е изтрит."
+
+#: .\reports\views.py:335 .\templates\reports\detail.html:172
+msgid "This report has already been reviewed."
+msgstr "Този сигнал вече е прегледан."
+
+#: .\reports\views.py:358
+msgid "Moderation flags saved."
+msgstr "Маркировките са запазени."
+
+#: .\templates\accounts\email\verify.txt:1
+#, python-format
+msgid "Hello %(name)s,"
+msgstr "Здравейте, %(name)s,"
+
+#: .\templates\accounts\email\verify.txt:3
+msgid ""
+"Please confirm that this is your email address for PATCH by opening this "
+"link:"
+msgstr "Моля, потвърдете, че това е вашият имейл адрес в PATCH, като отворите тази връзка:"
+
+#: .\templates\accounts\email\verify.txt:7
+#, python-format
+msgid "The link works for %(counter)s day."
+msgid_plural "The link works for %(counter)s days."
+msgstr[0] "Връзката е валидна %(counter)s ден."
+msgstr[1] "Връзката е валидна %(counter)s дни."
+
+#: .\templates\accounts\email\verify.txt:7
+msgid "If you didn't create a PATCH account, you can ignore this email."
+msgstr "Ако не сте създавали профил в PATCH, можете да пренебрегнете този имейл."
+
+#: .\templates\accounts\email\verify.txt:9 .\templates\base.html:8
+#: .\templates\base.html:82
+msgid "Road Inspector & Registry"
+msgstr "Инспектор и регистър на пътната настилка"
+
+#: .\templates\accounts\login.html:3 .\templates\accounts\login.html:6
+#: .\templates\base.html:63 .\templates\reports\detail.html:109
+msgid "Sign in"
+msgstr "Вход"
+
+#: .\templates\accounts\login.html:7
+msgid "Use the email address you registered with."
+msgstr "Използвайте имейла, с който сте се регистрирали."
+
+#: .\templates\accounts\login.html:10
+msgid "Continue"
+msgstr "Продължи"
+
+#: .\templates\accounts\login.html:12
+msgid "No account yet?"
+msgstr "Нямате профил?"
+
+#: .\templates\accounts\login.html:12 .\templates\accounts\register.html:3
+#: .\templates\accounts\register.html:16 .\templates\base.html:64
+msgid "Register"
+msgstr "Регистрация"
+
+#: .\templates\accounts\profile.html:3
+msgid "Profile"
+msgstr "Профил"
+
+#: .\templates\accounts\profile.html:11 .\templates\accounts\users.html:62
+msgid "Active"
+msgstr "Активен"
+
+#: .\templates\accounts\profile.html:11 .\templates\accounts\users.html:62
+msgid "Blocked"
+msgstr "Блокиран"
+
+#: .\templates\accounts\profile.html:14
+msgid "Your email address is confirmed"
+msgstr "Имейл адресът ви е потвърден"
+
+#: .\templates\accounts\profile.html:14 .\templates\accounts\users.html:45
+msgid "Email verified"
+msgstr "Потвърден имейл"
+
+#: .\templates\accounts\profile.html:16 .\templates\accounts\users.html:45
+msgid "Email not verified"
+msgstr "Непотвърден имейл"
+
+#: .\templates\accounts\profile.html:18
+#, python-format
+msgid "Member since %(date)s"
+msgstr "Член от %(date)s"
+
+#: .\templates\accounts\profile.html:29
+#, python-format
+msgid ""
+"Your request for the %(requested)s role is waiting for an administrator. "
+"Until then you can use PATCH with the %(current)s role."
+msgstr "Заявката ви за роля „%(requested)s“ чака одобрение от администратор. Дотогава използвате PATCH с роля „%(current)s“."
+
+#: .\templates\accounts\profile.html:34
+msgid "Account details"
+msgstr "Данни на профила"
+
+#: .\templates\accounts\profile.html:35
+msgid ""
+"Your name and email are shown to inspectors on your reports. You sign in "
+"with your email."
+msgstr "Името и имейлът ви се виждат от инспекторите в сигналите ви. Влизате с имейла си."
+
+#: .\templates\accounts\profile.html:38
+msgid "Your email address is verified"
+msgstr "Имейл адресът ви е потвърден"
+
+#: .\templates\accounts\profile.html:39
+#, python-format
+msgid ""
+"%(email)s, confirmed on %(date)s. Your reports show as coming from a "
+"verified account."
+msgstr "%(email)s, потвърден на %(date)s. Сигналите ви се показват като подадени от потвърден профил."
+
+#: .\templates\accounts\profile.html:43
+msgid "Your email address isn't verified yet"
+msgstr "Имейл адресът ви още не е потвърден"
+
+#: .\templates\accounts\profile.html:44
+#, python-format
+msgid ""
+"Open the link we sent to %(email)s. Reports from verified accounts are "
+"easier for inspectors to trust."
+msgstr "Отворете връзката, която изпратихме на %(email)s. На сигналите от потвърдени профили инспекторите се доверяват по-лесно."
+
+#: .\templates\accounts\profile.html:46
+msgid "Email sending isn't set up on this server, so use this link instead:"
+msgstr "Изпращането на имейли не е настроено на този сървър, затова използвайте тази връзка:"
+
+#: .\templates\accounts\profile.html:47
+msgid "Verify my email now"
+msgstr "Потвърди имейла ми сега"
+
+#: .\templates\accounts\profile.html:50
+msgid "Send verification email"
+msgstr "Изпрати имейл за потвърждение"
+
+#: .\templates\accounts\profile.html:63
+msgid "Save changes"
+msgstr "Запази промените"
+
+#: .\templates\accounts\profile.html:68
+msgid "Change password"
+msgstr "Смяна на парола"
+
+#: .\templates\accounts\profile.html:69
+msgid "Enter your current password, then the new one twice."
+msgstr "Въведете текущата си парола, след това новата два пъти."
+
+#: .\templates\accounts\profile.html:78
+msgid "At least 8 characters, not too common and not entirely numeric."
+msgstr "Поне 8 символа, да не е често срещана и да не е само от цифри."
+
+#: .\templates\accounts\profile.html:81
+msgid "Update password"
+msgstr "Смени паролата"
+
+#: .\templates\accounts\profile.html:87
+msgid "Contractor profile"
+msgstr "Профил на изпълнител"
+
+#: .\templates\accounts\profile.html:88
+msgid "Company details shown to inspectors when they assign repair work."
+msgstr "Данни за фирмата, които инспекторите виждат при възлагане на ремонти."
+
+#: .\templates\accounts\profile.html:96
+msgid "Save company details"
+msgstr "Запази данните на фирмата"
+
+#: .\templates\accounts\register.html:6
+msgid "Create a PATCH account"
+msgstr "Създайте профил в PATCH"
+
+#: .\templates\accounts\register.html:7
+msgid ""
+"Citizens report damage, contractors repair it. Inspector access has to be "
+"approved by an administrator."
+msgstr "Гражданите подават сигнали, изпълнителите ремонтират. Достъпът на инспектор се одобрява от администратор."
+
+#: .\templates\accounts\users.html:3 .\templates\base.html:43
+msgid "Users"
+msgstr "Потребители"
+
+#: .\templates\accounts\users.html:7
+msgid "Inspector requests"
+msgstr "Заявки за инспектор"
+
+#: .\templates\accounts\users.html:8
+msgid ""
+"These people asked for inspector access when they signed up. Inspectors can "
+"verify and reject reports, so only approve people you know. Until you "
+"decide, they use PATCH as citizens."
+msgstr "Тези хора са поискали достъп на инспектор при регистрацията си. Инспекторите могат да потвърждават и отхвърлят сигнали, затова одобрявайте само хора, които познавате. Докато не решите, те използват PATCH като граждани."
+
+#: .\templates\accounts\users.html:14
+#, python-format
+msgid "signed up %(date)s"
+msgstr "регистриран на %(date)s"
+
+#: .\templates\accounts\users.html:18
+msgid "Decline"
+msgstr "Откажи"
+
+#: .\templates\accounts\users.html:21
+#, python-format
+msgid "Give %(name)s inspector access?"
+msgstr "Да се даде ли достъп на инспектор на %(name)s?"
+
+#: .\templates\accounts\users.html:22
+#, python-format
+msgid "Approve as %(role)s"
+msgstr "Одобри като %(role)s"
+
+#: .\templates\accounts\users.html:32
+msgid "Accounts"
+msgstr "Профили"
+
+#: .\templates\accounts\users.html:33
+msgid ""
+"Change roles, or block and unblock users. Blocked accounts cannot sign in. "
+"You can't change your own role or block yourself."
+msgstr "Сменяйте роли или блокирайте и отблокирайте потребители. Блокираните профили не могат да влизат. Не можете да промените собствената си роля или да се блокирате."
+
+#: .\templates\accounts\users.html:35 .\templates\damages\register.html:9
+#: .\templates\home.html:43 .\templates\repairs\board.html:25
+#: .\templates\repairs\list.html:11 .\templates\reports\list.html:8
+#: .\templates\reports\moderate.html:23 .\templates\vision\jobs.html:9
+msgid "Status"
+msgstr "Статус"
+
+#: .\templates\accounts\users.html:35
+msgid "Spam strikes"
+msgstr "Нарушения (спам)"
+
+#: .\templates\accounts\users.html:41
+#, python-format
+msgid "Wants %(role)s"
+msgstr "Иска роля „%(role)s“"
+
+#: .\templates\accounts\users.html:49
+msgid "you"
+msgstr "вие"
+
+#: .\templates\accounts\users.html:52
+#, python-format
+msgid "Role for %(name)s"
+msgstr "Роля на %(name)s"
+
+#: .\templates\accounts\users.html:57
+msgid "Save"
+msgstr "Запази"
+
+#: .\templates\accounts\users.html:63
+msgid "Can't report"
+msgstr "Без право на сигнали"
+
+#: .\templates\accounts\users.html:69
+msgid "Reset this person's spam strikes? They'll be able to report again."
+msgstr "Да се нулират ли нарушенията за спам? Потребителят отново ще може да подава сигнали."
+
+#: .\templates\accounts\users.html:70
+msgid "Reset"
+msgstr "Нулирай"
+
+#: .\templates\accounts\users.html:78
+msgid "Block"
+msgstr "Блокирай"
+
+#: .\templates\accounts\users.html:78
+msgid "Unblock"
+msgstr "Отблокирай"
+
+#: .\templates\accounts\users.html:91
+#, python-brace-format
+msgid "Change this account to {role}?"
+msgstr "Да се смени ли ролята на този профил на „{role}“?"
+
+#: .\templates\base.html:22 .\templates\damages\map.html:3
+#: .\templates\home.html:16
+msgid "Public map"
+msgstr "Публична карта"
+
+#: .\templates\base.html:23 .\templates\damages\register.html:3
+#: .\templates\reports\before_after.html:52
+msgid "Damage register"
+msgstr "Регистър на повредите"
+
+#: .\templates\base.html:26 .\templates\repairs\available.html:3
+#: .\templates\repairs\available.html:6
+msgid "Available work"
+msgstr "Налична работа"
+
+#: .\templates\base.html:28
+msgid "Report damage"
+msgstr "Подай сигнал"
+
+#: .\templates\base.html:32 .\templates\reports\moderate.html:3
+#: .\templates\reports\moderate.html:6
+msgid "Review"
+msgstr "Преглед"
+
+#: .\templates\base.html:33
+msgid "Catalog"
+msgstr "Каталог"
+
+#: .\templates\base.html:34 .\templates\repairs\create.html:3
+msgid "Assign repair"
+msgstr "Възложи ремонт"
+
+#: .\templates\base.html:35 .\templates\vision\jobs.html:3
+msgid "Vision jobs"
+msgstr "Задачи за анализ"
+
+#: .\templates\base.html:38 .\templates\repairs\board.html:3
+#: .\templates\repairs\board.html:8
+msgid "My repairs"
+msgstr "Моите ремонти"
+
+#: .\templates\base.html:40 .\templates\reports\moderate.html:16
+msgid "Repairs"
+msgstr "Ремонти"
+
+#: .\templates\base.html:43
+msgid "Inspector requests waiting"
+msgstr "Чакащи заявки за инспектор"
+
+#: .\templates\base.html:60
+msgid "Sign out"
+msgstr "Изход"
+
+#: .\templates\damages\catalog.html:3 .\templates\damages\catalog.html:6
+msgid "Damage catalog"
+msgstr "Каталог на повредите"
+
+#: .\templates\damages\catalog.html:8
+msgid "Code"
+msgstr "Код"
+
+#: .\templates\damages\catalog.html:8
+msgid "Unit"
+msgstr "Мярка"
+
+#: .\templates\damages\catalog.html:8
+msgid "Base price"
+msgstr "Базова цена"
+
+#: .\templates\damages\catalog.html:8
+msgid "Technique"
+msgstr "Технология"
+
+#: .\templates\damages\map.html:10
+msgid "Public damage map"
+msgstr "Публична карта на повредите"
+
+#: .\templates\damages\map.html:11
+msgid ""
+"Non-rejected reports on the live register. Click a marker or a listing to "
+"inspect it. Faces and plates are blurred before annotated photos go public."
+msgstr "Всички неотхвърлени сигнали в регистъра. Кликнете върху маркер или ред, за да го разгледате. Лицата и регистрационните номера се замъгляват, преди снимките да станат публични."
+
+#: .\templates\damages\map.html:12
+msgid "Show on the map"
+msgstr "Покажи на картата"
+
+#: .\templates\damages\map.html:13
+msgid "All"
+msgstr "Всички"
+
+#: .\templates\damages\map.html:14 .\templates\damages\map.html:27
+msgid "Fixed"
+msgstr "Ремонтирани"
+
+#: .\templates\damages\map.html:16
+msgid "Checked by an inspector, not repaired yet"
+msgstr "Проверени от инспектор, още неремонтирани"
+
+#: .\templates\damages\map.html:16 .\templates\damages\map.html:28
+msgid "Not fixed"
+msgstr "Неремонтирани"
+
+#: .\templates\damages\map.html:18
+msgid "Reports no inspector has verified or rejected yet"
+msgstr "Сигнали, които още не са потвърдени или отхвърлени от инспектор"
+
+#: .\templates\damages\map.html:18 .\templates\damages\map.html:29
+msgid "Awaiting review"
+msgstr "Чакат преглед"
+
+#: .\templates\damages\map.html:22
+msgid "Verified reports nobody has reserved yet"
+msgstr "Потвърдени сигнали, които още никой не е резервирал"
+
+#: .\templates\damages\map.html:22
+msgid "Available to reserve"
+msgstr "За резервиране"
+
+#: .\templates\damages\map.html:33
+msgid "Registered problems"
+msgstr "Регистрирани проблеми"
+
+#: .\templates\damages\map.html:34 .\templates\damages\map.html:61
+msgid "Click a pin on the map, or pick one below."
+msgstr "Кликнете върху маркер на картата или изберете от списъка."
+
+#: .\templates\damages\map.html:36
+msgid "The map data couldn't be loaded."
+msgstr "Данните за картата не можаха да се заредят."
+
+#: .\templates\damages\map.html:37
+msgid "Check your connection and try again."
+msgstr "Проверете връзката си и опитайте отново."
+
+#: .\templates\damages\map.html:38 .\templates\error.html:28
+msgid "Try again"
+msgstr "Опитай отново"
+
+#: .\templates\damages\map.html:51
+msgid "Unnamed location"
+msgstr "Неозначено място"
+
+#: .\templates\damages\map.html:52
+msgid "Open this report"
+msgstr "Отвори сигнала"
+
+#: .\templates\damages\map.html:53
+msgid "Review this report"
+msgstr "Прегледай сигнала"
+
+#: .\templates\damages\map.html:54
+#, python-brace-format
+msgid "{n} confirmed accurate"
+msgstr "{n} потвърдиха, че е точен"
+
+#: .\templates\damages\map.html:55
+msgid "View and reserve"
+msgstr "Виж и резервирай"
+
+#: .\templates\damages\map.html:56
+msgid "An inspector hasn't checked this report yet, so it can't be reserved."
+msgstr "Инспектор още не е проверил този сигнал, затова не може да бъде резервиран."
+
+#: .\templates\damages\map.html:57
+msgid "Another contractor is already repairing this."
+msgstr "Друг изпълнител вече ремонтира това."
+
+#: .\templates\damages\map.html:58 .\templates\reports\detail.html:74
+msgid "Open in your repairs"
+msgstr "Отвори в „Моите ремонти“"
+
+#: .\templates\damages\map.html:59 .\templates\repairs\approval_result.html:39
+msgid "See before & after"
+msgstr "Виж преди и след"
+
+#: .\templates\damages\map.html:60
+msgid "Selected problem"
+msgstr "Избран проблем"
+
+#: .\templates\damages\map.html:62
+msgid "No registered problems on the map yet."
+msgstr "Все още няма регистрирани проблеми на картата."
+
+#: .\templates\damages\map.html:64
+msgid "No unfixed road problems right now."
+msgstr "В момента няма неремонтирани проблеми."
+
+#: .\templates\damages\map.html:65
+msgid "No repaired road problems yet."
+msgstr "Все още няма ремонтирани проблеми."
+
+#: .\templates\damages\map.html:66
+msgid ""
+"Nothing is waiting for review. Every report has been verified or rejected."
+msgstr "Няма сигнали за преглед. Всички са потвърдени или отхвърлени."
+
+#: .\templates\damages\map.html:67
+msgid ""
+"Nothing is available to reserve right now. New work appears here once an "
+"inspector verifies a report."
+msgstr "В момента няма нищо за резервиране. Новата работа се появява тук, след като инспектор потвърди сигнал."
+
+#: .\templates\damages\register.html:6
+msgid "Public damage register"
+msgstr "Публичен регистър на повредите"
+
+#: .\templates\damages\register.html:7
+msgid ""
+"Every report on the live register, one repair each. Repaired ones are shown "
+"in green; click them to see the road before and after the repair."
+msgstr "Всички сигнали в регистъра – по един ремонт на сигнал. Ремонтираните са в зелено – кликнете върху тях, за да видите пътя преди и след ремонта."
+
+#: .\templates\damages\register.html:9 .\templates\home.html:43
+#: .\templates\repairs\available.html:9 .\templates\repairs\board.html:25
+#: .\templates\reports\list.html:8 .\templates\reports\moderate.html:23
+#: .\templates\reports\moderate.html:53 .\templates\reports\submit.html:60
+msgid "Street"
+msgstr "Улица"
+
+#: .\templates\damages\register.html:9 .\templates\repairs\available.html:9
+#: .\templates\reports\detail.html:60
+#: .\templates\reports\moderation_result.html:33
+msgid "Damages"
+msgstr "Повреди"
+
+#: .\templates\damages\register.html:9 .\templates\repairs\available.html:9
+#: .\templates\reports\detail.html:61
+msgid "Severity"
+msgstr "Тежест"
+
+#: .\templates\damages\register.html:9 .\templates\repairs\available.html:9
+#: .\templates\repairs\board.html:25 .\templates\repairs\list.html:11
+#: .\templates\reports\detail.html:62
+msgid "Priority"
+msgstr "Приоритет"
+
+#: .\templates\damages\register.html:9
+msgid "Cost"
+msgstr "Цена"
+
+#: .\templates\damages\register.html:25
+msgid "The register is empty."
+msgstr "Регистърът е празен."
+
+#: .\templates\error.html:19
+#, python-format
+msgid "Error %(code)s"
+msgstr "Грешка %(code)s"
+
+#: .\templates\error.html:29
+msgid "Go to the home page"
+msgstr "Към началната страница"
+
+#: .\templates\error.html:30
+msgid "Go back"
+msgstr "Назад"
+
+#: .\templates\home.html:3
+msgid "Home"
+msgstr "Начало"
+
+#: .\templates\home.html:7
+msgid "Inspect, register and repair the road network."
+msgstr "Проверявайте, регистрирайте и ремонтирайте пътната мрежа."
+
+#: .\templates\home.html:8
+msgid ""
+"Citizens report potholes and surface damage. Inspectors moderate the "
+"register. Contractors close the loop with photographed, approved repairs."
+msgstr "Гражданите сигнализират за дупки и повреди по настилката. Инспекторите проверяват регистъра. Изпълнителите завършват цикъла с документирани и одобрени ремонти."
+
+#: .\templates\home.html:10
+msgid "Find available work"
+msgstr "Намери налична работа"
+
+#: .\templates\home.html:12
+msgid "Review reports"
+msgstr "Прегледай сигнали"
+
+#: .\templates\home.html:14
+msgid "Submit a road report"
+msgstr "Подай сигнал за пътя"
+
+#: .\templates\home.html:20
+msgid "Open cases"
+msgstr "Отворени случаи"
+
+#: .\templates\home.html:27
+msgid "For citizens"
+msgstr "За граждани"
+
+#: .\templates\home.html:28
+msgid ""
+"Capture a photo, drop a GPS pin and track status from submission through "
+"repair."
+msgstr "Направете снимка, отбележете мястото на картата и следете статуса от подаването до ремонта."
+
+#: .\templates\home.html:31
+msgid "For inspectors"
+msgstr "За инспектори"
+
+#: .\templates\home.html:32
+msgid ""
+"Review spam and duplicates, confirm computer-vision detections, override "
+"priority and issue a BOQ."
+msgstr "Отсейте спам и дублирани сигнали, потвърдете откритите повреди, задайте приоритет и изгответе КСС."
+
+#: .\templates\home.html:35
+msgid "For contractors"
+msgstr "За изпълнители"
+
+#: .\templates\home.html:36
+msgid ""
+"Reserve verified damage, track it from reserved to in progress to finished, "
+"and upload before/after photos for municipal approval."
+msgstr "Резервирайте потвърдени повреди, следете ги от резервация до завършване и качвайте снимки преди и след за одобрение от общината."
+
+#: .\templates\home.html:41
+msgid "Latest reports"
+msgstr "Последни сигнали"
+
+#: .\templates\home.html:43 .\templates\reports\submit.html:61
+msgid "District"
+msgstr "Район"
+
+#: .\templates\home.html:43
+msgid "When"
+msgstr "Кога"
+
+#: .\templates\home.html:57
+msgid "No reports yet. Be the first to file one."
+msgstr "Все още няма сигнали. Бъдете първият, който ще подаде."
+
+#: .\templates\repairs\approval_result.html:3
+#: .\templates\repairs\approval_result.html:14
+msgid "Repair approved"
+msgstr "Ремонтът е одобрен"
+
+#: .\templates\repairs\approval_result.html:3
+#: .\templates\repairs\approval_result.html:14
+msgid "Repair sent back"
+msgstr "Ремонтът е върнат"
+
+#: .\templates\repairs\approval_result.html:17
+msgid ""
+"The linked reports are now marked repaired and the job is closed. They show "
+"in green on the public map."
+msgstr "Свързаните сигнали са отбелязани като ремонтирани и задачата е приключена. Те се показват в зелено на публичната карта."
+
+#: .\templates\repairs\approval_result.html:19
+msgid ""
+"It's back in the contractor's In progress list with your note. It will "
+"return to the Repairs tab once they mark it finished again."
+msgstr "Ремонтът е върнат в списъка „В процес“ на изпълнителя заедно с бележката ви. Ще се появи отново в раздел „Ремонти“, когато го отбележи като завършен."
+
+#: .\templates\repairs\approval_result.html:24
+#: .\templates\reports\detail.html:57 .\templates\reports\moderate.html:53
+msgid "Repair"
+msgstr "Ремонт"
+
+#: .\templates\repairs\approval_result.html:25
+#: .\templates\reports\moderation_result.html:31
+msgid "New status"
+msgstr "Нов статус"
+
+#: .\templates\repairs\approval_result.html:25
+#: .\templates\repairs\board.html:33
+msgid "Sent back"
+msgstr "Върнат"
+
+#: .\templates\repairs\approval_result.html:28
+#: .\templates\reports\moderation_result.html:36
+msgid "Note"
+msgstr "Бележка"
+
+#: .\templates\repairs\approval_result.html:28
+#: .\templates\reports\detail.html:180
+#: .\templates\reports\moderation_result.html:36
+msgid "Reason"
+msgstr "Причина"
+
+#: .\templates\repairs\approval_result.html:29
+#: .\templates\reports\moderation_result.html:37
+msgid "By"
+msgstr "От"
+
+#: .\templates\repairs\approval_result.html:35
+msgid "Review next repair"
+msgstr "Следващ ремонт"
+
+#: .\templates\repairs\approval_result.html:37
+msgid "Back to repairs"
+msgstr "Към ремонтите"
+
+#: .\templates\repairs\approval_result.html:41
+msgid "View this repair"
+msgstr "Виж ремонта"
+
+#: .\templates\repairs\approval_result.html:45
+#, python-format
+msgid "%(counter)s repair still waiting for approval."
+msgid_plural "%(counter)s repairs still waiting for approval."
+msgstr[0] "%(counter)s ремонт още чака одобрение."
+msgstr[1] "%(counter)s ремонта още чакат одобрение."
+
+#: .\templates\repairs\approval_result.html:45
+msgid "No other repairs are waiting for approval."
+msgstr "Няма други ремонти, които чакат одобрение."
+
+#: .\templates\repairs\available.html:7
+msgid ""
+"Reports that inspectors have verified and nobody has reserved yet, most "
+"urgent first. Each report is one repair, including every damage found in it. "
+"Click a row to see the report, or reserve it straight away."
+msgstr "Сигнали, потвърдени от инспектор и още нерезервирани, подредени по спешност. Всеки сигнал е един ремонт, включващ всички открити в него повреди. Кликнете върху ред, за да видите сигнала, или го резервирайте директно."
+
+#: .\templates\repairs\available.html:9
+msgid "Est. cost"
+msgstr "Ориент. цена"
+
+#: .\templates\repairs\available.html:20
+msgid "Reserve"
+msgstr "Резервирай"
+
+#: .\templates\repairs\available.html:25
+msgid ""
+"Nothing to pick up right now. New damage shows up here once an inspector "
+"verifies it."
+msgstr "В момента няма налична работа. Новите повреди се появяват тук, след като инспектор ги потвърди."
+
+#: .\templates\repairs\board.html:9
+msgid ""
+"Work you've reserved or been assigned, from reservation to finished repair."
+msgstr "Работа, която сте резервирали или ви е възложена – от резервацията до завършения ремонт."
+
+#: .\templates\repairs\board.html:11
+msgid "Find work"
+msgstr "Намери работа"
+
+#: .\templates\repairs\board.html:25 .\templates\repairs\list.html:11
+msgid "Task"
+msgstr "Задача"
+
+#: .\templates\repairs\board.html:25
+msgid "Updated"
+msgstr "Обновена"
+
+#: .\templates\repairs\board.html:33
+msgid "Awaiting approval"
+msgstr "Чака одобрение"
+
+#: .\templates\repairs\board.html:41
+#, python-format
+msgid ""
+"No reservations. Pick something up from <a "
+"href=\"%(available_url)s\">Available work</a>."
+msgstr "Няма резервации. Изберете нещо от <a href=\"%(available_url)s\">Налична работа</a>."
+
+#: .\templates\repairs\board.html:42
+msgid "Nothing in progress. Start one of your reserved jobs."
+msgstr "Няма ремонти в процес. Започнете някоя от резервираните задачи."
+
+#: .\templates\repairs\board.html:43
+msgid "No finished repairs yet."
+msgstr "Все още няма завършени ремонти."
+
+#: .\templates\repairs\create.html:6
+msgid "Create repair task"
+msgstr "Нова задача за ремонт"
+
+#: .\templates\repairs\create.html:7
+msgid ""
+"Pick one verified report and the team that will repair it. The task covers "
+"every damage found in the report."
+msgstr "Изберете един потвърден сигнал и екипа, който ще го ремонтира. Задачата обхваща всички открити в сигнала повреди."
+
+#: .\templates\repairs\create.html:10
+msgid "The repair wasn't assigned."
+msgstr "Ремонтът не беше възложен."
+
+#: .\templates\repairs\create.html:15 .\templates\reports\detail.html:3
+#: .\templates\reports\moderation_result.html:30 .\templates\vision\jobs.html:9
+msgid "Report"
+msgstr "Сигнал"
+
+#: .\templates\repairs\create.html:25
+msgid "No verified reports are waiting for a repair. Verify a report first."
+msgstr "Няма потвърдени сигнали, които чакат ремонт. Първо потвърдете сигнал."
+
+#: .\templates\repairs\create.html:27
+msgid "Contractor team"
+msgstr "Екип на изпълнител"
+
+#: .\templates\repairs\create.html:34
+msgid "Title (optional)"
+msgstr "Заглавие (по желание)"
+
+#: .\templates\repairs\create.html:35
+msgid "Filled in from the report if left empty"
+msgstr "Попълва се от сигнала, ако е празно"
+
+#: .\templates\repairs\create.html:36
+msgid "Description (optional)"
+msgstr "Описание (по желание)"
+
+#: .\templates\repairs\create.html:38
+msgid "Priority override"
+msgstr "Ръчен приоритет"
+
+#: .\templates\repairs\create.html:40
+msgid "Assign"
+msgstr "Възложи"
+
+#: .\templates\repairs\detail.html:8
+#, python-format
+msgid "Priority %(priority)s"
+msgstr "Приоритет %(priority)s"
+
+#: .\templates\repairs\detail.html:10
+msgid "Linked damages"
+msgstr "Свързани повреди"
+
+#: .\templates\repairs\detail.html:16
+msgid "Photos"
+msgstr "Снимки"
+
+#: .\templates\repairs\detail.html:24
+msgid "No site photos yet."
+msgstr "Все още няма снимки от обекта."
+
+#: .\templates\repairs\detail.html:28
+msgid "Kind"
+msgstr "Вид"
+
+#: .\templates\repairs\detail.html:32
+msgid "Photo"
+msgstr "Снимка"
+
+#: .\templates\repairs\detail.html:34
+msgid "Upload"
+msgstr "Качи"
+
+#: .\templates\repairs\detail.html:40
+msgid "Your progress"
+msgstr "Вашият напредък"
+
+#: .\templates\repairs\detail.html:48
+msgid ""
+"When your crew is on site, start the work. Add a \"before\" photo if you can."
+msgstr "Когато екипът ви е на място, започнете работа. Ако можете, добавете снимка „преди“."
+
+#: .\templates\repairs\detail.html:50
+msgid "Start work"
+msgstr "Започни работа"
+
+#: .\templates\repairs\detail.html:54
+msgid "Release this reservation? Other contractors will be able to take it."
+msgstr "Да се освободи ли резервацията? Други изпълнители ще могат да я поемат."
+
+#: .\templates\repairs\detail.html:55
+msgid "Release reservation"
+msgstr "Освободи резервацията"
+
+#: .\templates\repairs\detail.html:61
+msgid "An inspector sent this repair back."
+msgstr "Инспектор върна този ремонт."
+
+#: .\templates\repairs\detail.html:62
+#, python-format
+msgid "Reason: %(reason)s"
+msgstr "Причина: %(reason)s"
+
+#: .\templates\repairs\detail.html:63
+msgid "Fix it, then add a new photo and mark it finished again."
+msgstr "Поправете го, добавете нова снимка и отново го отбележете като завършен."
+
+#: .\templates\repairs\detail.html:66
+msgid ""
+"When the work is done, add a photo of the finished repair and mark it "
+"finished for inspector approval."
+msgstr "Когато работата е готова, добавете снимка на завършения ремонт и го отбележете като завършен за одобрение от инспектор."
+
+#: .\templates\repairs\detail.html:70
+msgid "Photo of the finished repair"
+msgstr "Снимка на завършения ремонт"
+
+#: .\templates\repairs\detail.html:70
+msgid "Photo of the finished repair (required)"
+msgstr "Снимка на завършения ремонт (задължителна)"
+
+#: .\templates\repairs\detail.html:73
+msgid "Your photo of the finished repair"
+msgstr "Вашата снимка на завършения ремонт"
+
+#: .\templates\repairs\detail.html:74
+#, python-format
+msgid ""
+"Your \"after\" photo from %(date)s will be used. Add a new one only if you "
+"want to replace it."
+msgstr "Ще се използва снимката ви „след“ от %(date)s. Добавете нова само ако искате да я замените."
+
+#: .\templates\repairs\detail.html:80
+msgid "Completion note (optional)"
+msgstr "Бележка при завършване (по желание)"
+
+#: .\templates\repairs\detail.html:82
+msgid "Mark finished"
+msgstr "Отбележи като завършен"
+
+#: .\templates\repairs\detail.html:85
+msgid "Approved by the municipality. Nice work."
+msgstr "Одобрено от общината. Добра работа!"
+
+#: .\templates\repairs\detail.html:87
+msgid "Finished. Waiting for an inspector to approve the repair."
+msgstr "Завършено. Чака одобрение от инспектор."
+
+#: .\templates\repairs\detail.html:93
+msgid "Municipal approval"
+msgstr "Одобрение от общината"
+
+#: .\templates\repairs\detail.html:95
+msgid ""
+"The contractor marked this repair finished. Check the photos, then approve "
+"it or send it back."
+msgstr "Изпълнителят е отбелязал ремонта като завършен. Проверете снимките и го одобрете или върнете."
+
+#: .\templates\repairs\detail.html:97
+msgid "Note for the contractor"
+msgstr "Бележка за изпълнителя"
+
+#: .\templates\repairs\detail.html:98
+msgid "Required if you send it back"
+msgstr "Задължителна, ако го връщате"
+
+#: .\templates\repairs\detail.html:100
+msgid "Approve repair"
+msgstr "Одобри ремонта"
+
+#: .\templates\repairs\detail.html:102
+msgid "Send this repair back to the contractor?"
+msgstr "Да се върне ли ремонтът на изпълнителя?"
+
+#: .\templates\repairs\detail.html:102
+msgid "Send back"
+msgstr "Върни"
+
+#: .\templates\repairs\detail.html:106
+msgid "Approved. The linked reports are marked repaired."
+msgstr "Одобрено. Свързаните сигнали са отбелязани като ремонтирани."
+
+#: .\templates\repairs\detail.html:108
+msgid ""
+"Sent back to the contractor. It returns here once they mark it finished "
+"again."
+msgstr "Върнато на изпълнителя. Ще се появи отново тук, когато го отбележи като завършен."
+
+#: .\templates\repairs\detail.html:110
+msgid "Approval opens once the contractor marks the repair finished."
+msgstr "Одобрението става възможно, след като изпълнителят отбележи ремонта като завършен."
+
+#: .\templates\repairs\list.html:3 .\templates\repairs\list.html:7
+msgid "Repair tasks"
+msgstr "Задачи за ремонт"
+
+#: .\templates\repairs\list.html:8
+msgid "Assign work"
+msgstr "Възложи работа"
+
+#: .\templates\repairs\list.html:11
+msgid "Team"
+msgstr "Екип"
+
+#: .\templates\repairs\list.html:25
+msgid "No repair tasks."
+msgstr "Няма задачи за ремонт."
+
+#: .\templates\reports\before_after.html:11
+msgid "Repair confirmed by the municipality"
+msgstr "Ремонтът е потвърден от общината"
+
+#: .\templates\reports\before_after.html:15
+#, python-format
+msgid "Repaired on %(date)s"
+msgstr "Ремонтиран на %(date)s"
+
+#: .\templates\reports\before_after.html:22
+#, python-format
+msgid "Reported %(date)s"
+msgstr "Подаден на %(date)s"
+
+#: .\templates\reports\before_after.html:24
+msgid "The damage as reported"
+msgstr "Повредата при подаване на сигнала"
+
+#: .\templates\reports\before_after.html:26
+msgid "No photo was attached to the report."
+msgstr "Към сигнала няма прикачена снимка."
+
+#: .\templates\reports\before_after.html:30
+msgid "Now"
+msgstr "Сега"
+
+#: .\templates\reports\before_after.html:30
+#, python-format
+msgid "Photographed %(date)s"
+msgstr "Заснето на %(date)s"
+
+#: .\templates\reports\before_after.html:32
+msgid "The road after the repair"
+msgstr "Пътят след ремонта"
+
+#: .\templates\reports\before_after.html:36
+msgid "The contractor didn't upload a photo of the finished repair."
+msgstr "Изпълнителят не е качил снимка на завършения ремонт."
+
+#: .\templates\reports\before_after.html:43
+msgid "Damage fixed"
+msgstr "Отстранена повреда"
+
+#: .\templates\reports\before_after.html:45
+msgid "Repaired by"
+msgstr "Ремонтирано от"
+
+#: .\templates\reports\before_after.html:46
+msgid "Method"
+msgstr "Технология"
+
+#: .\templates\reports\before_after.html:51
+msgid "Back to the map"
+msgstr "Към картата"
+
+#: .\templates\reports\before_after.html:53
+msgid "Full report"
+msgstr "Целият сигнал"
+
+#: .\templates\reports\detail.html:11
+msgid "This damage has been repaired."
+msgstr "Тази повреда е ремонтирана."
+
+#: .\templates\reports\detail.html:11
+msgid "See the before and after photos."
+msgstr "Вижте снимките преди и след."
+
+#: .\templates\reports\detail.html:21 .\templates\reports\moderate.html:39
+msgid "Duplicate"
+msgstr "Дубликат"
+
+#: .\templates\reports\detail.html:24
+msgid "The person who sent this report has confirmed their email address"
+msgstr "Подателят на сигнала е потвърдил имейл адреса си"
+
+#: .\templates\reports\detail.html:24 .\templates\reports\moderate.html:34
+msgid "Verified account"
+msgstr "Потвърден профил"
+
+#: .\templates\reports\detail.html:26
+msgid "The person who sent this report hasn't confirmed their email address"
+msgstr "Подателят на сигнала не е потвърдил имейл адреса си"
+
+#: .\templates\reports\detail.html:26 .\templates\reports\moderate.html:34
+msgid "Unverified account"
+msgstr "Непотвърден профил"
+
+#: .\templates\reports\detail.html:32
+msgid "Annotated damage"
+msgstr "Маркирана повреда"
+
+#: .\templates\reports\detail.html:34
+msgid "Original capture"
+msgstr "Оригинална снимка"
+
+#: .\templates\reports\detail.html:39
+#, python-format
+msgid "Also reported by %(counter)s more person"
+msgid_plural "Also reported by %(counter)s more people"
+msgstr[0] "Подаден и от още %(counter)s човек"
+msgstr[1] "Подаден и от още %(counter)s души"
+
+#: .\templates\reports\detail.html:41
+msgid ""
+"Their photos were taken within a few metres of this report. Only inspectors "
+"and administrators see them."
+msgstr "Снимките им са направени на няколко метра от този сигнал. Виждат ги само инспектори и администратори."
+
+#: .\templates\reports\detail.html:45
+msgid "Confirmation photo"
+msgstr "Снимка – потвърждение"
+
+#: .\templates\reports\detail.html:58
+msgid "Everything found in this report is repaired as one job."
+msgstr "Всичко, открито в този сигнал, се ремонтира като една задача."
+
+#: .\templates\reports\detail.html:63 .\templates\reports\detail.html:123
+msgid "Estimated cost"
+msgstr "Ориентировъчна цена"
+
+#: .\templates\reports\detail.html:65
+msgid "Repair status"
+msgstr "Статус на ремонта"
+
+#: .\templates\reports\detail.html:70
+msgid "Reserve this repair"
+msgstr "Резервирай ремонта"
+
+#: .\templates\reports\detail.html:76
+msgid "Already taken by another contractor."
+msgstr "Вече е поето от друг изпълнител."
+
+#: .\templates\reports\detail.html:79
+msgid "Open the repair task"
+msgstr "Отвори задачата за ремонт"
+
+#: .\templates\reports\detail.html:86
+msgid "Is this report accurate?"
+msgstr "Точен ли е този сигнал?"
+
+#: .\templates\reports\detail.html:89
+#, python-format
+msgid "%(counter)s person confirmed it's accurate."
+msgid_plural "%(counter)s people confirmed it's accurate."
+msgstr[0] "%(counter)s човек потвърди, че е точен."
+msgstr[1] "%(counter)s души потвърдиха, че е точен."
+
+#: .\templates\reports\detail.html:90
+#, python-format
+msgid "Flagged as spam by %(counter)s person"
+msgid_plural "Flagged as spam by %(counter)s people"
+msgstr[0] "Отбелязан като спам от %(counter)s човек"
+msgstr[1] "Отбелязан като спам от %(counter)s души"
+
+#: .\templates\reports\detail.html:96
+msgid "You confirmed it's accurate"
+msgstr "Потвърдихте, че е точен"
+
+#: .\templates\reports\detail.html:96
+msgid "It's accurate"
+msgstr "Точен е"
+
+#: .\templates\reports\detail.html:100
+msgid "Report this as spam? Inspectors will review it."
+msgstr "Да се отбележи ли като спам? Инспекторите ще го прегледат."
+
+#: .\templates\reports\detail.html:102
+msgid "You reported it as spam (undo)"
+msgstr "Отбелязахте го като спам (отмени)"
+
+#: .\templates\reports\detail.html:102
+msgid "Report as spam"
+msgstr "Отбележи като спам"
+
+#: .\templates\reports\detail.html:107
+msgid "Other citizens can confirm your report or flag it."
+msgstr "Другите граждани могат да потвърдят сигнала ви или да го отбележат."
+
+#: .\templates\reports\detail.html:109
+msgid "to confirm this report or flag it as spam."
+msgstr "за да потвърдите сигнала или да го отбележите като спам."
+
+#: .\templates\reports\detail.html:116 .\templates\vision\jobs.html:9
+msgid "Detections"
+msgstr "Открити повреди"
+
+#: .\templates\reports\detail.html:121
+#, python-format
+msgid "Confidence %(value)s"
+msgstr "Сигурност %(value)s"
+
+#: .\templates\reports\detail.html:121
+#, python-format
+msgid "Area %(value)s m2"
+msgstr "Площ %(value)s м²"
+
+#: .\templates\reports\detail.html:121
+#, python-format
+msgid "Depth %(value)s cm"
+msgstr "Дълбочина %(value)s см"
+
+#: .\templates\reports\detail.html:122
+#, python-format
+msgid "Suggested priority %(priority)s"
+msgstr "Предложен приоритет %(priority)s"
+
+#: .\templates\reports\detail.html:122
+#, python-format
+msgid "override %(priority)s"
+msgstr "ръчен %(priority)s"
+
+#: .\templates\reports\detail.html:126
+msgid "Manual priority override (1 = most urgent)"
+msgstr "Ръчен приоритет (1 = най-спешно)"
+
+#: .\templates\reports\detail.html:128
+msgid "Save override"
+msgstr "Запази приоритета"
+
+#: .\templates\reports\detail.html:133
+msgid "Item"
+msgstr "Позиция"
+
+#: .\templates\reports\detail.html:133
+msgid "Qty"
+msgstr "Кол."
+
+#: .\templates\reports\detail.html:133
+msgid "Rate"
+msgstr "Ед. цена"
+
+#: .\templates\reports\detail.html:133
+msgid "Total"
+msgstr "Общо"
+
+#: .\templates\reports\detail.html:148
+msgid "No road damage was found in this photo."
+msgstr "В тази снимка не е открита повреда на пътя."
+
+#: .\templates\reports\detail.html:149
+msgid ""
+"If the damage is clearly visible, an inspector will still check the report. "
+"Otherwise, take a closer, clearer photo and report it again."
+msgstr "Ако повредата се вижда ясно, инспектор все пак ще провери сигнала. Иначе направете по-близка и ясна снимка и подайте сигнала отново."
+
+#: .\templates\reports\detail.html:152
+msgid ""
+"The photo couldn't be analysed automatically. An inspector will check it by "
+"hand."
+msgstr "Снимката не можа да бъде анализирана автоматично. Инспектор ще я провери ръчно."
+
+#: .\templates\reports\detail.html:154
+msgid "The photo is still being analysed. Refresh the page in a moment."
+msgstr "Снимката все още се анализира. Презаредете страницата след малко."
+
+#: .\templates\reports\detail.html:161
+msgid "Inspector review"
+msgstr "Проверка от инспектор"
+
+#: .\templates\reports\detail.html:166 .\templates\reports\detail.html:168
+msgid "system"
+msgstr "системата"
+
+#: .\templates\reports\detail.html:166
+#, python-format
+msgid "Rejected by %(name)s on %(date)s."
+msgstr "Отхвърлен от %(name)s на %(date)s."
+
+#: .\templates\reports\detail.html:168
+#, python-format
+msgid "Verified by %(name)s on %(date)s."
+msgstr "Потвърден от %(name)s на %(date)s."
+
+#: .\templates\reports\detail.html:183
+msgid "Mark as spam"
+msgstr "Отбележи като спам"
+
+#: .\templates\reports\detail.html:184
+msgid "Mark as duplicate"
+msgstr "Отбележи като дубликат"
+
+#: .\templates\reports\detail.html:187
+msgid "Verify"
+msgstr "Потвърди"
+
+#: .\templates\reports\detail.html:189
+msgid ""
+"Reject this report? It will be removed from the public map and register."
+msgstr "Да се отхвърли ли сигналът? Ще бъде премахнат от публичната карта и регистъра."
+
+#: .\templates\reports\detail.html:189
+msgid "Reject"
+msgstr "Отхвърли"
+
+#: .\templates\reports\detail.html:191
+msgid "Save flags"
+msgstr "Запази маркировките"
+
+#: .\templates\reports\detail.html:199 .\templates\reports\detail.html:204
+msgid "Delete report"
+msgstr "Изтрий сигнала"
+
+#: .\templates\reports\detail.html:201
+msgid ""
+"Permanently removes this report, its photos and detections. This cannot be "
+"undone."
+msgstr "Окончателно изтрива сигнала, снимките и откритите повреди. Действието е необратимо."
+
+#: .\templates\reports\detail.html:203 .\templates\reports\list.html:22
+msgid "Delete this report permanently?"
+msgstr "Да се изтрие ли сигналът окончателно?"
+
+#: .\templates\reports\detail.html:207
+msgid ""
+"This report is already scheduled for repair or repaired, so it can no longer "
+"be deleted."
+msgstr "Сигналът вече е насрочен за ремонт или е ремонтиран, затова не може да бъде изтрит."
+
+#: .\templates\reports\list.html:8
+msgid "Filed"
+msgstr "Подаден"
+
+#: .\templates\reports\list.html:23
+msgid "Delete"
+msgstr "Изтрий"
+
+#: .\templates\reports\list.html:29
+msgid "No reports yet."
+msgstr "Все още няма сигнали."
+
+#: .\templates\reports\moderate.html:7
+msgid ""
+"Verify citizen damage reports, and approve repairs contractors have "
+"finished. Click a row to open it."
+msgstr "Потвърждавайте сигнали от граждани и одобрявайте завършени от изпълнителите ремонти. Кликнете върху ред, за да го отворите."
+
+#: .\templates\reports\moderate.html:12
+msgid "Damage reports"
+msgstr "Сигнали за повреди"
+
+#: .\templates\reports\moderate.html:21
+msgid ""
+"Confirm the detected damage, flag spam and duplicates, then verify or "
+"reject. The count shows reports still waiting for a decision."
+msgstr "Проверете откритите повреди, отбележете спам и дубликати, след това потвърдете или отхвърлете. Броят показва сигналите, които още чакат решение."
+
+#: .\templates\reports\moderate.html:23
+msgid "Flags"
+msgstr "Маркировки"
+
+#: .\templates\reports\moderate.html:40
+#, python-format
+msgid "%(counter)s spam flag"
+msgid_plural "%(counter)s spam flags"
+msgstr[0] "%(counter)s сигнал за спам"
+msgstr[1] "%(counter)s сигнала за спам"
+
+#: .\templates\reports\moderate.html:42
+#, python-format
+msgid "+%(counter)s photo"
+msgid_plural "+%(counter)s photos"
+msgstr[0] "+%(counter)s снимка"
+msgstr[1] "+%(counter)s снимки"
+
+#: .\templates\reports\moderate.html:46
+msgid "No reports to review."
+msgstr "Няма сигнали за преглед."
+
+#: .\templates\reports\moderate.html:51
+msgid ""
+"Contractors marked these repairs finished. Check the photos, then approve "
+"them or send them back. Oldest first."
+msgstr "Изпълнителите са отбелязали тези ремонти като завършени. Проверете снимките и ги одобрете или върнете. Най-старите са първи."
+
+#: .\templates\reports\moderate.html:63
+msgid "No finished repairs waiting for approval."
+msgstr "Няма завършени ремонти, които чакат одобрение."
+
+#: .\templates\reports\moderation_result.html:3
+#: .\templates\reports\moderation_result.html:14
+msgid "Report verified"
+msgstr "Сигналът е потвърден"
+
+#: .\templates\reports\moderation_result.html:3
+#: .\templates\reports\moderation_result.html:14
+msgid "Report rejected"
+msgstr "Сигналът е отхвърлен"
+
+#: .\templates\reports\moderation_result.html:19
+#, python-format
+msgid ""
+"%(counter)s damage confirmed and added to the public register. Contractors "
+"can now reserve the repair work."
+msgid_plural ""
+"%(counter)s damages confirmed and added to the public register. Contractors "
+"can now reserve the repair work."
+msgstr[0] "%(counter)s повреда е потвърдена и добавена в публичния регистър. Изпълнителите вече могат да резервират ремонта."
+msgstr[1] "%(counter)s повреди са потвърдени и добавени в публичния регистър. Изпълнителите вече могат да резервират ремонта."
+
+#: .\templates\reports\moderation_result.html:21
+msgid ""
+"The report is on the public register. No damage was detected on it, so there "
+"is nothing for contractors to reserve."
+msgstr "Сигналът е в публичния регистър. В него не са открити повреди, затова няма какво да резервират изпълнителите."
+
+#: .\templates\reports\moderation_result.html:25
+msgid ""
+"It has been removed from the public map and register. The citizen who filed "
+"it can still see it, marked as rejected."
+msgstr "Сигналът е премахнат от публичната карта и регистъра. Гражданинът, който го е подал, все още го вижда като отхвърлен."
+
+#: .\templates\reports\moderation_result.html:43
+msgid "Review next report"
+msgstr "Следващ сигнал"
+
+#: .\templates\reports\moderation_result.html:45
+msgid "Back to review queue"
+msgstr "Към списъка за преглед"
+
+#: .\templates\reports\moderation_result.html:46
+msgid "View this report"
+msgstr "Виж сигнала"
+
+#: .\templates\reports\moderation_result.html:49
+#, python-format
+msgid "%(counter)s report still waiting for review."
+msgid_plural "%(counter)s reports still waiting for review."
+msgstr[0] "%(counter)s сигнал още чака преглед."
+msgstr[1] "%(counter)s сигнала още чакат преглед."
+
+#: .\templates\reports\moderation_result.html:49
+msgid "The review queue is clear. Nothing else is waiting."
+msgstr "Няма чакащи сигнали за преглед."
+
+#: .\templates\reports\submit.html:3
+msgid "Submit report"
+msgstr "Подай сигнал"
+
+#: .\templates\reports\submit.html:10
+msgid "Report road damage"
+msgstr "Сигнал за повреда на пътя"
+
+#: .\templates\reports\submit.html:11
+msgid ""
+"Point the camera at the damage and take a photo. Your location is added "
+"automatically from where you take it."
+msgstr "Насочете камерата към повредата и снимайте. Местоположението ви се добавя автоматично от мястото на снимката."
+
+#: .\templates\reports\submit.html:13
+msgid "Your report wasn't submitted."
+msgstr "Сигналът ви не беше изпратен."
+
+#: .\templates\reports\submit.html:14
+msgid "Fix the following and send it again:"
+msgstr "Поправете следното и изпратете отново:"
+
+#: .\templates\reports\submit.html:18
+msgid "Please take the photo again; it isn't kept after a failed attempt."
+msgstr "Моля, снимайте отново – снимката не се запазва след неуспешен опит."
+
+#: .\templates\reports\submit.html:23
+msgid "Reporting is switched off for your account"
+msgstr "Подаването на сигнали е спряно за профила ви"
+
+#: .\templates\reports\submit.html:23
+msgid "You've sent the maximum number of reports for now"
+msgstr "Изпратихте максималния брой сигнали засега"
+
+#: .\templates\reports\submit.html:25
+msgid "See my reports"
+msgstr "Виж моите сигнали"
+
+#: .\templates\reports\submit.html:29
+#, python-format
+msgid ""
+"You can send %(hour)s more of %(max_hour)s reports this hour and %(day)s "
+"more of %(max_day)s today."
+msgstr "Можете да изпратите още %(hour)s от %(max_hour)s сигнала този час и още %(day)s от %(max_day)s днес."
+
+#: .\templates\reports\submit.html:33
+msgid "The photo you took"
+msgstr "Направената снимка"
+
+#: .\templates\reports\submit.html:34 .\templates\reports\submit.html:89
+msgid "Starting the camera…"
+msgstr "Включване на камерата…"
+
+#: .\templates\reports\submit.html:37
+msgid "Switch camera"
+msgstr "Смени камерата"
+
+#: .\templates\reports\submit.html:40
+msgid "Take photo"
+msgstr "Снимай"
+
+#: .\templates\reports\submit.html:43
+msgid "Retake photo"
+msgstr "Снимай отново"
+
+#: .\templates\reports\submit.html:47 .\templates\reports\submit.html:96
+msgid "Getting your location…"
+msgstr "Определяне на местоположението…"
+
+#: .\templates\reports\submit.html:51
+msgid "Is this the same problem?"
+msgstr "Същият проблем ли е?"
+
+#: .\templates\reports\submit.html:52
+msgid ""
+"Someone already reported a problem right here. If it's the same one, add "
+"your photo to it instead of sending a new report."
+msgstr "Някой вече е подал сигнал точно тук. Ако е същият проблем, добавете снимката си към него, вместо да изпращате нов сигнал."
+
+#: .\templates\reports\submit.html:54
+msgid "No, it's a different problem"
+msgstr "Не, друг проблем е"
+
+#: .\templates\reports\submit.html:63
+msgid "Submit and analyse"
+msgstr "Изпрати за анализ"
+
+#: .\templates\reports\submit.html:75
+msgid "The pin shows where the photo was taken. It can't be moved by hand."
+msgstr "Маркерът показва къде е направена снимката. Не може да се мести ръчно."
+
+#: .\templates\reports\submit.html:90
+msgid ""
+"The camera and location only work over a secure connection (HTTPS). Open "
+"PATCH through its https:// address."
+msgstr "Камерата и местоположението работят само през защитена връзка (HTTPS). Отворете PATCH през адреса му с https://."
+
+#: .\templates\reports\submit.html:91
+msgid ""
+"This browser can't use the camera. Try a current version of Chrome, Safari, "
+"Firefox or Edge."
+msgstr "Този браузър не може да използва камерата. Опитайте с актуална версия на Chrome, Safari, Firefox или Edge."
+
+#: .\templates\reports\submit.html:92
+msgid ""
+"Camera access is blocked. Allow the camera for this site in your browser "
+"settings, then reload the page."
+msgstr "Достъпът до камерата е блокиран. Разрешете камерата за този сайт в настройките на браузъра и презаредете страницата."
+
+#: .\templates\reports\submit.html:93
+msgid "No camera was found on this device."
+msgstr "На това устройство не е открита камера."
+
+#: .\templates\reports\submit.html:94
+msgid "The camera is being used by another app. Close it and reload the page."
+msgstr "Камерата се използва от друго приложение. Затворете го и презаредете страницата."
+
+#: .\templates\reports\submit.html:95
+msgid "The camera couldn't be started. Reload the page to try again."
+msgstr "Камерата не можа да се включи. Презаредете страницата, за да опитате отново."
+
+#: .\templates\reports\submit.html:97
+#, python-brace-format
+msgid "Location found (± {m} m)."
+msgstr "Местоположението е намерено (± {m} м)."
+
+#: .\templates\reports\submit.html:98
+#, python-brace-format
+msgid "Photo taken here (± {m} m)."
+msgstr "Снимката е направена тук (± {m} м)."
+
+#: .\templates\reports\submit.html:99
+msgid "Photo taken. Waiting for your location…"
+msgstr "Снимката е направена. Изчакване на местоположението…"
+
+#: .\templates\reports\submit.html:100
+msgid ""
+"Location access is blocked. Allow location for this site in your browser "
+"settings, then reload the page."
+msgstr "Достъпът до местоположението е блокиран. Разрешете го за този сайт в настройките на браузъра и презаредете страницата."
+
+#: .\templates\reports\submit.html:101
+msgid ""
+"Your location couldn't be found. Turn on location services, step outside if "
+"you can, and retake the photo."
+msgstr "Местоположението ви не можа да бъде определено. Включете услугите за местоположение, излезте навън, ако можете, и снимайте отново."
+
+#: .\templates\reports\submit.html:105
+msgid "Sending…"
+msgstr "Изпращане…"
+
+#: .\templates\reports\submit.html:106
+msgid "Looking up the street…"
+msgstr "Търсене на улицата…"
+
+#: .\templates\reports\submit.html:107
+msgid "Filled in from where you took the photo. You can change it."
+msgstr "Попълнено според мястото на снимката. Можете да го промените."
+
+#: .\templates\reports\submit.html:108
+msgid "No street name was found at this point. Please type it in."
+msgstr "Не е намерена улица в тази точка. Моля, въведете я."
+
+#: .\templates\reports\submit.html:109
+msgid "The street couldn't be looked up right now. Please type it in."
+msgstr "Улицата не можа да бъде намерена в момента. Моля, въведете я."
+
+#: .\templates\reports\submit.html:111
+msgid "Yes, add my photo to this report"
+msgstr "Да, добави снимката ми към този сигнал"
+
+#: .\templates\reports\submit.html:112
+msgid "You reported this one yourself."
+msgstr "Вие сте подали този сигнал."
+
+#: .\templates\reports\submit.html:113
+msgid "You already added a photo to this one."
+msgstr "Вече сте добавили снимка към него."
+
+#: .\templates\reports\submit.html:114
+#, python-brace-format
+msgid "{m} m away"
+msgstr "на {m} м"
+
+#: .\templates\vision\jobs.html:6
+msgid "Computer vision pipeline"
+msgstr "Анализ с компютърно зрение"
+
+#: .\templates\vision\jobs.html:7
+msgid ""
+"Background jobs call the model, write detections, and blur faces and plates "
+"before annotated images go public."
+msgstr "Фонови задачи пускат модела, записват откритите повреди и замъгляват лица и номера, преди снимките да станат публични."
+
+#: .\templates\vision\jobs.html:9
+msgid "Job"
+msgstr "Задача"
+
+#: .\templates\vision\jobs.html:9
+msgid "Log"
+msgstr "Журнал"
+
+#: .\templates\vision\jobs.html:24
+msgid "No jobs have been queued."
+msgstr "Няма задачи на опашката."
+
+#: .\vision\models.py:10
+msgid "Queued"
+msgstr "На опашка"
+
+#: .\vision\models.py:11
+msgid "Running"
+msgstr "Изпълнява се"
+
+#: .\vision\models.py:13
+msgid "Failed"
+msgstr "Неуспешна"
+
+#, python-format
+#~ msgid "We sent a link to %(email)s. Open it to verify your email address."
+#~ msgstr ""
+#~ "Изпратихме връзка на %(email)s. Отворете я, за да потвърдите имейл адреса "
+#~ "си."
+
+#~ msgid ""
+#~ "An inspector sent this repair back. Check the task history for the "
+#~ "reason, fix it, then mark it finished again."
+#~ msgstr ""
+#~ "Инспектор е върнал този ремонт. Вижте причината в историята на задачата, "
+#~ "отстранете проблема и отново го отбележете като завършен."
+
+#~ msgid "Task history"
+#~ msgstr "История на задачата"
+
+#~ msgid "No detections yet. The vision job may still be running."
+#~ msgstr "Все още няма открити повреди. Анализът може още да тече."
+
+#~ msgid "Status history"
+#~ msgstr "История на статуса"
+
+#~ msgid "Open damage"
+#~ msgstr "Неремонтирана повреда"
+
+#~ msgid "Cost estimate generated."
+#~ msgstr "Количествено-стойностната сметка е генерирана."
+
+#~ msgid "Generate BOQ / cost estimate"
+#~ msgstr "Генерирай КСС / ценова оценка"
+
+#~ msgid "Choose whether this is the same problem as the report shown above."
+#~ msgstr "Изберете дали това е същият проблем като показания по-горе сигнал."
+
+#~ msgid "Device make"
+#~ msgstr "Марка на устройството"
+
+#~ msgid "Capture angle"
+#~ msgstr "Ъгъл на снимане"
+
+#~ msgid "Type"
+#~ msgstr "Вид"
+
+#~ msgid "Damage"
+#~ msgstr "Повреда"
+
+#~ msgid "Title"
+#~ msgstr "Заглавие"
+
+#~ msgid "Description"
+#~ msgstr "Описание"
+
+#~ msgid "Verify detections on a report before assigning a repair."
+#~ msgstr "Потвърдете повредите в сигнала, преди да възложите ремонт."
+
+#~ msgid "Choose the location by clicking the map."
+#~ msgstr "Изберете мястото, като кликнете върху картата."
+
+#~ msgid ""
+#~ "Click the map to set the GPS point (WGS 84). The original photo is stored "
+#~ "as a file URL, then sent to the vision pipeline."
+#~ msgstr ""
+#~ "Кликнете върху картата, за да отбележите GPS точката (WGS 84). Снимката "
+#~ "се запазва и се изпраща за анализ с компютърно зрение."
+
+#~ msgid ""
+#~ "For your security, the browser clears the chosen photo after a failed "
+#~ "attempt, so please add it again."
+#~ msgstr ""
+#~ "От съображения за сигурност браузърът изчиства избраната снимка след "
+#~ "неуспешен опит, затова я добавете отново."
+
+#~ msgid "No point selected yet."
+#~ msgstr "Все още няма избрана точка."
+
+#~ msgid "Point"
+#~ msgstr "Точка"
+
+

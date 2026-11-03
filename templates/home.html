@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Home" %}{% endblock %}
+{% block content %}
+<section class="hero">
+  <div>
+    <h1>{% trans "Inspect, register and repair the road network." %}</h1>
+    <p>{% trans "Citizens report potholes and surface damage. Inspectors moderate the register. Contractors close the loop with photographed, approved repairs." %}</p>
+    {% if user.is_contractor %}
+      <a class="btn" href="{% url 'repairs:available' %}">{% trans "Find available work" %}</a>
+    {% elif user.can_moderate %}
+      <a class="btn" href="{% url 'reports:moderation' %}">{% trans "Review reports" %}</a>
+    {% else %}
+      <a class="btn" href="{% url 'reports:submit' %}">{% trans "Submit a road report" %}</a>
+    {% endif %}
+    <a class="btn ghost on-dark" href="{% url 'damages:map' %}">{% trans "Public map" %}</a>
+  </div>
+  <div class="hero-stats">
+    <div class="stat"><b>{{ stats.reports }}</b><span>{% trans "Reports" %}</span></div>
+    <div class="stat"><b>{{ stats.open }}</b><span>{% trans "Open cases" %}</span></div>
+    <div class="stat"><b>{{ stats.repaired }}</b><span>{% trans "Repaired" context "count" %}</span></div>
+  </div>
+</section>
+
+<section class="grid section">
+  <article class="card">
+    <h3>{% trans "For citizens" %}</h3>
+    <p class="muted">{% trans "Capture a photo, drop a GPS pin and track status from submission through repair." %}</p>
+  </article>
+  <article class="card">
+    <h3>{% trans "For inspectors" %}</h3>
+    <p class="muted">{% trans "Review spam and duplicates, confirm computer-vision detections, override priority and issue a BOQ." %}</p>
+  </article>
+  <article class="card">
+    <h3>{% trans "For contractors" %}</h3>
+    <p class="muted">{% trans "Reserve verified damage, track it from reserved to in progress to finished, and upload before/after photos for municipal approval." %}</p>
+  </article>
+</section>
+
+<section class="card section">
+  <h2>{% trans "Latest reports" %}</h2>
+  <table class="table">
+    <thead><tr><th>{% trans "Street" %}</th><th>{% trans "District" %}</th><th>{% trans "Status" %}</th><th>{% trans "When" %}</th></tr></thead>
+    <tbody>
+      {% for report in latest %}
+      <tr class="click-row{% if report.status == 'repaired' %} is-repaired{% endif %}">
+        <td>
+          <a class="row-cover" href="{% if report.status == 'repaired' %}{% url 'reports:before_after' report.id %}{% else %}{% url 'reports:detail' report.id %}{% endif %}">
+            {{ report.street_name|default:"—" }}
+          </a>
+        </td>
+        <td>{{ report.district|default:"—" }}</td>
+        <td><span class="badge {{ report.status }}">{{ report.get_status_display }}</span></td>
+        <td>{{ report.created_at|date:"d.m.Y H:i" }}</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="4" class="muted">{% trans "No reports yet. Be the first to file one." %}</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}

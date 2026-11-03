@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Profile" %}{% endblock %}
+{% block content %}
+<section class="card profile-head">
+  <div class="avatar">{{ initials }}</div>
+  <div class="profile-id">
+    <h2>{{ user.full_name }}</h2>
+    <p class="muted">{{ user.email }}</p>
+    <p>
+      <span class="badge {% if user.is_active %}verified{% else %}rejected{% endif %}">{% if user.is_active %}{% trans "Active" %}{% else %}{% trans "Blocked" %}{% endif %}</span>
+      <span class="badge">{{ user.get_role_display }}</span>
+      {% if user.email_verified %}
+        <span class="badge verified" title="{% trans 'Your email address is confirmed' %}">✓ {% trans "Email verified" %}</span>
+      {% else %}
+        <span class="badge scheduled_for_repair">{% trans "Email not verified" %}</span>
+      {% endif %}
+      <span class="muted small">{% blocktrans with date=user.created_at|date:"F Y" %}Member since {{ date }}{% endblocktrans %}</span>
+    </p>
+  </div>
+  <div class="profile-stats">
+    {% for count, label, url in stats %}
+      <a class="profile-stat" href="{{ url }}"><b>{{ count }}</b><span>{{ label }}</span></a>
+    {% endfor %}
+  </div>
+</section>
+
+{% if user.has_pending_role_request %}
+<p class="notice section">{% blocktrans with requested=user.get_requested_role_display current=user.get_role_display %}Your request for the {{ requested }} role is waiting for an administrator. Until then you can use PATCH with the {{ current }} role.{% endblocktrans %}</p>
+{% endif %}
+
+<section class="profile-grid section">
+  <article class="card">
+    <h3>{% trans "Account details" %}</h3>
+    <p class="muted">{% trans "Your name and email are shown to inspectors on your reports. You sign in with your email." %}</p>
+    {% if user.email_verified %}
+      <div class="verify-box is-verified">
+        <strong>✓ {% trans "Your email address is verified" %}</strong>
+        <span class="muted small">{% blocktrans with email=user.email date=user.email_verified_at|date:"d.m.Y" %}{{ email }}, confirmed on {{ date }}. Your reports show as coming from a verified account.{% endblocktrans %}</span>
+      </div>
+    {% else %}
+      <div class="verify-box">
+        <strong>{% trans "Your email address isn't verified yet" %}</strong>
+        <span class="small">{% blocktrans with email=user.email %}Open the link we sent to {{ email }}. Reports from verified accounts are easier for inspectors to trust.{% endblocktrans %}</span>
+        {% if local_verify_link %}
+          <span class="small">{% trans "Email sending isn't set up on this server, so use this link instead:" %}</span>
+          <a class="btn btn-sm" href="{{ local_verify_link }}">{% trans "Verify my email now" %}</a>
+        {% else %}
+          <form method="post" action="{% url 'accounts:resend_verification' %}">{% csrf_token %}
+            <button class="btn btn-sm" type="submit">{% trans "Send verification email" %}</button>
+          </form>
+        {% endif %}
+      </div>
+    {% endif %}
+    <form method="post" novalidate>{% csrf_token %}
+      <input type="hidden" name="form" value="details">
+      {{ details_form.non_field_errors }}
+      {% for field in details_form %}
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
+        {{ field.errors }}
+      {% endfor %}
+      <button class="btn" type="submit">{% trans "Save changes" %}</button>
+    </form>
+  </article>
+
+  <article class="card">
+    <h3>{% trans "Change password" %}</h3>
+    <p class="muted">{% trans "Enter your current password, then the new one twice." %}</p>
+    <form method="post" novalidate>{% csrf_token %}
+      <input type="hidden" name="form" value="password">
+      {{ password_form.non_field_errors }}
+      {% for field in password_form %}
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
+        {{ field.errors }}
+        {% if field.name == "new_password1" %}
+          <p class="field-hint">{% trans "At least 8 characters, not too common and not entirely numeric." %}</p>
+        {% endif %}
+      {% endfor %}
+      <button class="btn" type="submit">{% trans "Update password" %}</button>
+    </form>
+  </article>
+
+  {% if contractor_form %}
+  <article class="card profile-wide">
+    <h3>{% trans "Contractor profile" %}</h3>
+    <p class="muted">{% trans "Company details shown to inspectors when they assign repair work." %}</p>
+    <form method="post" novalidate>{% csrf_token %}
+      <input type="hidden" name="form" value="contractor">
+      {% for field in contractor_form %}
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
+        {{ field.errors }}
+      {% endfor %}
+      <button class="btn" type="submit">{% trans "Save company details" %}</button>
+    </form>
+  </article>
+  {% endif %}
+</section>
+{% endblock %}

@@ -1,0 +1,222 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Report" %}{% endblock %}
+{% block extra_head %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+{% endblock %}
+{% block content %}
+{% if report.status == "repaired" %}
+<a class="repaired-banner" href="{% url 'reports:before_after' report.id %}">
+  <span class="repaired-banner-icon" aria-hidden="true">✓</span>
+  <span><strong>{% trans "This damage has been repaired." %}</strong> {% trans "See the before and after photos." %}</span>
+  <span aria-hidden="true">›</span>
+</a>
+{% endif %}
+<section class="split">
+  <div class="card">
+    <h2>{{ report.street_name|default:_("Road report") }}</h2>
+    <p>
+      <span class="badge {{ report.status }}">{{ report.get_status_display }}</span>
+      {% if report.is_spam %}<span class="badge rejected">{% trans "Spam" %}</span>{% endif %}
+      {% if report.is_duplicate %}<span class="badge rejected">{% trans "Duplicate" %}</span>{% endif %}
+      {% if report.user %}
+        {% if report.user.email_verified %}
+          <span class="badge verified" title="{% trans 'The person who sent this report has confirmed their email address' %}">✓ {% trans "Verified account" %}</span>
+        {% else %}
+          <span class="badge" title="{% trans "The person who sent this report hasn't confirmed their email address" %}">{% trans "Unverified account" %}</span>
+        {% endif %}
+      {% endif %}
+    </p>
+    <p class="muted">{{ report.district }} · {{ report.latitude }}, {{ report.longitude }}{% if report.device_metadata.location_accuracy_m is not None %} (± {{ report.device_metadata.location_accuracy_m|floatformat:0 }} m){% endif %} · {{ report.created_at }}</p>
+    {% if report.annotated_image %}
+      <img class="photo" src="{{ report.annotated_image.url }}" alt="{% trans 'Annotated damage' %}">
+    {% elif report.original_image %}
+      <img class="photo" src="{{ report.original_image.url }}" alt="{% trans 'Original capture' %}">
+    {% endif %}
+    <div id="mini-map" class="map" style="height:240px;margin-top:12px;"></div>
+    {% with confirmations=report.confirmations.all %}{% if confirmations %}
+      <div class="section">
+        <h3>{% blocktrans count counter=confirmations|length %}Also reported by {{ counter }} more person{% plural %}Also reported by {{ counter }} more people{% endblocktrans %}</h3>
+        {% if user.can_moderate %}
+          <p class="muted small">{% trans "Their photos were taken within a few metres of this report. Only inspectors and administrators see them." %}</p>
+          <div class="confirm-grid">
+            {% for confirmation in confirmations %}
+              <figure>
+                <a href="{{ confirmation.photo.url }}" target="_blank" rel="noopener"><img src="{{ confirmation.photo.url }}" alt="{% trans 'Confirmation photo' %}"></a>
+                <figcaption>{{ confirmation.user.full_name|default:"—" }} · {{ confirmation.created_at|date:"d.m.Y H:i" }} · ± {{ confirmation.location_accuracy_m|floatformat:0 }} m</figcaption>
+              </figure>
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+    {% endif %}{% endwith %}
+  </div>
+  <div class="stack">
+    {% if report.detections.all %}
+    <div class="card repair-summary">
+      <h3>{% trans "Repair" %}</h3>
+      <p class="muted">{% trans "Everything found in this report is repaired as one job." %}</p>
+      <dl class="result-summary">
+        <div><dt>{% trans "Damages" %}</dt><dd>{{ report.damage_names }}</dd></div>
+        {% with top=report.top_severity %}{% if top %}<div><dt>{% trans "Severity" %}</dt><dd><span class="badge {{ top.severity }}">{{ top.get_severity_display }}</span></dd></div>{% endif %}{% endwith %}
+        <div><dt>{% trans "Priority" %}</dt><dd>{{ report.priority|default:"—" }}</dd></div>
+        <div><dt>{% trans "Estimated cost" %}</dt><dd>{% if report.estimated_cost is not None %}€ {{ report.estimated_cost }}{% else %}—{% endif %}</dd></div>
+        {% if repair_task %}
+          <div><dt>{% trans "Repair status" %}</dt><dd><span class="badge {{ repair_task.status }}">{{ repair_task.get_status_display }}</span></dd></div>
+        {% endif %}
+      </dl>
+      {% if can_reserve %}
+        <form method="post" action="{% url 'repairs:reserve' report.id %}">{% csrf_token %}
+          <button class="btn" type="submit">{% trans "Reserve this repair" %}</button>
+        </form>
+      {% elif repair_task and user.is_contractor %}
+        {% if repair_task.assigned_to_id == user.id %}
+          <a class="btn ghost" href="{% url 'repairs:detail' repair_task.id %}">{% trans "Open in your repairs" %}</a>
+        {% else %}
+          <p class="muted">{% trans "Already taken by another contractor." %}</p>
+        {% endif %}
+      {% elif repair_task and user.can_moderate %}
+        <a class="btn ghost" href="{% url 'repairs:detail' repair_task.id %}">{% trans "Open the repair task" %}</a>
+      {% endif %}
+    </div>
+    {% endif %}
+
+    {% if report.status != "rejected" %}
+    <div class="card vote-card" id="votes">
+      <h3>{% trans "Is this report accurate?" %}</h3>
+      {% with accurate=report.accurate_votes flags=report.spam_flags %}
+        <p class="muted">
+          {% blocktrans count counter=accurate %}{{ counter }} person confirmed it's accurate.{% plural %}{{ counter }} people confirmed it's accurate.{% endblocktrans %}
+          {% if user.can_moderate and flags %}<span class="badge rejected">{% blocktrans count counter=flags %}Flagged as spam by {{ counter }} person{% plural %}Flagged as spam by {{ counter }} people{% endblocktrans %}</span>{% endif %}
+        </p>
+        {% if can_vote %}
+          <div class="vote-buttons">
+            <form method="post" action="{% url 'reports:vote' report.id 'accurate' %}">{% csrf_token %}
+              <button class="btn vote {% if my_vote == 'accurate' %}is-on{% else %}ghost{% endif %}" type="submit" aria-pressed="{% if my_vote == 'accurate' %}true{% else %}false{% endif %}">
+                <span aria-hidden="true">👍</span> {% if my_vote == "accurate" %}{% trans "You confirmed it's accurate" %}{% else %}{% trans "It's accurate" %}{% endif %}
+              </button>
+            </form>
+            <form method="post" action="{% url 'reports:vote' report.id 'spam' %}"
+                  {% if my_vote != "spam" %}onsubmit="return confirm('{% filter escapejs %}{% trans "Report this as spam? Inspectors will review it." %}{% endfilter %}');"{% endif %}>{% csrf_token %}
+              <button class="btn ghost vote-spam {% if my_vote == 'spam' %}is-on{% endif %}" type="submit" aria-pressed="{% if my_vote == 'spam' %}true{% else %}false{% endif %}">
+                {% if my_vote == "spam" %}{% trans "You reported it as spam (undo)" %}{% else %}{% trans "Report as spam" %}{% endif %}
+              </button>
+            </form>
+          </div>
+        {% elif user.is_authenticated and report.user_id == user.id %}
+          <p class="muted small">{% trans "Other citizens can confirm your report or flag it." %}</p>
+        {% elif not user.is_authenticated %}
+          <p class="muted small"><a href="{% url 'accounts:login' %}?next={{ request.path|urlencode }}">{% trans "Sign in" %}</a> {% trans "to confirm this report or flag it as spam." %}</p>
+        {% endif %}
+      {% endwith %}
+    </div>
+    {% endif %}
+
+    <div class="card">
+      <h3>{% trans "Detections" %}</h3>
+      {% for det in report.detections.all %}
+        <article style="margin-bottom:16px;">
+          <strong>{{ det.catalog.name }}</strong>
+          <span class="badge {{ det.severity }}">{{ det.get_severity_display }}</span>
+          <p class="muted">{% blocktrans with value=det.confidence %}Confidence {{ value }}{% endblocktrans %} · {% blocktrans with value=det.estimated_area_sqm %}Area {{ value }} m2{% endblocktrans %} · {% blocktrans with value=det.estimated_depth_cm %}Depth {{ value }} cm{% endblocktrans %}</p>
+          <p>{% blocktrans with priority=det.suggested_priority %}Suggested priority {{ priority }}{% endblocktrans %}{% if det.priority_override %} · {% blocktrans with priority=det.priority_override %}override {{ priority }}{% endblocktrans %}{% endif %}</p>
+          <p>{% trans "Estimated cost" %} € {{ det.estimated_repair_cost|default:"—" }}</p>
+          {% if user.can_moderate %}
+            <form method="post" action="{% url 'damages:override_priority' det.id %}">{% csrf_token %}
+              <label>{% trans "Manual priority override (1 = most urgent)" %}</label>
+              <input class="input" type="number" min="1" max="4" name="priority_override" value="{{ det.priority_override|default:'' }}">
+              <button class="btn ghost" type="submit">{% trans "Save override" %}</button>
+            </form>
+          {% endif %}
+          {% if det.boq_items.all %}
+            <table class="table">
+              <thead><tr><th>{% trans "Item" %}</th><th>{% trans "Qty" %}</th><th>{% trans "Rate" %}</th><th>{% trans "Total" %}</th></tr></thead>
+              {% for item in det.boq_items.all %}
+              <tr>
+                <td>{{ item.material_or_service }}</td>
+                <td>{{ item.quantity }} {{ item.unit }}</td>
+                <td>{{ item.unit_rate }}</td>
+                <td>{{ item.total_line_cost }}</td>
+              </tr>
+              {% endfor %}
+            </table>
+          {% endif %}
+        </article>
+      {% empty %}
+        {% if vision_job.status == "completed" %}
+          <div class="notice">
+            <strong>{% trans "No road damage was found in this photo." %}</strong>
+            <span>{% trans "If the damage is clearly visible, an inspector will still check the report. Otherwise, take a closer, clearer photo and report it again." %}</span>
+          </div>
+        {% elif vision_job.status == "failed" %}
+          <p class="notice bad">{% trans "The photo couldn't be analysed automatically. An inspector will check it by hand." %}</p>
+        {% else %}
+          <p class="muted">{% trans "The photo is still being analysed. Refresh the page in a moment." %}</p>
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    {% if user.can_moderate %}
+    <div class="card">
+      <h3>{% trans "Inspector review" %}</h3>
+      {% if not awaiting_review %}
+        <p class="notice {% if report.status == 'rejected' %}bad{% else %}good{% endif %}">
+          {% if decision %}
+            {% if decision.new_status == "rejected" %}
+              {% blocktrans with name=decision.changed_by.full_name|default:_("system") date=decision.created_at|date:"d.m.Y H:i" %}Rejected by {{ name }} on {{ date }}.{% endblocktrans %}
+            {% else %}
+              {% blocktrans with name=decision.changed_by.full_name|default:_("system") date=decision.created_at|date:"d.m.Y H:i" %}Verified by {{ name }} on {{ date }}.{% endblocktrans %}
+            {% endif %}
+            {% if decision.change_reason %}<br>{{ decision.change_reason }}{% endif %}
+          {% else %}
+            {% trans "This report has already been reviewed." %}
+          {% endif %}
+        </p>
+      {% endif %}
+      <form method="post" action="{% url 'reports:moderate' report.id %}">{% csrf_token %}
+        <label>{% trans "Notes" %}</label>
+        <textarea class="input" name="inspector_notes" rows="3">{{ report.inspector_notes }}</textarea>
+        {% if awaiting_review %}
+        <label>{% trans "Reason" %}</label>
+        <textarea class="input" name="reason" rows="2"></textarea>
+        {% endif %}
+        <label><input type="checkbox" name="is_spam" {% if report.is_spam %}checked{% endif %}> {% trans "Mark as spam" %}</label>
+        <label><input type="checkbox" name="is_duplicate" {% if report.is_duplicate %}checked{% endif %}> {% trans "Mark as duplicate" %}</label>
+        <div class="btn-row">
+          {% if awaiting_review %}
+          <button class="btn" name="action" value="verify">{% trans "Verify" %}</button>
+          <button class="btn danger" name="action" value="reject"
+                  onclick="return confirm('{% filter escapejs %}{% trans "Reject this report? It will be removed from the public map and register." %}{% endfilter %}');">{% trans "Reject" %}</button>
+          {% endif %}
+          <button class="btn ghost" name="action" value="save">{% trans "Save flags" %}</button>
+        </div>
+      </form>
+    </div>
+    {% endif %}
+
+    {% if user.is_authenticated and report.user_id == user.id %}
+    <div class="card danger-zone">
+      <h3>{% trans "Delete report" %}</h3>
+      {% if report.can_owner_delete %}
+        <p class="muted">{% trans "Permanently removes this report, its photos and detections. This cannot be undone." %}</p>
+        <form method="post" action="{% url 'reports:delete' report.id %}"
+              onsubmit="return confirm('{% filter escapejs %}{% trans "Delete this report permanently?" %}{% endfilter %}');">{% csrf_token %}
+          <button class="btn danger" type="submit">{% trans "Delete report" %}</button>
+        </form>
+      {% else %}
+        <p class="muted">{% trans "This report is already scheduled for repair or repaired, so it can no longer be deleted." %}</p>
+      {% endif %}
+    </div>
+    {% endif %}
+
+  </div>
+</section>
+{% endblock %}
+{% block extra_js %}
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+  const map = L.map('mini-map').setView([{{ report.latitude|stringformat:"s" }}, {{ report.longitude|stringformat:"s" }}], 16);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom: 19}).addTo(map);
+  L.marker([{{ report.latitude|stringformat:"s" }}, {{ report.longitude|stringformat:"s" }}]).addTo(map);
+</script>
+{% endblock %}

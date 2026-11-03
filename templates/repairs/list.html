@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Repair tasks" %}{% endblock %}
+{% block content %}
+<section class="card">
+  <div class="card-head">
+    <h2>{% trans "Repair tasks" %}</h2>
+    {% if user.can_moderate %}<a class="btn" href="{% url 'repairs:create' %}">{% trans "Assign work" %}</a>{% endif %}
+  </div>
+  <table class="table">
+    <thead><tr><th>{% trans "Task" %}</th><th>{% trans "Status" %}</th><th>{% trans "Team" %}</th><th>{% trans "Priority" %}</th></tr></thead>
+    <tbody>
+      {% for task in tasks %}
+      <tr class="click-row{% if task.status == 'approved' %} is-repaired{% endif %}">
+        <td>
+          <a class="row-cover" href="{% url 'repairs:detail' task.id %}">
+            {{ task.title }}
+          </a>
+        </td>
+        <td><span class="badge {{ task.status }}">{{ task.get_status_display }}</span></td>
+        <td>{{ task.team|default:task.assigned_to|default:"—" }}</td>
+        <td>{{ task.effective_priority }}</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="4">{% trans "No repair tasks." %}</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% if approved %}{% trans "Repair approved" %}{% else %}{% trans "Repair sent back" %}{% endif %}{% endblock %}
+{% block content %}
+<section class="card result-card {% if approved %}is-good{% else %}is-bad{% endif %}">
+  <div class="result-icon" aria-hidden="true">
+    {% if approved %}
+      <svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+    {% else %}
+      <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14L4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 010 11H11"/></svg>
+    {% endif %}
+  </div>
+
+  <h1>{% if approved %}{% trans "Repair approved" %}{% else %}{% trans "Repair sent back" %}{% endif %}</h1>
+  <p class="muted result-lead">
+    {% if approved %}
+      {% trans "The linked reports are now marked repaired and the job is closed. They show in green on the public map." %}
+    {% else %}
+      {% trans "It's back in the contractor's In progress list with your note. It will return to the Repairs tab once they mark it finished again." %}
+    {% endif %}
+  </p>
+
+  <dl class="result-summary">
+    <div><dt>{% trans "Repair" %}</dt><dd>{{ task.title }}</dd></div>
+    <div><dt>{% trans "New status" %}</dt><dd><span class="badge {{ task.status }}">{% if approved %}{% trans "Approved" %}{% else %}{% trans "Sent back" %}{% endif %}</span></dd></div>
+    <div><dt>{% trans "Contractor" %}</dt><dd>{{ task.team|default:task.assigned_to.full_name|default:"—" }}</dd></div>
+    {% if last_change %}
+      <div><dt>{% if approved %}{% trans "Note" %}{% else %}{% trans "Reason" %}{% endif %}</dt><dd>{{ last_change.change_reason|default:"—" }}</dd></div>
+      <div><dt>{% trans "By" %}</dt><dd>{{ last_change.changed_by.full_name|default:"—" }} · {{ last_change.created_at|date:"d.m.Y H:i" }}</dd></div>
+    {% endif %}
+  </dl>
+
+  <div class="result-actions">
+    {% if next_task %}
+      <a class="btn" href="{% url 'repairs:detail' next_task.id %}">{% trans "Review next repair" %}</a>
+    {% endif %}
+    <a class="btn {% if next_task %}ghost{% endif %}" href="{% url 'reports:moderation' %}?tab=repairs">{% trans "Back to repairs" %}</a>
+    {% if approved %}
+      {% with det=task.damages.all|first %}{% if det %}<a class="btn ghost" href="{% url 'reports:before_after' det.report_id %}">{% trans "See before & after" %}</a>{% endif %}{% endwith %}
+    {% else %}
+      <a class="btn ghost" href="{% url 'repairs:detail' task.id %}">{% trans "View this repair" %}</a>
+    {% endif %}
+  </div>
+  <p class="muted small result-remaining">
+    {% if remaining %}{% blocktrans count counter=remaining %}{{ counter }} repair still waiting for approval.{% plural %}{{ counter }} repairs still waiting for approval.{% endblocktrans %}{% else %}{% trans "No other repairs are waiting for approval." %}{% endif %}
+  </p>
+</section>
+{% endblock %}

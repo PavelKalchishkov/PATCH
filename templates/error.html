@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% comment %}
+  Shared error screen. Context: code, title, message, and optionally
+  retry_url / retry_label for a "try again" button and details (a list of problems).
+{% endcomment %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<section class="card result-card is-bad error-card" role="alert">
+  <div class="result-icon" aria-hidden="true">
+    {% if code == 404 %}
+      <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></svg>
+    {% elif code == 403 %}
+      <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg>
+    {% else %}
+      <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 7v6"/><path d="M12 17h.01"/></svg>
+    {% endif %}
+  </div>
+  {% if code %}<p class="eyebrow error-code">{% blocktrans %}Error {{ code }}{% endblocktrans %}</p>{% endif %}
+  <h1>{{ title }}</h1>
+  <p class="muted result-lead">{{ message }}</p>
+  {% if details %}
+    <ul class="error-details">
+      {% for item in details %}<li>{{ item }}</li>{% endfor %}
+    </ul>
+  {% endif %}
+  <div class="result-actions">
+    {% if retry_url %}<a class="btn" href="{{ retry_url }}">{{ retry_label|default:_("Try again") }}</a>{% endif %}
+    <a class="btn {% if retry_url %}ghost{% endif %}" href="{% url 'home' %}">{% trans "Go to the home page" %}</a>
+    <a class="btn ghost" href="javascript:history.back()">{% trans "Go back" %}</a>
+  </div>
+</section>
+{% endblock %}

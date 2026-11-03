@@ -1,0 +1,10 @@
+{% load i18n %}{% autoescape off %}{% blocktrans with name=user.full_name %}Hello {{ name }},{% endblocktrans %}
+
+{% trans "Please confirm that this is your email address for PATCH by opening this link:" %}
+
+{{ link }}
+
+{% blocktrans count counter=days %}The link works for {{ counter }} day.{% plural %}The link works for {{ counter }} days.{% endblocktrans %} {% trans "If you didn't create a PATCH account, you can ignore this email." %}
+
+PATCH · {% trans "Road Inspector & Registry" %}
+{% endautoescape %}

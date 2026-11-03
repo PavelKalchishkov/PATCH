@@ -1,0 +1,111 @@
+{% load static i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}PATCH{% endblock %} · {% trans "Road Inspector & Registry" %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="{% static 'css/app.css' %}">
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="{% url 'home' %}">
+      <span class="mark">P</span>
+      PATCH
+    </a>
+    <nav class="nav">
+      <a href="{% url 'damages:map' %}">{% trans "Public map" %}</a>
+      <a href="{% url 'damages:register' %}">{% trans "Damage register" %}</a>
+      {% if user.is_authenticated %}
+        {% if user.is_contractor %}
+          <a href="{% url 'repairs:available' %}">{% trans "Available work" %}</a>
+        {% elif not user.is_admin_role %}
+          <a href="{% url 'reports:submit' %}">{% trans "Report damage" %}</a>
+          <a href="{% url 'reports:mine' %}">{% trans "My reports" %}</a>
+        {% endif %}
+        {% if user.can_moderate %}
+          <a href="{% url 'reports:moderation' %}">{% trans "Review" %}</a>
+          <a href="{% url 'damages:catalog' %}">{% trans "Catalog" %}</a>
+          {% if not user.is_admin_role %}<a href="{% url 'repairs:create' %}">{% trans "Assign repair" %}</a>{% endif %}
+          <a href="{% url 'vision:jobs' %}">{% trans "Vision jobs" %}</a>
+        {% endif %}
+        {% if user.is_contractor %}
+          <a href="{% url 'repairs:list' %}">{% trans "My repairs" %}</a>
+        {% elif user.can_moderate and not user.is_admin_role %}
+          <a href="{% url 'repairs:list' %}">{% trans "Repairs" %}</a>
+        {% endif %}
+        {% if user.is_admin_role %}
+          <a href="{% url 'accounts:users' %}">{% trans "Users" %}{% if pending_role_requests %} <span class="nav-count" title="{% trans 'Inspector requests waiting' %}">{{ pending_role_requests }}</span>{% endif %}</a>
+        {% endif %}
+      {% endif %}
+    </nav>
+    <div class="user-chip">
+      <form class="lang-switch" method="post" action="{% url 'set_language' %}">{% csrf_token %}
+        <input type="hidden" name="next" value="{{ request.get_full_path }}">
+        {% get_available_languages as LANGUAGES %}
+        {% for code, name in LANGUAGES %}
+          <button type="submit" name="language" value="{{ code }}" lang="{{ code }}" title="{{ name }}"
+                  class="{% if code == LANGUAGE_CODE %}is-active{% endif %}"
+                  {% if code == LANGUAGE_CODE %}aria-current="true"{% endif %}>{{ code|upper }}</button>
+        {% endfor %}
+      </form>
+      {% if user.is_authenticated %}
+        <a href="{% url 'accounts:profile' %}">{{ user.full_name }} · {{ user.get_role_display }}</a>
+        <form method="post" action="{% url 'accounts:logout' %}">{% csrf_token %}
+          <button class="btn ghost" type="submit">{% trans "Sign out" %}</button>
+        </form>
+      {% else %}
+        <a class="btn ghost" href="{% url 'accounts:login' %}">{% trans "Sign in" %}</a>
+        <a class="btn" href="{% url 'accounts:register' %}">{% trans "Register" %}</a>
+      {% endif %}
+    </div>
+  </header>
+
+  <main class="wrap">
+    {% if messages %}
+      <ul class="messages">
+        {% for message in messages %}
+          <li class="{{ message.tags }}" {% if message.level_tag == "error" %}role="alert"{% endif %}>
+            <span class="message-icon" aria-hidden="true">{% if message.level_tag == "error" %}!{% elif message.level_tag == "success" %}✓{% elif message.level_tag == "warning" %}!{% else %}i{% endif %}</span>
+            <span>{{ message }}</span>
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+    {% block content %}{% endblock %}
+  </main>
+  <footer>PATCH · {% trans "Road Inspector & Registry" %}</footer>
+  <script>
+    // Highlight the nav link for the current page.
+    document.querySelectorAll('.nav a').forEach(function (a) {
+      if (a.pathname === window.location.pathname) a.classList.add('active');
+    });
+
+    // Make every row in a .click-row table open its link, not just the link text.
+    (function () {
+      function rowLink(event) {
+        const row = event.target.closest('tr.click-row');
+        if (!row || event.target.closest('a, button, input, select, textarea, label, form')) return null;
+        if (window.getSelection && String(window.getSelection())) return null;
+        return row.querySelector('a.row-cover');
+      }
+      document.addEventListener('click', function (event) {
+        const link = rowLink(event);
+        if (!link) return;
+        if (event.ctrlKey || event.metaKey || event.shiftKey) window.open(link.href, '_blank');
+        else window.location.href = link.href;
+      });
+      document.addEventListener('auxclick', function (event) {
+        const link = event.button === 1 && rowLink(event);
+        if (link) window.open(link.href, '_blank');
+      });
+    })();
+  </script>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

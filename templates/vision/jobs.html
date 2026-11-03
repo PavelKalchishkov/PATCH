@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Vision jobs" %}{% endblock %}
+{% block content %}
+<section class="card">
+  <h2>{% trans "Computer vision pipeline" %}</h2>
+  <p class="muted">{% trans "Background jobs call the model, write detections, and blur faces and plates before annotated images go public." %}</p>
+  <table class="table">
+    <thead><tr><th>{% trans "Job" %}</th><th>{% trans "Report" %}</th><th>{% trans "Status" %}</th><th>{% trans "Detections" %}</th><th>{% trans "Log" %}</th></tr></thead>
+    <tbody>
+      {% for job in jobs %}
+      <tr class="click-row">
+        <td>{{ job.id|truncatechars:8 }}</td>
+        <td>
+          <a class="row-cover" href="{% url 'reports:detail' job.report_id %}">
+            {{ job.report }}
+          </a>
+        </td>
+        <td><span class="badge {{ job.status }}">{{ job.get_status_display }}</span></td>
+        <td>{{ job.detections_written }}</td>
+        <td class="muted">{{ job.log|truncatechars:80 }}</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="5">{% trans "No jobs have been queued." %}</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}

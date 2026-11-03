@@ -1,0 +1,8 @@
+# Secrets and local data
+.env
+sent_emails/
+media/
+.venv/
+__pycache__/
+*.pyc
+staticfiles/

@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Register" %}{% endblock %}
+{% block content %}
+<section class="card" style="max-width:560px;margin:0 auto;">
+  <h2>{% trans "Create a PATCH account" %}</h2>
+  <p class="muted">{% trans "Citizens report damage, contractors repair it. Inspector access has to be approved by an administrator." %}</p>
+  <form method="post" novalidate>{% csrf_token %}
+    {{ form.non_field_errors }}
+    {% for field in form %}
+      <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+      {{ field }}
+      {% if field.help_text %}<p class="field-hint">{{ field.help_text|safe }}</p>{% endif %}
+      {{ field.errors }}
+    {% endfor %}
+    <button class="btn" type="submit">{% trans "Register" %}</button>
+  </form>
+</section>
+{% endblock %}

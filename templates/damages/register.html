@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Damage register" %}{% endblock %}
+{% block content %}
+<section class="card">
+  <h2>{% trans "Public damage register" %}</h2>
+  <p class="muted">{% trans "Every report on the live register, one repair each. Repaired ones are shown in green; click them to see the road before and after the repair." %}</p>
+  <table class="table">
+    <thead><tr><th>{% trans "Street" %}</th><th>{% trans "Damages" %}</th><th>{% trans "Severity" %}</th><th>{% trans "Priority" %}</th><th>{% trans "Cost" %}</th><th>{% trans "Status" %}</th></tr></thead>
+    <tbody>
+      {% for report in reports %}
+      <tr class="click-row{% if report.status == 'repaired' %} is-repaired{% endif %}">
+        <td>
+          <a class="row-cover" href="{% if report.status == 'repaired' %}{% url 'reports:before_after' report.id %}{% else %}{% url 'reports:detail' report.id %}{% endif %}">
+            {{ report.street_name|default:report.district|default:"—" }}
+          </a>
+        </td>
+        <td>{{ report.damage_names }}</td>
+        <td>{% with top=report.top_severity %}{% if top %}<span class="badge {{ top.severity }}">{{ top.get_severity_display }}</span>{% endif %}{% endwith %}</td>
+        <td>{{ report.priority|default:"—" }}</td>
+        <td>{% if report.estimated_cost is not None %}€ {{ report.estimated_cost }}{% else %}—{% endif %}</td>
+        <td><span class="badge {{ report.status }}">{{ report.get_status_display }}</span></td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="6" class="muted">{% trans "The register is empty." %}</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}

@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{{ task.title }}{% endblock %}
+{% block content %}
+<section class="split">
+  <div class="card">
+    <h2>{{ task.title }}</h2>
+    <p><span class="badge {{ task.status }}">{{ task.get_status_display }}</span> {% blocktrans with priority=task.effective_priority %}Priority {{ priority }}{% endblocktrans %}</p>
+    <p class="muted">{{ task.description }}</p>
+    <h3>{% trans "Linked damages" %}</h3>
+    <ul>
+      {% for det in task.damages.all %}
+        <li>{{ det.catalog.name }} — {{ det.report.street_name|default:det.report.district }}</li>
+      {% endfor %}
+    </ul>
+    <h3>{% trans "Photos" %}</h3>
+    <div class="grid">
+      {% for photo in task.photos.all %}
+        <figure>
+          <img class="photo" src="{{ photo.image.url }}" alt="{{ photo.get_kind_display }}">
+          <figcaption class="muted">{{ photo.get_kind_display }} · {{ photo.created_at }}</figcaption>
+        </figure>
+      {% empty %}
+        <p class="muted">{% trans "No site photos yet." %}</p>
+      {% endfor %}
+    </div>
+    <form method="post" enctype="multipart/form-data" action="{% url 'repairs:upload_photo' task.id %}">{% csrf_token %}
+      <label>{% trans "Kind" %}</label>
+      <select class="input" name="kind">
+        {% for value, label in photo_kinds %}<option value="{{ value }}">{{ label }}</option>{% endfor %}
+      </select>
+      <label>{% trans "Photo" %}</label>
+      <input class="input" type="file" name="image" required>
+      <button class="btn" type="submit">{% trans "Upload" %}</button>
+    </form>
+  </div>
+  <div class="stack">
+    {% if user.is_contractor and task.assigned_to_id == user.id %}
+    <div class="card">
+      <h3>{% trans "Your progress" %}</h3>
+      <ol class="stepper">
+        <li class="{% if task.contractor_stage == 'reserved' %}is-current{% else %}is-done{% endif %}">{% trans "Reserved" %}</li>
+        <li class="{% if task.contractor_stage == 'in_progress' %}is-current{% elif task.contractor_stage == 'finished' %}is-done{% endif %}">{% trans "In progress" %}</li>
+        <li class="{% if task.contractor_stage == 'finished' %}is-current{% endif %}">{% trans "Finished" %}</li>
+      </ol>
+
+      {% if task.contractor_stage == "reserved" %}
+        <p class="muted">{% trans 'When your crew is on site, start the work. Add a "before" photo if you can.' %}</p>
+        <form method="post" action="{% url 'repairs:act' task.id 'start' %}">{% csrf_token %}
+          <button class="btn" type="submit">{% trans "Start work" %}</button>
+        </form>
+        {% if task.status == "reserved" %}
+        <form method="post" action="{% url 'repairs:act' task.id 'release' %}"
+              onsubmit="return confirm('{% filter escapejs %}{% trans "Release this reservation? Other contractors will be able to take it." %}{% endfilter %}');">{% csrf_token %}
+          <button class="btn ghost" type="submit">{% trans "Release reservation" %}</button>
+        </form>
+        {% endif %}
+      {% elif task.contractor_stage == "in_progress" %}
+        {% if task.status == "rejected" %}
+          <div class="notice bad">
+            <strong>{% trans "An inspector sent this repair back." %}</strong>
+            {% with reason=task.send_back_reason %}{% if reason %}<p class="send-back-reason">{% blocktrans %}Reason: {{ reason }}{% endblocktrans %}</p>{% endif %}{% endwith %}
+            <span>{% trans "Fix it, then add a new photo and mark it finished again." %}</span>
+          </div>
+        {% else %}
+          <p class="muted">{% trans "When the work is done, add a photo of the finished repair and mark it finished for inspector approval." %}</p>
+        {% endif %}
+        <form method="post" action="{% url 'repairs:act' task.id 'finish' %}" enctype="multipart/form-data" id="finish-form">{% csrf_token %}
+          {% with after=task.current_after_photo %}
+            <label for="after-photo">{% if after %}{% trans "Photo of the finished repair" %}{% else %}{% trans "Photo of the finished repair (required)" %}{% endif %}</label>
+            {% if after %}
+              <div class="after-current">
+                <img src="{{ after.image.url }}" alt="{% trans 'Your photo of the finished repair' %}">
+                <span class="muted small">{% blocktrans with date=after.created_at|date:"d.m.Y H:i" %}Your "after" photo from {{ date }} will be used. Add a new one only if you want to replace it.{% endblocktrans %}</span>
+              </div>
+            {% endif %}
+            <input class="input" type="file" name="after_photo" id="after-photo" accept="image/*" capture="environment" {% if not after %}required{% endif %}>
+            <img class="after-preview" id="after-preview" alt="" hidden>
+          {% endwith %}
+          <label>{% trans "Completion note (optional)" %}</label>
+          <textarea class="input" name="reason" rows="3"></textarea>
+          <button class="btn" type="submit">{% trans "Mark finished" %}</button>
+        </form>
+      {% elif task.status == "approved" %}
+        <p class="notice good">{% trans "Approved by the municipality. Nice work." %}</p>
+      {% else %}
+        <p class="notice">{% trans "Finished. Waiting for an inspector to approve the repair." %}</p>
+      {% endif %}
+    </div>
+    {% endif %}
+    {% if user.can_moderate %}
+    <div class="card">
+      <h3>{% trans "Municipal approval" %}</h3>
+      {% if task.status == "completed" %}
+        <p class="muted">{% trans "The contractor marked this repair finished. Check the photos, then approve it or send it back." %}</p>
+        <form method="post" action="{% url 'repairs:approve' task.id %}">{% csrf_token %}
+          <label>{% trans "Note for the contractor" %}</label>
+          <textarea class="input" name="reason" rows="3" placeholder="{% trans 'Required if you send it back' %}"></textarea>
+          <div class="btn-row">
+            <button class="btn" name="action" value="approve">{% trans "Approve repair" %}</button>
+            <button class="btn danger" name="action" value="reject"
+                    onclick="return confirm('{% filter escapejs %}{% trans "Send this repair back to the contractor?" %}{% endfilter %}');">{% trans "Send back" %}</button>
+          </div>
+        </form>
+      {% elif task.status == "approved" %}
+        <p class="notice good">{% trans "Approved. The linked reports are marked repaired." %}</p>
+      {% elif task.status == "rejected" %}
+        <p class="notice bad">{% trans "Sent back to the contractor. It returns here once they mark it finished again." %}</p>
+      {% else %}
+        <p class="muted">{% trans "Approval opens once the contractor marks the repair finished." %}</p>
+      {% endif %}
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}
+{% block extra_js %}
+<script>
+  // Show the chosen photo before the repair is marked finished.
+  const afterInput = document.getElementById('after-photo');
+  if (afterInput) {
+    afterInput.addEventListener('change', () => {
+      const preview = document.getElementById('after-preview');
+      const file = afterInput.files[0];
+      if (preview.src) URL.revokeObjectURL(preview.src);
+      preview.hidden = !file;
+      if (file) preview.src = URL.createObjectURL(file);
+    });
+  }
+</script>
+{% endblock %}

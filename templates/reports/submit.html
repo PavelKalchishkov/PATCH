@@ -1,0 +1,536 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Submit report" %}{% endblock %}
+{% block extra_head %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+{% endblock %}
+{% block content %}
+<section class="split">
+  <div class="card">
+    <h2>{% trans "Report road damage" %}</h2>
+    <p class="muted">{% trans "Point the camera at the damage and take a photo. Your location is added automatically from where you take it." %}</p>
+    <div class="form-error" id="form-error" role="alert" {% if not problems %}hidden{% endif %}>
+      <strong>{% trans "Your report wasn't submitted." %}</strong>
+      <span>{% trans "Fix the following and send it again:" %}</span>
+      <ul id="form-error-list">
+        {% for problem in problems %}<li>{{ problem }}</li>{% endfor %}
+      </ul>
+      {% if problems %}<span class="small">{% trans "Please take the photo again; it isn't kept after a failed attempt." %}</span>{% endif %}
+    </div>
+
+    {% if report_block %}
+      <div class="limit-notice {% if report_block == 'banned' %}is-banned{% endif %}" role="alert">
+        <strong>{% if report_block == "banned" %}{% trans "Reporting is switched off for your account" %}{% else %}{% trans "You've sent the maximum number of reports for now" %}{% endif %}</strong>
+        <span>{{ block_message }}</span>
+        <a class="btn ghost btn-sm" href="{% url 'reports:mine' %}">{% trans "See my reports" %}</a>
+      </div>
+    {% else %}
+    {% if quota and not user.can_moderate %}
+      <p class="field-hint quota-hint">{% blocktrans with hour=quota.remaining_hour day=quota.remaining_day max_hour=limits.hour max_day=limits.day %}You can send {{ hour }} more of {{ max_hour }} reports this hour and {{ day }} more of {{ max_day }} today.{% endblocktrans %}</p>
+    {% endif %}
+    <div class="camera" id="camera">
+      <video id="camera-video" playsinline muted autoplay></video>
+      <img id="camera-photo" alt="{% trans 'The photo you took' %}" hidden>
+      <div class="camera-status" id="camera-status" role="status">{% trans "Starting the camera…" %}</div>
+    </div>
+    <div class="camera-controls">
+      <button type="button" class="camera-switch" id="camera-switch" hidden title="{% trans 'Switch camera' %}" aria-label="{% trans 'Switch camera' %}">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 7h-3l-2-3H9L7 7H4a1 1 0 00-1 1v11a1 1 0 001 1h16a1 1 0 001-1V8a1 1 0 00-1-1z"/><path d="M9 13.5a3 3 0 015-2.2M15 12.5a3 3 0 01-5 2.2"/><path d="M14 9.5v2h-2M10 16.5v-2h2"/></svg>
+      </button>
+      <button type="button" class="shutter" id="camera-shutter" disabled aria-label="{% trans 'Take photo' %}">
+        <span aria-hidden="true"></span>
+      </button>
+      <button type="button" class="btn ghost" id="camera-retake" hidden>{% trans "Retake photo" %}</button>
+    </div>
+    <p class="location-status" id="location-status" role="status">
+      <span class="location-dot" aria-hidden="true"></span>
+      <span id="location-text">{% trans "Getting your location…" %}</span>
+    </p>
+
+    <div class="duplicate-panel" id="duplicate-panel" role="alertdialog" aria-labelledby="duplicate-title" hidden>
+      <strong id="duplicate-title">{% trans "Is this the same problem?" %}</strong>
+      <span class="muted">{% trans "Someone already reported a problem right here. If it's the same one, add your photo to it instead of sending a new report." %}</span>
+      <div id="duplicate-list" class="duplicate-list"></div>
+      <button type="button" class="btn ghost" id="duplicate-different">{% trans "No, it's a different problem" %}</button>
+    </div>
+
+    <form method="post" enctype="multipart/form-data" id="report-form" novalidate>{% csrf_token %}
+      <input type="file" name="original_image" id="id_original_image" accept="image/jpeg" hidden>
+      {{ form.latitude }}{{ form.longitude }}{{ form.location_accuracy }}{{ form.captured_at }}{{ form.confirm_new }}
+      <label for="{{ form.street_name.id_for_label }}">{% trans "Street" %}</label>{{ form.street_name }}
+      <label for="{{ form.district.id_for_label }}">{% trans "District" %}</label>{{ form.district }}
+      <p class="field-hint" id="address-status" aria-live="polite" hidden></p>
+      <button class="btn" type="submit" id="report-submit">{% trans "Submit and analyse" %}</button>
+    </form>
+    {# Sends the same photo and location as a confirmation of an existing report. #}
+    <form method="post" enctype="multipart/form-data" id="confirm-form" hidden>{% csrf_token %}
+      <input type="file" name="photo" id="confirm-photo" hidden>
+      <input type="hidden" name="latitude"><input type="hidden" name="longitude">
+      <input type="hidden" name="location_accuracy"><input type="hidden" name="captured_at">
+    </form>
+    {% endif %}
+  </div>
+  <div>
+    <div id="picker" class="map"></div>
+    <p class="muted small map-note">{% trans "The pin shows where the photo was taken. It can't be moved by hand." %}</p>
+  </div>
+</section>
+{% endblock %}
+{% block extra_js %}
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+{% if report_block %}
+<script>
+  const map = L.map('picker').setView([42.6977, 23.3219], 12);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom: 19}).addTo(map);
+</script>
+{% else %}
+<script>
+  const T = {
+    starting: "{% filter escapejs %}{% trans 'Starting the camera…' %}{% endfilter %}",
+    insecure: "{% filter escapejs %}{% trans 'The camera and location only work over a secure connection (HTTPS). Open PATCH through its https:// address.' %}{% endfilter %}",
+    unsupported: "{% filter escapejs %}{% trans "This browser can't use the camera. Try a current version of Chrome, Safari, Firefox or Edge." %}{% endfilter %}",
+    cameraBlocked: "{% filter escapejs %}{% trans 'Camera access is blocked. Allow the camera for this site in your browser settings, then reload the page.' %}{% endfilter %}",
+    noCamera: "{% filter escapejs %}{% trans 'No camera was found on this device.' %}{% endfilter %}",
+    cameraBusy: "{% filter escapejs %}{% trans 'The camera is being used by another app. Close it and reload the page.' %}{% endfilter %}",
+    cameraFailed: "{% filter escapejs %}{% trans "The camera couldn't be started. Reload the page to try again." %}{% endfilter %}",
+    locating: "{% filter escapejs %}{% trans 'Getting your location…' %}{% endfilter %}",
+    located: "{% filter escapejs %}{% trans 'Location found (± {m} m).' %}{% endfilter %}",
+    photoLocated: "{% filter escapejs %}{% trans 'Photo taken here (± {m} m).' %}{% endfilter %}",
+    waitingFix: "{% filter escapejs %}{% trans 'Photo taken. Waiting for your location…' %}{% endfilter %}",
+    locationBlocked: "{% filter escapejs %}{% trans 'Location access is blocked. Allow location for this site in your browser settings, then reload the page.' %}{% endfilter %}",
+    locationFailed: "{% filter escapejs %}{% trans "Your location couldn't be found. Turn on location services, step outside if you can, and retake the photo." %}{% endfilter %}",
+    noPhoto: "{% filter escapejs %}{% trans 'Take a photo of the damage with the camera.' %}{% endfilter %}",
+    noLocation: "{% filter escapejs %}{% trans "Your location wasn't captured. Allow location access and take the photo again." %}{% endfilter %}",
+    tooOld: "{% filter escapejs %}{% trans 'The photo is too old. Take a new photo and send the report right away.' %}{% endfilter %}",
+    sending: "{% filter escapejs %}{% trans 'Sending…' %}{% endfilter %}",
+    lookingUp: "{% filter escapejs %}{% trans 'Looking up the street…' %}{% endfilter %}",
+    filled: "{% filter escapejs %}{% trans 'Filled in from where you took the photo. You can change it.' %}{% endfilter %}",
+    notFound: "{% filter escapejs %}{% trans 'No street name was found at this point. Please type it in.' %}{% endfilter %}",
+    failed: "{% filter escapejs %}{% trans "The street couldn't be looked up right now. Please type it in." %}{% endfilter %}",
+  };
+  T.dupAdd = "{% filter escapejs %}{% trans 'Yes, add my photo to this report' %}{% endfilter %}";
+  T.dupMine = "{% filter escapejs %}{% trans 'You reported this one yourself.' %}{% endfilter %}";
+  T.dupDone = "{% filter escapejs %}{% trans 'You already added a photo to this one.' %}{% endfilter %}";
+  T.dupAway = "{% filter escapejs %}{% trans '{m} m away' %}{% endfilter %}";
+  // Same wording as reports/photo_quality.py, which checks again on the server.
+  T.photoProblem = {
+    too_small: "{% filter escapejs %}{% trans 'The photo is too small. Take it with the camera on this page.' %}{% endfilter %}",
+    too_dark: "{% filter escapejs %}{% trans 'The photo is too dark. Make sure nothing covers the camera and there is enough light, then take it again.' %}{% endfilter %}",
+    too_bright: "{% filter escapejs %}{% trans "The photo is almost white. Don't point the camera at the sun or a bright light, then take it again." %}{% endfilter %}",
+    blank: "{% filter escapejs %}{% trans 'The photo looks blank, with no detail. Point the camera at the road damage and take it again.' %}{% endfilter %}",
+    blurry: "{% filter escapejs %}{% trans 'The photo is too blurry. Hold the phone still for a moment and take it again.' %}{% endfilter %}",
+  };
+  const geocodeUrl = "{% url 'reports:geocode' %}";
+  const nearbyUrl = "{% url 'reports:nearby' %}";
+  const MAX_PHOTO_AGE_MS = 15 * 60 * 1000;
+  const FRESH_FIX_MS = 30 * 1000;
+  const MAX_PHOTO_SIDE = 2048;
+
+  const $ = (id) => document.getElementById(id);
+  const video = $('camera-video'), photo = $('camera-photo'), cameraStatus = $('camera-status');
+  const shutter = $('camera-shutter'), retake = $('camera-retake'), switchBtn = $('camera-switch');
+  const locationStatus = $('location-status'), locationText = $('location-text');
+  const fileInput = $('id_original_image');
+  const lat = $('id_latitude'), lng = $('id_longitude'), accuracy = $('id_location_accuracy'), capturedAt = $('id_captured_at');
+  const form = $('report-form'), errorBox = $('form-error'), errorList = $('form-error-list');
+
+  // A photo from an earlier, failed attempt is never kept, so neither is its location.
+  [lat, lng, accuracy, capturedAt].forEach((input) => { input.value = ''; });
+
+  // ---- Map: shows where you are; the pin can't be placed by hand ----
+  const map = L.map('picker').setView([42.6977, 23.3219], 13);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom: 19}).addTo(map);
+  let hereMarker = null, accuracyCircle = null, photoMarker = null;
+
+  function showHere(fix) {
+    const ll = [fix.coords.latitude, fix.coords.longitude];
+    if (!hereMarker) {
+      hereMarker = L.circleMarker(ll, { radius: 7, color: '#fff', weight: 2, fillColor: '#3a63a8', fillOpacity: 1 }).addTo(map);
+      accuracyCircle = L.circle(ll, { radius: fix.coords.accuracy, color: '#3a63a8', weight: 1, fillOpacity: 0.08 }).addTo(map);
+      map.setView(ll, 17);
+    } else {
+      hereMarker.setLatLng(ll);
+      accuracyCircle.setLatLng(ll).setRadius(fix.coords.accuracy);
+    }
+  }
+
+  function showPhotoPin(fix, imageUrl) {
+    const ll = [fix.coords.latitude, fix.coords.longitude];
+    if (hereMarker) { map.removeLayer(hereMarker); hereMarker = null; }
+    if (accuracyCircle) accuracyCircle.setLatLng(ll).setRadius(fix.coords.accuracy).setStyle({ color: '#c8693a' });
+    else accuracyCircle = L.circle(ll, { radius: fix.coords.accuracy, color: '#c8693a', weight: 1, fillOpacity: 0.08 }).addTo(map);
+    const icon = L.divIcon({
+      className: 'photo-pin',
+      html: `<span style="background-image:url('${imageUrl}')"></span>`,
+      iconSize: [58, 66], iconAnchor: [29, 66],
+    });
+    photoMarker = L.marker(ll, { icon, interactive: false, keyboard: false }).addTo(map);
+    map.setView(ll, 17);
+  }
+
+  function clearPhotoPin() {
+    if (photoMarker) { map.removeLayer(photoMarker); photoMarker = null; }
+    if (accuracyCircle) { map.removeLayer(accuracyCircle); accuracyCircle = null; }
+  }
+
+  // ---- Location ----
+  let lastFix = null, watchId = null, fixWaiters = [];
+  function setLocation(state, text) {
+    locationStatus.dataset.state = state;
+    locationText.textContent = text;
+  }
+  function metres(fix) { return Math.round(fix.coords.accuracy); }
+
+  function startWatching() {
+    if (!navigator.geolocation) { setLocation('error', T.locationFailed); return; }
+    if (watchId !== null) return;
+    setLocation('busy', T.locating);
+    watchId = navigator.geolocation.watchPosition((fix) => {
+      lastFix = fix;
+      fixWaiters.splice(0).forEach((resolve) => resolve(fix));
+      if (!photo.hidden) return;
+      showHere(fix);
+      setLocation('ok', T.located.replace('{m}', metres(fix)));
+    }, (err) => {
+      if (err.code === err.PERMISSION_DENIED) {
+        setLocation('error', T.locationBlocked);
+        fixWaiters.splice(0).forEach((resolve) => resolve(null));
+      } else if (!lastFix) {
+        setLocation('busy', T.locating);
+      }
+    }, { enableHighAccuracy: true, maximumAge: 0, timeout: 20000 });
+  }
+  function stopWatching() {
+    if (watchId !== null) navigator.geolocation.clearWatch(watchId);
+    watchId = null;
+  }
+  function freshFix(timeoutMs) {
+    if (lastFix && Date.now() - lastFix.timestamp < FRESH_FIX_MS) return Promise.resolve(lastFix);
+    return new Promise((resolve) => {
+      fixWaiters.push(resolve);
+      setTimeout(() => resolve(null), timeoutMs);
+    });
+  }
+
+  // ---- Camera ----
+  let stream = null, facing = 'environment';
+  function setCameraStatus(text) {
+    cameraStatus.textContent = text || '';
+    cameraStatus.hidden = !text;
+  }
+  function stopCamera() {
+    if (stream) stream.getTracks().forEach((track) => track.stop());
+    stream = null;
+    shutter.disabled = true;
+  }
+  async function startCamera() {
+    stopCamera();
+    setCameraStatus(T.starting);
+    try {
+      stream = await navigator.mediaDevices.getUserMedia({
+        audio: false,
+        video: { facingMode: { ideal: facing }, width: { ideal: 1920 }, height: { ideal: 1080 } },
+      });
+      video.srcObject = stream;
+      await video.play();
+      setCameraStatus('');
+      shutter.disabled = false;
+      const cams = (await navigator.mediaDevices.enumerateDevices()).filter((d) => d.kind === 'videoinput');
+      switchBtn.hidden = cams.length < 2;
+    } catch (err) {
+      const messages = { NotAllowedError: T.cameraBlocked, SecurityError: T.cameraBlocked, NotFoundError: T.noCamera,
+                         OverconstrainedError: T.noCamera, NotReadableError: T.cameraBusy };
+      setCameraStatus(messages[err.name] || T.cameraFailed);
+    }
+  }
+
+  // ---- Photo quality: mirrors reports/photo_quality.py (same thresholds and measurements) ----
+  const QUALITY = { minSide: 240, minBrightness: 30, maxBrightness: 235, minContrast: 10, minSharpness: 6, size: 256 };
+  function photoProblem(source) {
+    if (Math.min(source.width, source.height) < QUALITY.minSide) return 'too_small';
+    const scale = Math.min(1, QUALITY.size / Math.max(source.width, source.height));
+    const w = Math.max(1, Math.round(source.width * scale)), h = Math.max(1, Math.round(source.height * scale));
+    const small = document.createElement('canvas');
+    small.width = w; small.height = h;
+    const ctx = small.getContext('2d', { willReadFrequently: true });
+    ctx.drawImage(source, 0, 0, w, h);
+    const rgba = ctx.getImageData(0, 0, w, h).data;
+    const gray = new Float32Array(w * h);
+    let sum = 0, sumSq = 0;
+    for (let i = 0; i < w * h; i++) {
+      const v = (rgba[i * 4] * 299 + rgba[i * 4 + 1] * 587 + rgba[i * 4 + 2] * 114) / 1000;
+      gray[i] = v; sum += v; sumSq += v * v;
+    }
+    const n = w * h, mean = sum / n, contrast = Math.sqrt(Math.max(0, sumSq / n - mean * mean));
+    // Edge strength like PIL's FIND_EDGES: 8 x centre minus the 8 neighbours, clipped to 0-255;
+    // border pixels keep their own value, as PIL does.
+    let edgeSum = 0;
+    for (let y = 0; y < h; y++) {
+      for (let x = 0; x < w; x++) {
+        const i = y * w + x;
+        if (x === 0 || y === 0 || x === w - 1 || y === h - 1) { edgeSum += gray[i]; continue; }
+        let e = 8 * gray[i];
+        for (const d of [-w - 1, -w, -w + 1, -1, 1, w - 1, w, w + 1]) e -= gray[i + d];
+        edgeSum += Math.min(255, Math.max(0, e));
+      }
+    }
+    const sharpness = edgeSum / n;
+    if (mean < QUALITY.minBrightness) return 'too_dark';
+    if (mean > QUALITY.maxBrightness) return 'too_bright';
+    if (contrast < QUALITY.minContrast) return 'blank';
+    if (sharpness < QUALITY.minSharpness) return 'blurry';
+    return null;
+  }
+
+  async function takePhoto() {
+    if (!stream || !video.videoWidth) return;
+    shutter.disabled = true;
+    const scale = Math.min(1, MAX_PHOTO_SIDE / Math.max(video.videoWidth, video.videoHeight));
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.round(video.videoWidth * scale);
+    canvas.height = Math.round(video.videoHeight * scale);
+    canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+    const takenAt = Date.now();
+
+    // A black, white, blank or blurry photo is turned down here, before anything is attached.
+    const problem = photoProblem(canvas);
+    if (problem) {
+      stopCamera();
+      photo.src = canvas.toDataURL('image/jpeg', 0.6);
+      photo.hidden = false;
+      video.hidden = true;
+      shutter.hidden = true;
+      switchBtn.hidden = true;
+      retake.hidden = false;
+      setCameraStatus(T.photoProblem[problem]);
+      cameraStatus.classList.add('is-bad');
+      return;
+    }
+    const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/jpeg', 0.9));
+    stopCamera();
+
+    // Put the photo into the form's file field: this page is the only way to add one.
+    const file = new File([blob], `patch-${takenAt}.jpg`, { type: 'image/jpeg', lastModified: takenAt });
+    const transfer = new DataTransfer();
+    transfer.items.add(file);
+    fileInput.files = transfer.files;
+    capturedAt.value = String(takenAt);
+
+    const imageUrl = URL.createObjectURL(blob);
+    photo.src = imageUrl;
+    photo.hidden = false;
+    video.hidden = true;
+    shutter.hidden = true;
+    switchBtn.hidden = true;
+    retake.hidden = false;
+
+    setLocation('busy', T.waitingFix);
+    const fix = await freshFix(20000);
+    stopWatching();
+    if (photo.hidden) return; // retaken while waiting
+    if (!fix) {
+      setLocation('error', T.locationFailed);
+      return;
+    }
+    lat.value = fix.coords.latitude.toFixed(6);
+    lng.value = fix.coords.longitude.toFixed(6);
+    accuracy.value = fix.coords.accuracy.toFixed(1);
+    setLocation('ok', T.photoLocated.replace('{m}', metres(fix)));
+    showPhotoPin(fix, imageUrl);
+    errorBox.hidden = true;
+    lookupAddress();
+    checkNearby();
+  }
+
+  function retakePhoto() {
+    cameraStatus.classList.remove('is-bad');
+    fileInput.value = '';
+    [lat, lng, accuracy, capturedAt].forEach((input) => { input.value = ''; });
+    if (photo.src) URL.revokeObjectURL(photo.src);
+    photo.hidden = true;
+    photo.removeAttribute('src');
+    video.hidden = false;
+    shutter.hidden = false;
+    retake.hidden = true;
+    clearPhotoPin();
+    resetDuplicateQuestion();
+    lastFix = null;
+    startWatching();
+    startCamera();
+  }
+
+  shutter.addEventListener('click', takePhoto);
+  retake.addEventListener('click', retakePhoto);
+  switchBtn.addEventListener('click', () => {
+    facing = facing === 'environment' ? 'user' : 'environment';
+    startCamera();
+  });
+  // Don't keep the camera on while the page is in the background.
+  document.addEventListener('visibilitychange', () => {
+    if (!photo.hidden) return;
+    if (document.hidden) stopCamera(); else startCamera();
+  });
+
+  if (!window.isSecureContext) {
+    setCameraStatus(T.insecure);
+    setLocation('error', T.insecure);
+  } else if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || !window.DataTransfer) {
+    setCameraStatus(T.unsupported);
+    startWatching();
+  } else {
+    startCamera();
+    startWatching();
+  }
+
+  // ---- Street and district from the photo's location ----
+  // A field the user typed in is never overwritten; one we filled is updated on a retake.
+  const streetInput = $('{{ form.street_name.id_for_label }}');
+  const districtInput = $('{{ form.district.id_for_label }}');
+  const addressStatus = $('address-status');
+  const autofilled = new WeakSet();
+  [streetInput, districtInput].forEach((input) => {
+    input.addEventListener('input', () => {
+      autofilled.delete(input);
+      input.classList.remove('is-autofilled');
+    });
+  });
+  let lookupController = null;
+  const canFill = (input) => !input.value.trim() || autofilled.has(input);
+  function showAddressStatus(text) {
+    addressStatus.textContent = text;
+    addressStatus.hidden = !text;
+  }
+  async function lookupAddress() {
+    if (!canFill(streetInput) && !canFill(districtInput)) return;
+    if (lookupController) lookupController.abort();
+    lookupController = new AbortController();
+    showAddressStatus(T.lookingUp);
+    try {
+      const params = new URLSearchParams({ lat: lat.value, lng: lng.value });
+      const response = await fetch(`${geocodeUrl}?${params}`, { signal: lookupController.signal });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const address = await response.json();
+      let filledAny = false;
+      for (const [input, value] of [[streetInput, address.street], [districtInput, address.district]]) {
+        if (value && canFill(input)) {
+          input.value = value;
+          autofilled.add(input);
+          input.classList.add('is-autofilled');
+          filledAny = true;
+        }
+      }
+      showAddressStatus(filledAny ? T.filled : (address.street ? '' : T.notFound));
+    } catch (error) {
+      if (error.name !== 'AbortError') showAddressStatus(T.failed);
+    }
+  }
+
+  // ---- Already reported nearby? ----
+  const dupPanel = $('duplicate-panel'), dupList = $('duplicate-list');
+  const confirmNew = $('id_confirm_new');
+  let duplicateDecisionPending = false;
+
+  function resetDuplicateQuestion() {
+    duplicateDecisionPending = false;
+    confirmNew.checked = false;
+    confirmNew.value = '';
+    dupPanel.hidden = true;
+    dupList.innerHTML = '';
+  }
+
+  function escapeHtml(value) {
+    const node = document.createElement('span');
+    node.textContent = value == null ? '' : String(value);
+    return node.innerHTML;
+  }
+
+  async function checkNearby() {
+    try {
+      const params = new URLSearchParams({ lat: lat.value, lng: lng.value });
+      const response = await fetch(`${nearbyUrl}?${params}`);
+      if (!response.ok) return;
+      const { reports } = await response.json();
+      if (!reports.length) return;
+      dupList.innerHTML = '';
+      for (const r of reports) {
+        const item = document.createElement('div');
+        item.className = 'duplicate-item';
+        let action = `<button type="button" class="btn btn-sm" data-confirm="${escapeHtml(r.confirm_url)}">${escapeHtml(T.dupAdd)}</button>`;
+        if (r.mine) action = `<span class="muted small">${escapeHtml(T.dupMine)}</span>`;
+        else if (r.already_confirmed) action = `<span class="muted small">${escapeHtml(T.dupDone)}</span>`;
+        item.innerHTML = `
+          ${r.image ? `<img src="${escapeHtml(r.image)}" alt="">` : '<span class="duplicate-noimg"></span>'}
+          <div>
+            <strong>${escapeHtml(r.title)}</strong>
+            <span class="muted small">${escapeHtml(r.damages)} · ${escapeHtml(T.dupAway.replace('{m}', r.distance_m))}</span>
+            <span class="badge ${escapeHtml(r.status)}">${escapeHtml(r.status_label)}</span>
+            ${action}
+          </div>`;
+        dupList.appendChild(item);
+      }
+      dupList.querySelectorAll('[data-confirm]').forEach((button) => {
+        button.addEventListener('click', () => sendAsConfirmation(button.dataset.confirm, button));
+      });
+      duplicateDecisionPending = true;
+      dupPanel.hidden = false;
+      dupPanel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } catch (error) {
+      // If the check fails the server still asks before saving a duplicate.
+    }
+  }
+
+  function sendAsConfirmation(url, button) {
+    const confirmForm = $('confirm-form');
+    confirmForm.action = url;
+    const transfer = new DataTransfer();
+    transfer.items.add(fileInput.files[0]);
+    $('confirm-photo').files = transfer.files;
+    for (const [name, source] of [['latitude', lat], ['longitude', lng], ['location_accuracy', accuracy], ['captured_at', capturedAt]]) {
+      confirmForm.querySelector(`[name="${name}"]`).value = source.value;
+    }
+    button.disabled = true;
+    button.textContent = T.sending;
+    confirmForm.submit();
+  }
+
+  $('duplicate-different').addEventListener('click', () => {
+    duplicateDecisionPending = false;
+    confirmNew.value = 'on';
+    dupPanel.hidden = true;
+  });
+
+  // ---- Sending ----
+  form.addEventListener('submit', (event) => {
+    if (duplicateDecisionPending) {
+      // The question is the next step, so take the person there instead of showing an error.
+      event.preventDefault();
+      dupPanel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      dupPanel.classList.remove('is-flash');
+      void dupPanel.offsetWidth;
+      dupPanel.classList.add('is-flash');
+      return;
+    }
+    const problems = [];
+    if (!fileInput.files.length) problems.push(T.noPhoto);
+    else if (!lat.value || !lng.value || !accuracy.value) problems.push(T.noLocation);
+    else if (Date.now() - Number(capturedAt.value) > MAX_PHOTO_AGE_MS) problems.push(T.tooOld);
+
+    if (problems.length) {
+      event.preventDefault();
+      errorList.innerHTML = '';
+      problems.forEach((text) => {
+        const li = document.createElement('li');
+        li.textContent = text;
+        errorList.appendChild(li);
+      });
+      errorBox.hidden = false;
+      errorBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    const button = $('report-submit');
+    button.disabled = true;
+    button.textContent = T.sending;
+  });
+</script>
+{% endif %}
+{% endblock %}
