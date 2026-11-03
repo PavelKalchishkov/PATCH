@@ -18,7 +18,14 @@
       <span class="mark">P</span>
       PATCH
     </a>
-    <nav class="nav">
+    <button type="button" class="menu-toggle" aria-controls="site-menu" aria-expanded="false"
+            aria-label="{% trans 'Menu' %}">
+      <span class="menu-toggle-bars" aria-hidden="true"><span></span><span></span><span></span></span>
+      {% if pending_role_requests %}<span class="menu-toggle-badge" aria-hidden="true">{{ pending_role_requests }}</span>{% endif %}
+    </button>
+    {# On phones this whole block folds away behind the menu button; on computers it's the normal bar. #}
+    <div class="site-menu" id="site-menu">
+    <nav class="nav" aria-label="{% trans 'Main' %}">
       <a href="{% url 'damages:map' %}">{% trans "Public map" %}</a>
       <a href="{% url 'damages:register' %}">{% trans "Damage register" %}</a>
       {% if user.is_authenticated %}
@@ -64,6 +71,7 @@
         <a class="btn" href="{% url 'accounts:register' %}">{% trans "Register" %}</a>
       {% endif %}
     </div>
+    </div>
   </header>
 
   <main class="wrap">
@@ -85,6 +93,26 @@
     document.querySelectorAll('.nav a').forEach(function (a) {
       if (a.pathname === window.location.pathname) a.classList.add('active');
     });
+
+    // Phone menu: the button opens and closes it; Escape, a tap outside or a link tap closes it.
+    (function () {
+      const bar = document.querySelector('.topbar');
+      const toggle = bar.querySelector('.menu-toggle');
+      function setOpen(open) {
+        bar.classList.toggle('menu-open', open);
+        toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      }
+      toggle.addEventListener('click', () => setOpen(!bar.classList.contains('menu-open')));
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && bar.classList.contains('menu-open')) { setOpen(false); toggle.focus(); }
+      });
+      document.addEventListener('click', (event) => {
+        if (bar.classList.contains('menu-open') && !bar.contains(event.target)) setOpen(false);
+      });
+      bar.querySelectorAll('.site-menu a').forEach((link) => link.addEventListener('click', () => setOpen(false)));
+      // Back on a wide screen, the menu is always shown, so drop the "open" state.
+      window.matchMedia('(min-width: 861px)').addEventListener('change', (event) => { if (event.matches) setOpen(false); });
+    })();
 
     // Make every row in a .click-row table open its link, not just the link text.
     (function () {

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-03 17:11+0200\n"
+"POT-Creation-Date: 2026-11-03 18:21+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -617,7 +617,7 @@ msgstr "Благодарим ви! Инспекторите ще видят, ч�
 msgid "Thank you for confirming this report is accurate."
 msgstr "Благодарим ви, че потвърдихте, че сигналът е точен."
 
-#: .\reports\views.py:236 .\templates\base.html:29
+#: .\reports\views.py:236 .\templates\base.html:36
 msgid "My reports"
 msgstr "Моите сигнали"
 
@@ -665,12 +665,12 @@ msgid "If you didn't create a PATCH account, you can ignore this email."
 msgstr "Ако не сте създавали профил в PATCH, можете да пренебрегнете този имейл."
 
 #: .\templates\accounts\email\verify.txt:9 .\templates\base.html:8
-#: .\templates\base.html:82
+#: .\templates\base.html:90
 msgid "Road Inspector & Registry"
 msgstr "Инспектор и регистър на пътната настилка"
 
 #: .\templates\accounts\login.html:3 .\templates\accounts\login.html:6
-#: .\templates\base.html:63 .\templates\reports\detail.html:109
+#: .\templates\base.html:70 .\templates\reports\detail.html:109
 msgid "Sign in"
 msgstr "Вход"
 
@@ -687,7 +687,7 @@ msgid "No account yet?"
 msgstr "Нямате профил?"
 
 #: .\templates\accounts\login.html:12 .\templates\accounts\register.html:3
-#: .\templates\accounts\register.html:16 .\templates\base.html:64
+#: .\templates\accounts\register.html:16 .\templates\base.html:71
 msgid "Register"
 msgstr "Регистрация"
 
@@ -813,7 +813,7 @@ msgid ""
 "approved by an administrator."
 msgstr "Гражданите подават сигнали, изпълнителите ремонтират. Достъпът на инспектор се одобрява от администратор."
 
-#: .\templates\accounts\users.html:3 .\templates\base.html:43
+#: .\templates\accounts\users.html:3 .\templates\base.html:50
 msgid "Users"
 msgstr "Потребители"
 
@@ -911,56 +911,64 @@ msgstr "Отблокирай"
 msgid "Change this account to {role}?"
 msgstr "Да се смени ли ролята на този профил на „{role}“?"
 
-#: .\templates\base.html:22 .\templates\damages\map.html:3
+#: .\templates\base.html:22
+msgid "Menu"
+msgstr "Меню"
+
+#: .\templates\base.html:28
+msgid "Main"
+msgstr "Основно меню"
+
+#: .\templates\base.html:29 .\templates\damages\map.html:3
 #: .\templates\home.html:16
 msgid "Public map"
 msgstr "Публична карта"
 
-#: .\templates\base.html:23 .\templates\damages\register.html:3
+#: .\templates\base.html:30 .\templates\damages\register.html:3
 #: .\templates\reports\before_after.html:52
 msgid "Damage register"
 msgstr "Регистър на повредите"
 
-#: .\templates\base.html:26 .\templates\repairs\available.html:3
+#: .\templates\base.html:33 .\templates\repairs\available.html:3
 #: .\templates\repairs\available.html:6
 msgid "Available work"
 msgstr "Налична работа"
 
-#: .\templates\base.html:28
+#: .\templates\base.html:35
 msgid "Report damage"
 msgstr "Подай сигнал"
 
-#: .\templates\base.html:32 .\templates\reports\moderate.html:3
+#: .\templates\base.html:39 .\templates\reports\moderate.html:3
 #: .\templates\reports\moderate.html:6
 msgid "Review"
 msgstr "Преглед"
 
-#: .\templates\base.html:33
+#: .\templates\base.html:40
 msgid "Catalog"
 msgstr "Каталог"
 
-#: .\templates\base.html:34 .\templates\repairs\create.html:3
+#: .\templates\base.html:41 .\templates\repairs\create.html:3
 msgid "Assign repair"
 msgstr "Възложи ремонт"
 
-#: .\templates\base.html:35 .\templates\vision\jobs.html:3
+#: .\templates\base.html:42 .\templates\vision\jobs.html:3
 msgid "Vision jobs"
 msgstr "Задачи за анализ"
 
-#: .\templates\base.html:38 .\templates\repairs\board.html:3
+#: .\templates\base.html:45 .\templates\repairs\board.html:3
 #: .\templates\repairs\board.html:8
 msgid "My repairs"
 msgstr "Моите ремонти"
 
-#: .\templates\base.html:40 .\templates\reports\moderate.html:16
+#: .\templates\base.html:47 .\templates\reports\moderate.html:16
 msgid "Repairs"
 msgstr "Ремонти"
 
-#: .\templates\base.html:43
+#: .\templates\base.html:50
 msgid "Inspector requests waiting"
 msgstr "Чакащи заявки за инспектор"
 
-#: .\templates\base.html:60
+#: .\templates\base.html:67
 msgid "Sign out"
 msgstr "Изход"
 
