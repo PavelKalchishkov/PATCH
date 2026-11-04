@@ -693,4 +693,6 @@ BG = {
     # Phone menu
     "Menu": "Меню",
     "Main": "Основно меню",
+    # Account button
+    "My profile": "Моят профил",
 }

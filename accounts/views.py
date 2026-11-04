@@ -111,7 +111,7 @@ def profile(request):
             (reports.exclude(status__in=[ReportStatus.REPAIRED, ReportStatus.REJECTED]).count(), _("Open"), reports_url),
             (reports.filter(status=ReportStatus.REPAIRED).count(), pgettext("count", "Repaired"), reports_url),
         ]
-    initials = "".join(part[0] for part in user.full_name.split()[:2]).upper() or "?"
+    initials = user.initials
     # With no mail server, the link can't reach anyone's inbox, so show it here (development only).
     local_verify_link = (
         verification.verification_link(request, user)

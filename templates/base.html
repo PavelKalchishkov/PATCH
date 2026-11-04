@@ -62,7 +62,14 @@
         {% endfor %}
       </form>
       {% if user.is_authenticated %}
-        <a href="{% url 'accounts:profile' %}">{{ user.full_name }} · {{ user.get_role_display }}</a>
+        <a class="account-button" href="{% url 'accounts:profile' %}" title="{% trans 'My profile' %}">
+          <span class="account-avatar" aria-hidden="true">{{ user.initials }}</span>
+          <span class="account-text">
+            <strong>{{ user.full_name }}</strong>
+            <span>{{ user.get_role_display }}</span>
+          </span>
+          <span class="account-chevron" aria-hidden="true">›</span>
+        </a>
         <form method="post" action="{% url 'accounts:logout' %}">{% csrf_token %}
           <button class="btn ghost" type="submit">{% trans "Sign out" %}</button>
         </form>
@@ -90,7 +97,7 @@
   <footer>PATCH · {% trans "Road Inspector & Registry" %}</footer>
   <script>
     // Highlight the nav link for the current page.
-    document.querySelectorAll('.nav a').forEach(function (a) {
+    document.querySelectorAll('.nav a, a.account-button').forEach(function (a) {
       if (a.pathname === window.location.pathname) a.classList.add('active');
     });
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-03 18:21+0200\n"
+"POT-Creation-Date: 2026-11-04 16:02+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -665,12 +665,12 @@ msgid "If you didn't create a PATCH account, you can ignore this email."
 msgstr "Ако не сте създавали профил в PATCH, можете да пренебрегнете този имейл."
 
 #: .\templates\accounts\email\verify.txt:9 .\templates\base.html:8
-#: .\templates\base.html:90
+#: .\templates\base.html:97
 msgid "Road Inspector & Registry"
 msgstr "Инспектор и регистър на пътната настилка"
 
 #: .\templates\accounts\login.html:3 .\templates\accounts\login.html:6
-#: .\templates\base.html:70 .\templates\reports\detail.html:109
+#: .\templates\base.html:77 .\templates\reports\detail.html:109
 msgid "Sign in"
 msgstr "Вход"
 
@@ -687,7 +687,7 @@ msgid "No account yet?"
 msgstr "Нямате профил?"
 
 #: .\templates\accounts\login.html:12 .\templates\accounts\register.html:3
-#: .\templates\accounts\register.html:16 .\templates\base.html:71
+#: .\templates\accounts\register.html:16 .\templates\base.html:78
 msgid "Register"
 msgstr "Регистрация"
 
@@ -968,7 +968,11 @@ msgstr "Ремонти"
 msgid "Inspector requests waiting"
 msgstr "Чакащи заявки за инспектор"
 
-#: .\templates\base.html:67
+#: .\templates\base.html:65
+msgid "My profile"
+msgstr "Моят профил"
+
+#: .\templates\base.html:74
 msgid "Sign out"
 msgstr "Изход"
 
@@ -2326,5 +2330,4 @@ msgstr "Неуспешна"
 
 #~ msgid "Point"
 #~ msgstr "Точка"
-
 

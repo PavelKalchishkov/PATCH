@@ -100,8 +100,8 @@ a:hover { color: var(--accent); }
 .nav a.active { color: var(--accent-dark); background: var(--accent-soft); }
 .user-chip { font-size: 13px; color: var(--ink-soft); display: flex; gap: 10px; align-items: center; }
 .user-chip form { margin: 0; }
-.user-chip > a:not(.btn) { color: var(--ink-soft); font-weight: 500; }
-.user-chip > a:not(.btn):hover { color: var(--ink); }
+.user-chip > a:not(.btn):not(.account-button) { color: var(--ink-soft); font-weight: 500; }
+.user-chip > a:not(.btn):not(.account-button):hover { color: var(--ink); }
 
 /* Layout */
 .wrap { width: min(1160px, calc(100% - 32px)); margin: 32px auto 64px; }
@@ -442,7 +442,8 @@ footer {
 .stepper li.is-current::before { background: var(--accent); color: white; box-shadow: 0 0 0 4px var(--accent-ring); }
 .stepper li.is-done + li::after, .stepper li.is-current + li::after { background: var(--line); }
 .stepper li.is-done::after, .stepper li.is-current::after { background: var(--good); }
-.stack .card form + form { margin-top: 8px; }
+/* Only forms stacked straight in a card get space between them, not forms in a row of buttons. */
+.stack .card > form + form { margin-top: 8px; }
 .stack .card form .btn[type="submit"] { width: 100%; }
 .notice { padding: 12px 14px; border-radius: 10px; background: var(--info-soft); color: var(--info); font-size: 14px; }
 .notice.good { background: var(--good-soft); color: var(--good); }
@@ -766,7 +767,7 @@ label.choice input { margin-top: 4px; accent-color: var(--accent); }
   .nav { flex-direction: column; align-items: stretch; gap: 2px; }
   .nav a { display: flex; align-items: center; justify-content: space-between; min-height: 46px; padding: 0 12px; font-size: 16px; border-radius: 10px; }
   .user-chip { flex-direction: column; align-items: stretch; gap: 10px; padding-top: 12px; border-top: 1px solid var(--line); font-size: 14px; }
-  .user-chip > a:not(.btn) { padding: 4px 12px; }
+  .user-chip > a:not(.btn):not(.account-button) { padding: 4px 12px; }
   .user-chip .btn { width: 100%; min-height: 44px; }
   .user-chip form { width: 100%; }
   .lang-switch { align-self: flex-start; margin-left: 12px; }
@@ -815,3 +816,35 @@ label.choice input { margin-top: 4px; accent-color: var(--accent); }
   .table tbody tr td[colspan] { flex-basis: 100%; }
 }
 @media (max-width: 860px) { .map-legend { flex-wrap: wrap; gap: 6px 16px; } }
+
+/* Top bar on computers: the language switch is as tall as the buttons next to it. */
+@media (min-width: 861px) {
+  .user-chip .lang-switch { align-self: stretch; }
+}
+
+/* The signed-in user's name: a button to their profile, in the bar and in the phone menu. */
+.account-button {
+  display: inline-flex; align-items: center; gap: 10px; padding: 4px 14px 4px 4px;
+  border: 1px solid var(--line-strong); border-radius: 999px; background: var(--white);
+  box-shadow: var(--shadow-sm); color: var(--ink); text-decoration: none; line-height: 1.2;
+  transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
+}
+.account-button:hover { background: var(--accent-soft); border-color: #ecc6af; color: var(--ink); }
+.account-button:focus-visible { outline: 3px solid var(--accent-ring); outline-offset: 2px; }
+.account-button.active { border-color: var(--accent); background: var(--accent-soft); }
+.account-avatar {
+  width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0; display: grid; place-items: center;
+  background: linear-gradient(140deg, #d9804f, var(--accent-dark)); color: #fff; font-size: 12px; font-weight: 700;
+}
+.account-text { display: flex; flex-direction: column; min-width: 0; }
+.account-text strong { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 170px; }
+.account-text span { font-size: 11px; color: var(--ink-soft); }
+.account-chevron { display: none; }
+
+@media (max-width: 860px) {
+  .user-chip > a.account-button { display: flex; padding: 10px 12px; border-radius: 12px; gap: 12px; }
+  .account-avatar { width: 40px; height: 40px; font-size: 14px; }
+  .account-text strong { font-size: 15px; max-width: none; }
+  .account-text span { font-size: 13px; }
+  .account-chevron { display: block; margin-left: auto; font-size: 22px; color: var(--ink-faint); }
+}

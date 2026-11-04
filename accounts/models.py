@@ -84,6 +84,10 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.spam_strikes >= SPAM_STRIKE_LIMIT
 
     @property
+    def initials(self):
+        return "".join(part[0] for part in self.full_name.split()[:2]).upper() or "?"
+
+    @property
     def has_pending_role_request(self):
         return bool(self.requested_role) and self.requested_role != self.role
 
