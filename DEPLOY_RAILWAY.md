@@ -69,26 +69,27 @@ Railway builds and starts automatically. On every start it runs, in order: datab
 `collectstatic`, loading the damage catalog (`seed_patch --catalog-only`, which creates **no**
 demo accounts), then `gunicorn`.
 
-Create your administrator once the first deploy is green. Install the
-[Railway CLI](https://docs.railway.com/guides/cli), then in the project folder:
+### Create your administrator (dashboard only)
 
-```bash
-railway login
-```
-```bash
-railway link
-```
-```bash
-railway ssh
-```
+1. Web service → **Variables** → add:
 
-That opens a terminal inside the running app. There, run:
+   | Variable | Value |
+   |---|---|
+   | `DJANGO_SUPERUSER_EMAIL` | the email you'll sign in with |
+   | `DJANGO_SUPERUSER_PASSWORD` | a strong password (at least 8 characters, not only numbers) |
+   | `DJANGO_SUPERUSER_FULL_NAME` | your name (optional) |
 
-```bash
-python manage.py createsuperuser
-```
+2. **Deploy**. On start, `ensure_superuser` creates that account; the deploy log shows
+   `ensure_superuser: administrator … created.`
+3. Sign in on the site with that email and password.
+4. **Delete `DJANGO_SUPERUSER_PASSWORD`** from the variables afterwards and deploy again. The
+   account stays; the command never creates a second one or changes an existing password.
 
-It asks for email, name and password. Sign in on the site with them.
+If you set the start commands in the dashboard instead of using the `Procfile`, add
+`&& python manage.py ensure_superuser` to the end of the **Pre-deploy Command**.
+
+**Alternatively, with the Railway CLI:** `railway login`, `railway link`, `railway ssh`, then
+`python manage.py createsuperuser` inside the app.
 
 ## 6. Check it works
 
