@@ -695,4 +695,18 @@ BG = {
     "Main": "Основно меню",
     # Account button
     "My profile": "Моят профил",
+    # Admin: reports by account, deleting any report
+    "Reports by %(name)s": "Сигнали от %(name)s",
+    'The report "%(title)s" and everything attached to it were deleted.': "Сигналът „%(title)s“ и всичко свързано с него бяха изтрити.",
+    "See all reports by %(name)s": "Виж всички сигнали от %(name)s",
+    "%(counter)s report": ("%(counter)s сигнал", "%(counter)s сигнала"),
+    "As an administrator you can delete any report, whatever its status or who reviewed it.":
+        "Като администратор можете да изтриете всеки сигнал, независимо от статуса му и кой го е прегледал.",
+    "Deleted with it: its photos, detections and cost estimates, confirmations and votes.":
+        "Заедно с него се изтриват: снимките, откритите повреди и ценовите оценки, потвържденията и гласовете.",
+    "Its repair task, with the contractor's photos, is deleted too.": "Изтрива се и задачата за ремонт заедно със снимките на изпълнителя.",
+    "All accounts": "Всички профили",
+    "This account hasn't sent any reports.": "Този профил не е подавал сигнали.",
+    "Delete this report permanently? Its photos, any repair task and the contractor's photos, confirmations and votes are deleted too. This cannot be undone.":
+        "Да се изтрие ли сигналът окончателно? Изтриват се и снимките му, задачата за ремонт със снимките на изпълнителя, потвържденията и гласовете. Действието е необратимо.",
 }

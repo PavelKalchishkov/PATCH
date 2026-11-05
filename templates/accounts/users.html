@@ -32,7 +32,7 @@
   <h2>{% trans "Accounts" %}</h2>
   <p class="muted">{% trans "Change roles, or block and unblock users. Blocked accounts cannot sign in. You can't change your own role or block yourself." %}</p>
   <table class="table">
-    <thead><tr><th>{% trans "Name" %}</th><th>{% trans "Email" %}</th><th>{% trans "Role" %}</th><th>{% trans "Status" %}</th><th>{% trans "Spam strikes" %}</th><th></th></tr></thead>
+    <thead><tr><th>{% trans "Name" %}</th><th>{% trans "Email" %}</th><th>{% trans "Role" %}</th><th>{% trans "Status" %}</th><th>{% trans "Spam strikes" %}</th><th>{% trans "Reports" %}</th><th></th></tr></thead>
     <tbody>
       {% for account in users %}
       <tr>
@@ -70,6 +70,12 @@
             <button class="btn ghost btn-sm" type="submit">{% trans "Reset" %}</button>
           </form>
           {% endif %}
+        </td>
+        <td>
+          <a class="report-count-link" href="{% url 'accounts:user_reports' account.id %}"
+             title="{% blocktrans with name=account.full_name %}See all reports by {{ name }}{% endblocktrans %}">
+            {% blocktrans count counter=account.report_count %}{{ counter }} report{% plural %}{{ counter }} reports{% endblocktrans %} ›
+          </a>
         </td>
         <td class="row-actions">
           {% if account != user %}

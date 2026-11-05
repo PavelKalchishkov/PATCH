@@ -194,7 +194,20 @@
     </div>
     {% endif %}
 
-    {% if user.is_authenticated and report.user_id == user.id %}
+    {% if user.is_admin_role %}
+    <div class="card danger-zone">
+      <h3>{% trans "Delete report" %} <span class="badge">{% trans "Administrator" %}</span></h3>
+      <p class="muted">{% trans "As an administrator you can delete any report, whatever its status or who reviewed it." %}</p>
+      <p class="muted small">
+        {% trans "Deleted with it: its photos, detections and cost estimates, confirmations and votes." %}
+        {% if repair_task %}<strong>{% trans "Its repair task, with the contractor's photos, is deleted too." %}</strong>{% endif %}
+      </p>
+      <form method="post" action="{% url 'reports:admin_delete' report.id %}"
+            onsubmit="return confirm('{% filter escapejs %}{% trans "Delete this report permanently? Its photos, any repair task and the contractor's photos, confirmations and votes are deleted too. This cannot be undone." %}{% endfilter %}');">{% csrf_token %}
+        <button class="btn danger" type="submit">{% trans "Delete report" %}</button>
+      </form>
+    </div>
+    {% elif user.is_authenticated and report.user_id == user.id %}
     <div class="card danger-zone">
       <h3>{% trans "Delete report" %}</h3>
       {% if report.can_owner_delete %}

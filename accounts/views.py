@@ -4,6 +4,7 @@ from django.contrib.auth import login, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView, LogoutView
 from django.shortcuts import get_object_or_404, redirect, render
+from django.db.models import Count
 from django.urls import reverse
 from django.utils.translation import gettext as _
 from django.utils.translation import pgettext
@@ -173,13 +174,26 @@ def _report_sending(request, outcome, user):
 
 @role_required(UserRole.ADMIN)
 def user_directory(request):
-    users = User.objects.all()
+    users = User.objects.annotate(report_count=Count("road_reports"))
     pending = [u for u in users if u.has_pending_role_request]
     return render(
         request,
         "accounts/users.html",
         {"users": users, "pending": pending, "roles": UserRole.choices, "strike_limit": SPAM_STRIKE_LIMIT},
     )
+
+
+@role_required(UserRole.ADMIN)
+def user_reports(request, user_id):
+    """Every report one account has sent, whatever its status."""
+    account = get_object_or_404(User, pk=user_id)
+    reports = account.road_reports.all()
+    return render(request, "reports/list.html", {
+        "reports": reports,
+        "title": _("Reports by %(name)s") % {"name": account.full_name},
+        "account": account,
+        "admin_view": True,
+    })
 
 
 @role_required(UserRole.ADMIN)

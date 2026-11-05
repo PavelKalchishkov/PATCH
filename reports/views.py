@@ -7,6 +7,7 @@ from django.utils import timezone
 from django.utils.translation import get_language
 from django.views.decorators.http import require_GET
 from django.urls import reverse
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.translation import gettext as _
@@ -20,7 +21,7 @@ from reports.geocode import GeocodingError, reverse_geocode
 from reports.models import ReportConfirmation, ReportStatus, ReportVote, RoadReport, VoteKind
 from repairs.models import PhotoKind, RepairTask, TaskStatus
 from repairs.services import reservable_reports
-from reports.services import transition_report
+from reports.services import delete_report_completely, transition_report
 from vision.pipeline import enqueue_vision_job
 
 logger = logging.getLogger(__name__)
@@ -292,12 +293,24 @@ def delete_report(request, report_id):
     if not report.can_owner_delete:
         messages.error(request, _("This report is already in the repair workflow and can no longer be deleted."))
         return redirect("reports:detail", report_id=report.id)
-    for field in (report.original_image, report.annotated_image):
-        if field:
-            field.delete(save=False)
-    report.delete()
+    delete_report_completely(report)
     messages.success(request, _("Report deleted."))
     return redirect("reports:mine")
+
+
+@role_required(UserRole.ADMIN)
+def admin_delete_report(request, report_id):
+    """Administrators can delete any report, whatever its status or who reviewed it."""
+    report = get_object_or_404(RoadReport, pk=report_id)
+    if request.method != "POST":
+        return redirect("reports:detail", report_id=report.id)
+    title = report.street_name or report.district or _("Road report")
+    delete_report_completely(report)
+    messages.success(request, _("The report \"%(title)s\" and everything attached to it were deleted.") % {"title": title})
+    next_url = request.POST.get("next", "")
+    if url_has_allowed_host_and_scheme(next_url, allowed_hosts={request.get_host()}, require_https=request.is_secure()):
+        return redirect(next_url)
+    return redirect("reports:moderation")
 
 
 @role_required(UserRole.INSPECTOR, UserRole.ADMIN)

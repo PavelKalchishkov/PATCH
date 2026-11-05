@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-04 16:02+0200\n"
+"POT-Creation-Date: 2026-11-05 15:21+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -153,7 +153,7 @@ msgstr "Друг профил вече използва този имейл ад
 msgid "Inspector"
 msgstr "Инспектор"
 
-#: .\accounts\models.py:11
+#: .\accounts\models.py:11 .\templates\reports\detail.html:199
 msgid "Administrator"
 msgstr "Администратор"
 
@@ -161,139 +161,145 @@ msgstr "Администратор"
 msgid "Confirm your email address for PATCH"
 msgstr "Потвърдете имейл адреса си в PATCH"
 
-#: .\accounts\views.py:49
+#: .\accounts\views.py:50
 msgid ""
 "Welcome to PATCH. Your inspector request was sent to an administrator. You "
 "can use PATCH as a citizen until it is approved."
 msgstr "Добре дошли в PATCH. Заявката ви за инспектор е изпратена до администратор. Дотогава можете да използвате PATCH като гражданин."
 
-#: .\accounts\views.py:54
+#: .\accounts\views.py:55
 msgid "Welcome to PATCH."
 msgstr "Добре дошли в PATCH."
 
-#: .\accounts\views.py:80
+#: .\accounts\views.py:81
 msgid "Account details updated."
 msgstr "Данните на профила са обновени."
 
-#: .\accounts\views.py:83
+#: .\accounts\views.py:84
 msgid "Your email changed, so it needs verifying again."
 msgstr "Имейлът ви е променен и трябва да бъде потвърден отново."
 
-#: .\accounts\views.py:89
+#: .\accounts\views.py:90
 msgid "Password changed."
 msgstr "Паролата е сменена."
 
-#: .\accounts\views.py:93
+#: .\accounts\views.py:94
 msgid "Contractor profile updated."
 msgstr "Профилът на изпълнителя е обновен."
 
-#: .\accounts\views.py:104 .\repairs\models.py:14 .\repairs\views.py:30
+#: .\accounts\views.py:105 .\repairs\models.py:14 .\repairs\views.py:30
 #: .\templates\repairs\detail.html:42
 msgid "Reserved"
 msgstr "Резервирано"
 
-#: .\accounts\views.py:104 .\repairs\models.py:17 .\repairs\views.py:30
+#: .\accounts\views.py:105 .\repairs\models.py:17 .\repairs\views.py:30
 #: .\templates\repairs\detail.html:43
 msgid "In progress"
 msgstr "В процес"
 
-#: .\accounts\views.py:104 .\repairs\views.py:30
+#: .\accounts\views.py:105 .\repairs\views.py:30
 #: .\templates\repairs\detail.html:44 .\templates\reports\moderate.html:53
 msgid "Finished"
 msgstr "Завършено"
 
-#: .\accounts\views.py:110 .\templates\home.html:19
+#: .\accounts\views.py:111 .\templates\accounts\users.html:35
+#: .\templates\home.html:19
 msgid "Reports"
 msgstr "Сигнали"
 
-#: .\accounts\views.py:111
+#: .\accounts\views.py:112
 msgid "Open"
 msgstr "Отворени"
 
-#: .\accounts\views.py:112 .\templates\home.html:21
+#: .\accounts\views.py:113 .\templates\home.html:21
 msgctxt "count"
 msgid "Repaired"
 msgstr "Ремонтирани"
 
-#: .\accounts\views.py:140
+#: .\accounts\views.py:141
 msgid "This verification link doesn't work"
 msgstr "Тази връзка за потвърждение не работи"
 
-#: .\accounts\views.py:141
+#: .\accounts\views.py:142
 msgid ""
 "It may have expired, been used for an old email address, or been copied "
 "incompletely. Sign in and send yourself a new link from your profile."
 msgstr "Може да е изтекла, да е за стар имейл адрес или да е копирана непълно. Влезте и си изпратете нова връзка от профила."
 
-#: .\accounts\views.py:143
+#: .\accounts\views.py:144
 msgid "Go to my profile"
 msgstr "Към профила ми"
 
-#: .\accounts\views.py:148
+#: .\accounts\views.py:149
 msgid "Your email address was already verified."
 msgstr "Имейл адресът ви вече е потвърден."
 
-#: .\accounts\views.py:150
+#: .\accounts\views.py:151
 #, python-format
 msgid "Thank you. Your email address %(email)s is verified."
 msgstr "Благодарим ви! Имейл адресът ви %(email)s е потвърден."
 
-#: .\accounts\views.py:164
+#: .\accounts\views.py:165
 #, python-format
 msgid "We sent a link to %(email)s. Check your inbox and spam folder."
 msgstr "Изпратихме връзка на %(email)s. Проверете входящата поща и папката за спам."
 
-#: .\accounts\views.py:166
+#: .\accounts\views.py:167
 msgid ""
 "Email sending isn't set up on this server, so no email was sent. Use the "
 "verification link on your profile page."
 msgstr "Изпращането на имейли не е настроено на този сървър, затова не е изпратен имейл. Използвайте връзката за потвърждение в профила си."
 
-#: .\accounts\views.py:169
+#: .\accounts\views.py:170
 msgid ""
 "The verification email couldn't be sent right now. Try again from your "
 "profile in a few minutes."
 msgstr "Имейлът за потвърждение не можа да бъде изпратен в момента. Опитайте отново от профила си след няколко минути."
 
-#: .\accounts\views.py:171
+#: .\accounts\views.py:172
 msgid ""
 "A link was sent less than two minutes ago. Please check your inbox first."
 msgstr "Преди по-малко от две минути беше изпратена връзка. Моля, първо проверете пощата си."
 
 #: .\accounts\views.py:193
 #, python-format
+msgid "Reports by %(name)s"
+msgstr "Сигнали от %(name)s"
+
+#: .\accounts\views.py:207
+#, python-format
 msgid "Approved: %(name)s is now %(role)s."
 msgstr "Одобрено: %(name)s вече е с роля „%(role)s“."
 
-#: .\accounts\views.py:196
+#: .\accounts\views.py:210
 #, python-format
 msgid "Declined %(name)s's request to become %(role)s."
 msgstr "Заявката на %(name)s за роля „%(role)s“ е отказана."
 
-#: .\accounts\views.py:210
+#: .\accounts\views.py:224
 msgid "You cannot change your own role."
 msgstr "Не можете да промените собствената си роля."
 
-#: .\accounts\views.py:217
+#: .\accounts\views.py:231
 #, python-format
 msgid "%(name)s's role is now %(role)s."
 msgstr "Ролята на %(name)s вече е „%(role)s“."
 
-#: .\accounts\views.py:228
+#: .\accounts\views.py:242
 #, python-format
 msgid "%(name)s's spam strikes were reset. They can report again."
 msgstr "Нарушенията за спам на %(name)s са нулирани. Отново може да подава сигнали."
 
-#: .\accounts\views.py:236
+#: .\accounts\views.py:250
 msgid "You cannot block your own account."
 msgstr "Не можете да блокирате собствения си профил."
 
-#: .\accounts\views.py:241
+#: .\accounts\views.py:255
 #, python-format
 msgid "%(name)s was unblocked."
 msgstr "%(name)s е отблокиран."
 
-#: .\accounts\views.py:243
+#: .\accounts\views.py:257
 #, python-format
 msgid "%(name)s was blocked."
 msgstr "%(name)s е блокиран."
@@ -495,7 +501,7 @@ msgid "Accurate"
 msgstr "Точен"
 
 #: .\reports\models.py:220 .\templates\reports\detail.html:20
-#: .\templates\reports\moderate.html:38
+#: .\templates\reports\list.html:25 .\templates\reports\moderate.html:38
 msgid "Spam"
 msgstr "Спам"
 
@@ -526,14 +532,14 @@ msgid ""
 "The photo is too blurry. Hold the phone still for a moment and take it again."
 msgstr "Снимката е твърде размазана. Задръжте телефона неподвижно за момент и снимайте отново."
 
-#: .\reports\views.py:43
+#: .\reports\views.py:44
 #, python-format
 msgid ""
 "You've reached the limit of %(hour)s reports an hour and %(day)s a day. You "
 "can send the next one at %(time)s."
 msgstr "Достигнахте ограничението от %(hour)s сигнала на час и %(day)s на ден. Следващия можете да изпратите в %(time)s."
 
-#: .\reports\views.py:51
+#: .\reports\views.py:52
 #, python-format
 msgid ""
 "Your account can no longer send reports because %(limit)s of your reports "
@@ -541,104 +547,110 @@ msgid ""
 "administrator."
 msgstr "Профилът ви вече не може да подава сигнали, защото %(limit)s от сигналите ви са отбелязани като спам. Ако смятате, че това е грешка, свържете се с администратор."
 
-#: .\reports\views.py:58 .\reports\views.py:159
+#: .\reports\views.py:59 .\reports\views.py:160
 msgid ""
 "Contractor accounts don't file damage reports. Pick up verified damage from "
 "Available work."
 msgstr "Изпълнителите не подават сигнали за повреди. Изберете потвърдена повреда от „Налична работа“."
 
-#: .\reports\views.py:82
+#: .\reports\views.py:83
 msgid ""
 "This problem may already be reported nearby. Take the photo again and choose "
 "whether it's the same problem."
 msgstr "Възможно е проблемът вече да е подаден наблизо. Снимайте отново и изберете дали е същият проблем."
 
-#: .\reports\views.py:105
+#: .\reports\views.py:106
 msgid "Your report wasn't submitted"
 msgstr "Сигналът ви не беше изпратен"
 
-#: .\reports\views.py:106
+#: .\reports\views.py:107
 msgid ""
 "Something went wrong while saving it, so nothing was sent. Please take the "
 "photo again and resend it."
 msgstr "Възникна грешка при запазването, затова нищо не е изпратено. Моля, снимайте отново и изпратете пак."
 
-#: .\reports\views.py:117
+#: .\reports\views.py:118
 msgid ""
 "Your report was saved, but the automatic photo analysis couldn't start. An "
 "inspector will review it manually."
 msgstr "Сигналът ви е запазен, но автоматичният анализ на снимката не успя да стартира. Инспектор ще го прегледа ръчно."
 
-#: .\reports\views.py:121
+#: .\reports\views.py:122
 msgid "Report submitted. Computer vision analysis is running."
 msgstr "Сигналът е подаден. Тече анализ с компютърно зрение."
 
-#: .\reports\views.py:136 .\templates\damages\map.html:50
-#: .\templates\reports\before_after.html:12 .\templates\reports\detail.html:17
+#: .\reports\views.py:137 .\reports\views.py:307
+#: .\templates\damages\map.html:50 .\templates\reports\before_after.html:12
+#: .\templates\reports\detail.html:17
 #: .\templates\reports\moderation_result.html:30
 msgid "Road report"
 msgstr "Сигнал за пътя"
 
-#: .\reports\views.py:165
+#: .\reports\views.py:166
 msgid "You already reported this problem."
 msgstr "Вече сте подали сигнал за този проблем."
 
-#: .\reports\views.py:167
+#: .\reports\views.py:168
 msgid "This report is already closed, so it can't take more photos."
 msgstr "Сигналът вече е приключен и не приема повече снимки."
 
-#: .\reports\views.py:169
+#: .\reports\views.py:170
 msgid "You've already added a photo to this report."
 msgstr "Вече сте добавили снимка към този сигнал."
 
-#: .\reports\views.py:174
+#: .\reports\views.py:175
 msgid "Your photo was taken too far from this report to confirm it."
 msgstr "Снимката ви е направена твърде далеч от този сигнал, за да го потвърди."
 
-#: .\reports\views.py:189
+#: .\reports\views.py:190
 msgid ""
 "Thank you. Your photo was added to the existing report, which helps "
 "inspectors prioritise it."
 msgstr "Благодарим ви! Снимката ви е добавена към съществуващия сигнал, което помага на инспекторите да определят приоритета му."
 
-#: .\reports\views.py:201
+#: .\reports\views.py:202
 msgid "You can't vote on this report."
 msgstr "Не можете да гласувате за този сигнал."
 
-#: .\reports\views.py:206
+#: .\reports\views.py:207
 msgid "Your vote was removed."
 msgstr "Гласът ви е премахнат."
 
-#: .\reports\views.py:210
+#: .\reports\views.py:211
 msgid "Thank you. Inspectors will see that you flagged this report as spam."
 msgstr "Благодарим ви! Инспекторите ще видят, че сте отбелязали сигнала като спам."
 
-#: .\reports\views.py:212
+#: .\reports\views.py:213
 msgid "Thank you for confirming this report is accurate."
 msgstr "Благодарим ви, че потвърдихте, че сигналът е точен."
 
-#: .\reports\views.py:236 .\templates\base.html:36
+#: .\reports\views.py:237 .\templates\base.html:36
 msgid "My reports"
 msgstr "Моите сигнали"
 
-#: .\reports\views.py:250
+#: .\reports\views.py:251
 msgid "You can only view your own reports."
 msgstr "Можете да преглеждате само собствените си сигнали."
 
-#: .\reports\views.py:293
+#: .\reports\views.py:294
 msgid ""
 "This report is already in the repair workflow and can no longer be deleted."
 msgstr "Този сигнал вече е в процес на ремонт и не може да бъде изтрит."
 
-#: .\reports\views.py:299
+#: .\reports\views.py:297
 msgid "Report deleted."
 msgstr "Сигналът е изтрит."
 
-#: .\reports\views.py:335 .\templates\reports\detail.html:172
+#: .\reports\views.py:309
+#, python-format
+msgid "The report \"%(title)s\" and everything attached to it were deleted."
+msgstr "Сигналът „%(title)s“ и всичко свързано с него бяха изтрити."
+
+#: .\reports\views.py:348 .\templates\reports\detail.html:172
 msgid "This report has already been reviewed."
 msgstr "Този сигнал вече е прегледан."
 
-#: .\reports\views.py:358
+#: .\reports\views.py:371
 msgid "Moderation flags saved."
 msgstr "Маркировките са запазени."
 
@@ -708,6 +720,7 @@ msgid "Your email address is confirmed"
 msgstr "Имейл адресът ви е потвърден"
 
 #: .\templates\accounts\profile.html:14 .\templates\accounts\users.html:45
+#: .\templates\reports\list.html:9
 msgid "Email verified"
 msgstr "Потвърден имейл"
 
@@ -859,7 +872,7 @@ msgstr "Сменяйте роли или блокирайте и отблоки�
 
 #: .\templates\accounts\users.html:35 .\templates\damages\register.html:9
 #: .\templates\home.html:43 .\templates\repairs\board.html:25
-#: .\templates\repairs\list.html:11 .\templates\reports\list.html:8
+#: .\templates\repairs\list.html:11 .\templates\reports\list.html:14
 #: .\templates\reports\moderate.html:23 .\templates\vision\jobs.html:9
 msgid "Status"
 msgstr "Статус"
@@ -898,15 +911,27 @@ msgstr "Да се нулират ли нарушенията за спам? По
 msgid "Reset"
 msgstr "Нулирай"
 
-#: .\templates\accounts\users.html:78
+#: .\templates\accounts\users.html:76
+#, python-format
+msgid "See all reports by %(name)s"
+msgstr "Виж всички сигнали от %(name)s"
+
+#: .\templates\accounts\users.html:77
+#, python-format
+msgid "%(counter)s report"
+msgid_plural "%(counter)s reports"
+msgstr[0] "%(counter)s сигнал"
+msgstr[1] "%(counter)s сигнала"
+
+#: .\templates\accounts\users.html:84
 msgid "Block"
 msgstr "Блокирай"
 
-#: .\templates\accounts\users.html:78
+#: .\templates\accounts\users.html:84
 msgid "Unblock"
 msgstr "Отблокирай"
 
-#: .\templates\accounts\users.html:91
+#: .\templates\accounts\users.html:97
 #, python-brace-format
 msgid "Change this account to {role}?"
 msgstr "Да се смени ли ролята на този профил на „{role}“?"
@@ -1138,7 +1163,7 @@ msgstr "Всички сигнали в регистъра – по един ре
 
 #: .\templates\damages\register.html:9 .\templates\home.html:43
 #: .\templates\repairs\available.html:9 .\templates\repairs\board.html:25
-#: .\templates\reports\list.html:8 .\templates\reports\moderate.html:23
+#: .\templates\reports\list.html:14 .\templates\reports\moderate.html:23
 #: .\templates\reports\moderate.html:53 .\templates\reports\submit.html:60
 msgid "Street"
 msgstr "Улица"
@@ -1899,35 +1924,67 @@ msgstr "Отхвърли"
 msgid "Save flags"
 msgstr "Запази маркировките"
 
-#: .\templates\reports\detail.html:199 .\templates\reports\detail.html:204
+#: .\templates\reports\detail.html:199 .\templates\reports\detail.html:207
+#: .\templates\reports\detail.html:212 .\templates\reports\detail.html:217
 msgid "Delete report"
 msgstr "Изтрий сигнала"
 
-#: .\templates\reports\detail.html:201
+#: .\templates\reports\detail.html:200
+msgid ""
+"As an administrator you can delete any report, whatever its status or who "
+"reviewed it."
+msgstr "Като администратор можете да изтриете всеки сигнал, независимо от статуса му и кой го е прегледал."
+
+#: .\templates\reports\detail.html:202
+msgid ""
+"Deleted with it: its photos, detections and cost estimates, confirmations "
+"and votes."
+msgstr "Заедно с него се изтриват: снимките, откритите повреди и ценовите оценки, потвържденията и гласовете."
+
+#: .\templates\reports\detail.html:203
+msgid "Its repair task, with the contractor's photos, is deleted too."
+msgstr "Изтрива се и задачата за ремонт заедно със снимките на изпълнителя."
+
+#: .\templates\reports\detail.html:206 .\templates\reports\list.html:31
+msgid ""
+"Delete this report permanently? Its photos, any repair task and the "
+"contractor's photos, confirmations and votes are deleted too. This cannot be "
+"undone."
+msgstr "Да се изтрие ли сигналът окончателно? Изтриват се и снимките му, задачата за ремонт със снимките на изпълнителя, потвържденията и гласовете. Действието е необратимо."
+
+#: .\templates\reports\detail.html:214
 msgid ""
 "Permanently removes this report, its photos and detections. This cannot be "
 "undone."
 msgstr "Окончателно изтрива сигнала, снимките и откритите повреди. Действието е необратимо."
 
-#: .\templates\reports\detail.html:203 .\templates\reports\list.html:22
+#: .\templates\reports\detail.html:216 .\templates\reports\list.html:37
 msgid "Delete this report permanently?"
 msgstr "Да се изтрие ли сигналът окончателно?"
 
-#: .\templates\reports\detail.html:207
+#: .\templates\reports\detail.html:220
 msgid ""
 "This report is already scheduled for repair or repaired, so it can no longer "
 "be deleted."
 msgstr "Сигналът вече е насрочен за ремонт или е ремонтиран, затова не може да бъде изтрит."
 
-#: .\templates\reports\list.html:8
+#: .\templates\reports\list.html:7
+msgid "All accounts"
+msgstr "Всички профили"
+
+#: .\templates\reports\list.html:14
 msgid "Filed"
 msgstr "Подаден"
 
-#: .\templates\reports\list.html:23
+#: .\templates\reports\list.html:33 .\templates\reports\list.html:38
 msgid "Delete"
 msgstr "Изтрий"
 
-#: .\templates\reports\list.html:29
+#: .\templates\reports\list.html:44
+msgid "This account hasn't sent any reports."
+msgstr "Този профил не е подавал сигнали."
+
+#: .\templates\reports\list.html:44
 msgid "No reports yet."
 msgstr "Все още няма сигнали."
 

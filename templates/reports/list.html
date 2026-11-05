@@ -3,21 +3,36 @@
 {% block title %}{{ title }}{% endblock %}
 {% block content %}
 <section class="card">
-  <h2>{{ title }}</h2>
+  {% if admin_view %}
+    <a class="back-link" href="{% url 'accounts:users' %}">‹ {% trans "All accounts" %}</a>
+    <h2>{{ title }}</h2>
+    <p class="muted">{{ account.email }} · {{ account.get_role_display }}{% if account.email_verified %} · ✓ {% trans "Email verified" %}{% endif %}</p>
+  {% else %}
+    <h2>{{ title }}</h2>
+  {% endif %}
   <table class="table">
     <thead><tr><th>{% trans "Street" %}</th><th>{% trans "Status" %}</th><th>{% trans "Filed" %}</th><th></th></tr></thead>
     <tbody>
       {% for report in reports %}
       <tr class="click-row{% if report.status == 'repaired' %} is-repaired{% endif %}">
         <td>
-          <a class="row-cover" href="{% if report.status == 'repaired' %}{% url 'reports:before_after' report.id %}{% else %}{% url 'reports:detail' report.id %}{% endif %}">
+          <a class="row-cover" href="{% if report.status == 'repaired' and not admin_view %}{% url 'reports:before_after' report.id %}{% else %}{% url 'reports:detail' report.id %}{% endif %}">
             {{ report.street_name|default:report.district|default:"—" }}
           </a>
         </td>
-        <td><span class="badge {{ report.status }}">{{ report.get_status_display }}</span></td>
+        <td>
+          <span class="badge {{ report.status }}">{{ report.get_status_display }}</span>
+          {% if admin_view and report.is_spam %}<span class="badge rejected">{% trans "Spam" %}</span>{% endif %}
+        </td>
         <td>{{ report.created_at|date:"d.m.Y H:i" }}</td>
         <td class="row-actions">
-          {% if report.user_id == user.id and report.can_owner_delete %}
+          {% if admin_view %}
+          <form method="post" action="{% url 'reports:admin_delete' report.id %}"
+                onsubmit="return confirm('{% filter escapejs %}{% trans "Delete this report permanently? Its photos, any repair task and the contractor's photos, confirmations and votes are deleted too. This cannot be undone." %}{% endfilter %}');">{% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.get_full_path }}">
+            <button class="btn ghost btn-sm" type="submit">{% trans "Delete" %}</button>
+          </form>
+          {% elif report.user_id == user.id and report.can_owner_delete %}
           <form method="post" action="{% url 'reports:delete' report.id %}"
                 onsubmit="return confirm('{% filter escapejs %}{% trans "Delete this report permanently?" %}{% endfilter %}');">{% csrf_token %}
             <button class="btn ghost btn-sm" type="submit">{% trans "Delete" %}</button>
@@ -26,7 +41,7 @@
         </td>
       </tr>
       {% empty %}
-      <tr><td colspan="4" class="muted">{% trans "No reports yet." %}</td></tr>
+      <tr><td colspan="4" class="muted">{% if admin_view %}{% trans "This account hasn't sent any reports." %}{% else %}{% trans "No reports yet." %}{% endif %}</td></tr>
       {% endfor %}
     </tbody>
   </table>

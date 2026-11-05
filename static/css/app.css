@@ -848,3 +848,7 @@ label.choice input { margin-top: 4px; accent-color: var(--accent); }
   .account-text span { font-size: 13px; }
   .account-chevron { display: block; margin-left: auto; font-size: 22px; color: var(--ink-faint); }
 }
+
+/* Admin: an account's reports */
+.back-link { display: inline-block; margin-bottom: 8px; font-size: 14px; font-weight: 500; }
+.report-count-link { white-space: nowrap; font-weight: 600; }
